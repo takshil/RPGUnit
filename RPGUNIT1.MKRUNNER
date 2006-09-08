@@ -1,0 +1,24 @@
+             PGM        PARM(&TARGETLIB)
+             DCL        VAR(&TARGETLIB) TYPE(*CHAR) LEN(10)
+
+             CHGVAR     VAR(&TARGETLIB) VALUE(&TARGETLIB)
+             MONMSG     MSGID(MCH3601) EXEC(SNDPGMMSG MSGID(CPF9898) +
+                          MSGF(QCPFMSG) MSGDTA('Target library +
+                          parameter required.') MSGTYPE(*ESCAPE))
+
+             CRTRPGMOD  MODULE(QTEMP/CALLPROC) SRCFILE(RPGUNIT1) DBGVIEW(*LIST)
+             CRTRPGMOD  MODULE(QTEMP/EXTPRC) SRCFILE(RPGUNIT1) DBGVIEW(*LIST)
+             CRTRPGMOD  MODULE(QTEMP/EXTTST) SRCFILE(RPGUNIT1) DBGVIEW(*LIST)
+             CRTRPGMOD  MODULE(QTEMP/PGMMSG) SRCFILE(RPGUNIT1) DBGVIEW(*LIST)
+             CRTRPGMOD  MODULE(QTEMP/RUN   ) SRCFILE(RPGUNIT1) DBGVIEW(*LIST)
+             CRTRPGMOD  MODULE(QTEMP/USRSPC) SRCFILE(RPGUNIT1) DBGVIEW(*LIST)
+
+             CRTSRVPGM  SRVPGM(&TARGETLIB/RURUNNER) +
+                          MODULE(QTEMP/CALLPROC QTEMP/EXTPRC +
+                          QTEMP/EXTTST QTEMP/PGMMSG QTEMP/RUN +
+                          QTEMP/USRSPC) EXPORT(*SRCFILE) +
+                          SRCFILE(RPGUNITY1) SRCMBR(RUNNERBND) +
+                          TEXT('RPGUnit - Runner Toolkit.') +
+                          BNDSRVPGM(RUTESTCASE) BNDDIR(QC2LE)
+
+             ENDPGM

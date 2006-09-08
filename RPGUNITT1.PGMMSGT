@@ -1,0 +1,76 @@
+      //
+      // Tests PGMMSG.
+      //
+
+     H NoMain Option(*SrcStmt)
+
+
+      //----------------------------------------------------------------------
+      //   Imported Procedures
+      //----------------------------------------------------------------------
+
+      /copy RPGUNITY1,PGMMSG
+      /copy RPGUNITY1,TEMPLATES
+      /copy RPGUNIT1,TESTCASE
+
+
+      //----------------------------------------------------------------------
+      //   Exported Procedures
+      //----------------------------------------------------------------------
+
+     D testInternalEscapeMessage...
+     D                 pr
+
+
+      //----------------------------------------------------------------------
+      //   Private Procedures
+      //----------------------------------------------------------------------
+
+     D procWithError   pr            10i 0
+
+
+      //----------------------------------------------------------------------
+      //   Procedure Definitions
+      //----------------------------------------------------------------------
+
+     P testInternalEscapeMessage...
+     P                 b                   Export
+     D testInternalEscapeMessage...
+     D                 pi
+
+     D excpMsgInfo     ds                  LikeDs(ExcpMsgInfo_t)
+
+      /free
+
+        monitor;
+          procWithError();
+          fail( 'procWithError() did not raise an error.' );
+
+        on-error;
+          // Success.
+        endmon;
+
+        excpMsgInfo = getExcpMsgInfo();
+
+        aEqual( 'MCH1211': excpMsgInfo.msgId );
+        aEqual( 'Tentative de division par z{ro '
+              + 'pour op{ration en virgule fixe.':
+                excpMsgInfo.msg );    // FIXME: message in French...
+        aEqual( 'PGMMSGT': excpMsgInfo.pgmNm );
+        aEqual( 'PROCWITHERROR': excpMsgInfo.procNm );
+        aEqual( '7300': excpMsgInfo.sttNb );
+
+      /end-free
+     P                 e
+
+
+     P procWithError   b
+     D procWithError   pi            10i 0
+     D  x              s             10i 0 Inz(1)
+     D  y              s             10i 0 Inz(0)
+      /free
+
+        return (x / y);
+
+      /end-free
+     P procWithError   e

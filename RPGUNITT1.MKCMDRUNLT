@@ -1,0 +1,17 @@
+             PGM        PARM(&TARGETLIB)
+             DCL        VAR(&TARGETLIB) TYPE(*CHAR) LEN(10)
+
+             CHGVAR     VAR(&TARGETLIB) VALUE(&TARGETLIB)
+             MONMSG     MSGID(MCH3601) EXEC(SNDPGMMSG MSGID(CPF9898) +
+                          MSGF(QCPFMSG) MSGDTA('Target library +
+                          parameter required.') MSGTYPE(*ESCAPE))
+
+             CRTRPGMOD  MODULE(QTEMP/CMDRUNLOG) SRCFILE(RPGUNIT1) +
+                          DBGVIEW(*LIST)
+             CRTRPGMOD  MODULE(QTEMP/CMDRUNLOGT) SRCFILE(RPGUNITT1) +
+                          DBGVIEW(*LIST)
+             CRTSRVPGM  SRVPGM(&TARGETLIB/CMDRUNLOGT) +
+                          MODULE(QTEMP/CMDRUNLOGT QTEMP/CMDRUNLOG) +
+                          EXPORT(*ALL) BNDSRVPGM(RURUNNER RUTESTCASE)
+
+             ENDPGM

@@ -1,0 +1,102 @@
+
+      // Spike pour retrouver le numero de ligne en cours d'execution.
+
+     H DftActGrp(*no) Option(*SrcStmt: *NoDebugIo)
+
+      /copy RPGUNIT1,DSEC
+      /copy RPGUNIT1,QWVRCSTK
+
+     Dproc1            pr
+     Dproc2            pr
+
+      /free
+
+        proc1();
+
+        *inlr = *on;
+
+      /end-free
+
+     Pproc1            b
+     Dproc1            pi
+      /free
+
+        proc2();
+
+      /end-free
+     Pproc1            e
+
+     Pproc2            b
+     Dproc2            pi
+
+     D jobIdInfo       ds                  LikeDs(dsJIDF0100)
+     D rcvVar          s           5000a
+
+     D header          ds                  LikeDs(dsCSTK0100Hdr)
+     D                                     Based(p_header)
+     D entry           ds                  LikeDs(callStkEnt)
+     D                                     Based(p_entry)
+     D p_header        s               *
+     D p_entry         s               *
+     D p_sttId         s               *
+     D callStkEntIdx   s             10i 0
+     D sttIdIdx        s             10i 0
+     D sttId           s             10a   Dim(256)
+     D                                     Based(p_sttId)
+
+     D p_procNmBuf     s               *
+     D procNmBuf       s            256a   Based(p_procNmBuf)
+     D procNm          s             52a
+
+      /free
+
+        jobIdInfo.jobNm = '*';
+        jobIdInfo.usrNm = *blank;
+        jobIdInfo.jobNb = *blank;
+        jobIdInfo.intJobId = *blank;
+        jobIdInfo.reserved = *loval;
+        jobIdInfo.threadInd = 1;
+        jobIdInfo.threadId  = *loval;
+
+        QWVRCSTK(rcvVar:
+                 %len(rcvVar):
+                 'CSTK0100':
+                 jobIdInfo:
+                 'JIDF0100':
+                 dsEc);
+
+        p_header = %addr(rcvVar);
+        // eval header
+
+        p_entry = p_header + header.callStkOff;
+
+        for callStkEntIdx = 1 to header.nbCallStkEntRtn;
+          // eval entry
+
+          dsply entry.pgmNm;
+
+          if entry.procNmLen <> 0;
+            p_procNmBuf = p_entry + entry.dsplToProcNm;
+            procNm = %subst( procNmBuf: 1: entry.procNmLen );
+            dsply procNm;
+          else;
+            dsply 'No proc name';
+          endif;
+
+          if entry.nbSttId > 0;
+            p_sttId = p_entry + entry.dsplToSttId;
+
+            for sttIdIdx = 1 to entry.nbSttId;
+              dsply sttId(sttIdIdx);
+            endfor;
+
+          else;
+            dsply 'No statement';
+          endif;
+
+          p_entry += entry.len;
+        endfor;
+
+      /end-free
+     Pproc2            e
+

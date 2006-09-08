@@ -1,0 +1,3 @@
+             PGM
+             CRTBNDRPG  PGM(COMPMSG) SRCFILE(RPGUNIT1) DBGVIEW(*SOURCE)
+             ENDPGM

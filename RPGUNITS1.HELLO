@@ -1,0 +1,27 @@
+     H NoMain Option(*SrcStmt)
+
+     DdspHello         pr
+     Dfail             pr
+
+     PdspHello         b                   Export
+     DdspHello         pi
+      /free
+
+        dsply 'Hello!';
+
+      /end-free
+     PdspHello         e
+
+     Pfail             b                   Export
+     Dfail             pi
+     D a               s             10i 0
+     D b               s                   Like(a)
+     D c               s                   Like(a)
+      /free
+
+        a = 1;
+        b = 0;
+        c = a / b;
+
+      /end-free
+     Pfail             e
