@@ -1,0 +1,74 @@
+      //
+      // Generate the source code for TESTPGM13.
+      //
+      // Compilation instructions:
+      //  CRTRPGMOD MODULE(QTEMP/MKPGM13) SRCFILE(RPGUNITS1) DBGVIEW(*LIST)
+      //  CRTPGM PGM(QTEMP/MKPGM13) BNDSRVPGM(RUTESTCASE)
+
+     H Option(*SrcStmt:*NoDebugIo)
+
+     FRPGUNITF1 o    e             disk    ExtMbr(fileMbr)
+     F                                     Rename(RPGUNITF1:SRCFMT)
+     F                                     UsrOpn
+
+      /copy RPGUNIT1,TESTCASE
+
+     D wrt             pr
+     D  line                         80a   Const
+
+     D TEST_PGM        c                   Const('TESTPGM13')
+     D PROC_NB         c                   Const(256)
+
+     D fileMbr         s             10a
+     D i               s              5s 0
+     D nb              s              5a
+
+      /free
+
+        clrpfm( 'RPGUNITF1' : TEST_PGM );
+
+        fileMbr = TEST_PGM;
+        open RPGUNITF1;
+        wrt('                                                                ');
+        wrt('      //--------------------------------------------------------');
+        wrt('      //                                                        ');
+        wrt('      //    Many test procedures.                               ');
+        wrt('      //                                                        ');
+        wrt('      //--------------------------------------------------------');
+        wrt('                                                                ');
+        wrt('     H NoMain Option(*SrcStmt)                                  ');
+        wrt('                                                                ');
+        wrt('      /copy RPGUNIT1,TESTCASE                                   ');
+        wrt('                                                                ');
+
+        for i = 1 to PROC_NB;
+          nb = %editc(i:'X');
+          wrt('     Dtest'+nb+'        pr');
+        endfor;
+
+        wrt('                                                                ');
+
+        for i = 1 to PROC_NB;
+          nb = %editc(i:'X');
+          wrt('     Ptest'+nb+'        b                   Export          ');
+          wrt('     Dtest'+nb+'        pi                                  ');
+          wrt('     Ptest'+nb+'        e                                   ');
+        endfor;
+
+        close RPGUNITF1;
+
+        *inlr = *on;
+
+      /end-free
+
+     P wrt             b
+     D wrt             pi
+     D  line                         80a   const
+      /free
+
+        SRCSEQ += 0.01;
+        SRCDTA = line;
+        write SRCFMT;
+
+      /end-free
+     P                 e

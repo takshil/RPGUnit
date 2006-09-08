@@ -1,0 +1,5 @@
+             PGM
+             CRTRPGMOD  MODULE(CONDHANDLE) SRCFILE(RPGUNIT1) +
+                          DBGVIEW(*LIST)
+             CRTPGM     PGM(CONDHANDLE) BNDSRVPGM(HELLO)
+             ENDPGM

@@ -1,0 +1,12 @@
+             PGM        PARM(&TARGETLIB)
+             DCL        VAR(&TARGETLIB) TYPE(*CHAR) LEN(10)
+
+             DLTMSGF    MSGF(&TARGETLIB/RPGUNITMSG)
+
+             CRTMSGF    MSGF(&TARGETLIB/RPGUNITMSG) TEXT('RPGUnit - +
+                          Message File (French).')
+
+             ADDMSGD
+
+
+             ENDPGM

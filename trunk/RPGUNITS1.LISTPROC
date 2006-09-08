@@ -1,0 +1,167 @@
+      // Spike : recupere la liste des procedures exportees par un srvpgm.
+
+     h DftActGrp(*no) Option(*SrcStmt: *NoDebugIo)
+
+      // List ILE service program information.
+      /copy RPGUNIT1,QBNLSPM
+      // Create User Space.
+      /copy RPGUNIT1,QUSCRTUS
+      // Renvoie pointeur sur User Space.
+      /copy RPGUNIT1,QUSPTRUS
+      // Error Code pour API.
+      /copy RPGUNIT1,DSEC
+      /copy RPGUNIT1,APILIST
+
+       // Emission d'un message d'echappement en cas d'erreur.
+     D EC_Escape       PR
+     D   When                        60A   const
+     D   CallStackCnt                10I 0 value
+     D   ErrorCode                32766A   options(*varsize)
+
+       // User Space pour stocker la liste des procedures.
+     D ProcListUsrSpc  ds                  Qualified
+     D  Name                         20a   Inz('LISTPROC  QTEMP')
+     D  Attribute                    10a   Inz('USRSPC')
+     D  Size                         10i 0 Inz(1024)
+     D  Value                         1a   Inz(x'00')
+     D  Authority                    10a   Inz('*ALL')
+     D  Text                         50a   Inz('Liste de procedures')
+     D  Replace                      10a   Inz('*YES')
+
+       // List API generic header structure
+     D p_Header        s               *
+     D dsLH            ds                   LikeDs(ListHeader) Based(p_Header)
+
+       // Structure d'une entree dans la liste de QBNLSPGM.
+     D p_Entry         s               *
+     D dsEntry         ds                  Qualified Based(p_Entry)
+        // Taille de cette entree. Chaque entree a une taille differente.
+     D  Size                         10i 0
+     D  SrvPgmName                         LikeDs(SrvPgmName)
+     D  Ccsid                        10i 0
+        // Decalage memoire pour atteindre le nom de la procedure.
+     D  ProcNameOff                  10i 0
+        // Longueur du nom de la procedure.
+     D  ProcNameSiz                  10i 0
+
+        // String avec le nom de la procedure.
+     D p_ProcName      s               *
+     D ProcNameBuf     s            256a   Based(p_ProcName)
+     D ProcName        s             52a   Varying
+
+       // Nom du programme de service dont on liste les procedures.
+     D SrvPgmName      ds                  Qualified
+     D  File                         10a
+     D  Lib                          10a
+
+       // Index pour iterer sur les entrees de la liste.
+     D EntryIdx        s             10i 0
+
+      /free
+
+        QUSCRTUS( ProcListUsrSpc.Name:
+                  ProcListUsrSpc.Attribute:
+                  ProcListUsrSpc.Size:
+                  ProcListUsrSpc.Value:
+                  ProcListUsrSpc.Authority:
+                  ProcListUsrSpc.Text:
+                  ProcListUsrSpc.Replace:
+                  dsEC);
+
+        if dsEC.BytesA > 0;
+          EC_Escape('Creation du User Space (QUSCRTUS)':3:dsEC);
+        endif;
+
+        SrvPgmName.File = 'AJOUTEUR';
+        SrvPgmName.Lib  = '*LIBL';
+
+        QBNLSPGM( ProcListUsrSpc.Name:
+                  'SPGL0610':
+                  SrvPgmName:
+                  dsEc);
+
+        if dsEC.BytesA > 0;
+          EC_Escape('Analyse du srvpgm (QBNLSPGM)':3:dsEC);
+        endif;
+
+        // Recuperation du pointeur sur le User Space.
+
+        QUSPTRUS(ProcListUsrSpc.Name: p_Header);
+
+        // Deplacement jusqu'a la premiere entree de la liste.
+
+        p_Entry = p_Header + dsLH.LstOff;
+
+        for EntryIdx = 1 to dsLH.EntCnt;
+          p_ProcName = p_Header + dsEntry.ProcNameOff;
+          ProcName = %subst(ProcNameBuf: 1: dsEntry.ProcNameSiz);
+          dsply ProcName;
+          p_Entry += dsEntry.Size;
+        endfor;
+
+        *inlr = *on;
+
+      /end-free
+
+      *+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      * Send back an escape message based on an API error code DS
+      *+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+     P EC_Escape       B
+     D EC_Escape       PI
+     D   When                        60A   const
+     D   CallStackCnt                10I 0 value
+     D   ErrorCode                32766A   options(*varsize)
+
+      *
+      * Send Program Message API
+      *
+     D QMHSNDPM        PR                  ExtPgm('QMHSNDPM')
+     D   MessageID                    7A   Const
+     D   QualMsgF                    20A   Const
+     D   MsgData                    256A   Const
+     D   MsgDtaLen                   10I 0 Const
+     D   MsgType                     10A   Const
+     D   CallStkEnt                  10A   Const
+     D   CallStkCnt                  10I 0 Const
+     D   MessageKey                   4A
+     D   Errors                       1A
+
+      *
+      * API error code (passed from caller)
+      *
+     D p_EC            S               *
+     D dsEC            DS                  based(p_EC)
+     D  dsECBytesP                   10I 0
+     D  dsECBytesA                   10I 0
+     D  dsECMsgID                     7A
+     D  dsECReserv                    1A
+     D  dsECMsgDta                  240A
+
+      *
+      * API error code (no error handling requested)
+      *
+     D dsNullError     DS
+     D  dsNullError0                 10I 0 inz(0)
+
+     D MsgDtaLen       S             10I 0
+     D MsgKey          S              4A
+
+     c                   eval      p_EC = %addr(ErrorCode)
+
+     c                   if        dsECBytesA <= 16
+     c                   eval      MsgDtaLen = 0
+     c                   else
+     c                   eval      MsgDtaLen = dsECBytesA - 16
+     c                   endif
+
+     C* diagnostic msg tells us when the error occurred in our pgm
+     c                   callp     QMHSNDPM('CPF9897': 'QCPFMSG   *LIBL':
+     c                               When: %Len(%trimr(when)): '*DIAG':
+     c                               '*': 1:  MsgKey: dsNullError)
+
+     C* send back actual error from API
+     c                   callp     QMHSNDPM(dsECMsgID: 'QCPFMSG   *LIBL':
+     c                               dsECMsgDta: MsgDtaLen: '*ESCAPE':
+     c                               '*': CallStackCnt: MsgKey:
+     c                               dsNullError)
+     P                 E

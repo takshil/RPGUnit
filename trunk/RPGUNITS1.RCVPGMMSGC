@@ -1,0 +1,7 @@
+             PGM
+
+             CRTRPGMOD  MODULE(RCVPGMMSG) SRCFILE(RPGUNIT1) +
+                          DBGVIEW(*LIST)
+             CRTPGM     PGM(RCVPGMMSG)
+
+             ENDPGM
