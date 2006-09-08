@@ -1,4 +1,0 @@
-             PGM
-             CRTBNDRPG  PGM(FINDLINENB) SRCFILE(RPGUNIT1) +
-                          DBGVIEW(*SOURCE)
-             ENDPGM
