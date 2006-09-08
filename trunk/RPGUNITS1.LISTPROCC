@@ -1,4 +1,0 @@
-             PGM
-             CRTBNDRPG  PGM(LISTPROC) SRCFILE(RPGUNIT1) +
-                          DBGVIEW(*SOURCE)
-             ENDPGM

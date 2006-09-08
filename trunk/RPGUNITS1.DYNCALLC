@@ -1,4 +1,0 @@
-             PGM
-             CRTBNDRPG  PGM(DYNCALL) SRCFILE(RPGUNIT1) +
-                          DFTACTGRP(*NO) ACTGRP(*NEW) DBGVIEW(*SOURCE)
-             ENDPGM
