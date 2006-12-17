@@ -1,6 +1,6 @@
 
        // List API generic header structure (template).
-     D ListHdr_t       ds                   Qualified Based(@)
+     D ListHdr_t       ds                   Qualified Based(template)
          // Filler
      D   filler1                    103a
          // Status (I=Incomplete,C=Complete,F=Partially Complete)

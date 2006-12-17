@@ -9,7 +9,7 @@
      D fmtJobIdInfo                   8a   Const
      D errors                     32766a   Options(*VarSize) NoOpt
 
-     D dsJIDF0100      ds                  Qualified Based(@)
+     D dsJIDF0100      ds                  Qualified Based(template)
      D  jobNm                        10a
      D  usrNm                        10a
      D  jobNb                         6a
@@ -18,7 +18,7 @@
      D  threadInd                    10i 0
      D  threadId                      8a
 
-     D dsCSTK0100Hdr   ds                  Qualified Based(@)
+     D dsCSTK0100Hdr   ds                  Qualified Based(template)
      D  bytesP                       10i 0
      D  bytesA                       10i 0
      D  nbCallStkEntForThread...
@@ -29,7 +29,7 @@
      D  threadId                      8a
      D  infoSts                       1a
 
-     D dsCSTK0100Ent   ds                  Qualified Based(@)
+     D dsCSTK0100Ent   ds                  Qualified Based(template)
      D  len                          10i 0
      D  dsplToSttId                  10i 0
      D  nbSttId                      10i 0

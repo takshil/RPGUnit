@@ -38,12 +38,12 @@
        //----------------------------------------------------------------------
 
        // A sized array of OS400 objects.
-     D ObjectArray_t   ds                  Based(@) Qualified
+     D ObjectArray_t   ds                  Based(template) Qualified
      D  size                          5i 0
      D  object                             Dim(3) LikeDs(Object_t)
 
        // A sized list of options.
-     D Options_t       ds                  Based(@) Qualified
+     D Options_t       ds                  Based(template) Qualified
      D  size                          5i 0
      D  option                       10a   Dim(3)
 

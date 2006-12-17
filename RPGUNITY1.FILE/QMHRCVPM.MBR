@@ -14,7 +14,7 @@
      D  msgAction                    10a   Const
      D  errorCode                 32565a   Options(*VarSize) NoOpt
 
-     D RCVM0300        ds                  Qualified Based(@)
+     D RCVM0300        ds                  Qualified Based(template)
      D  bytesR                       10i 0
      D  bytesA                       10i 0
      D  msgSev                       10i 0
@@ -41,7 +41,7 @@
      D  sndInfoLenR                  10i 0
      D  sndInfoLenA                  10i 0
 
-     D RCVM0300Sender  ds                  Qualified Based(@)
+     D RCVM0300Sender  ds                  Qualified Based(template)
      D  sndJob                       10a
      D  sndUsrPrf                    10a
      D  sndJobNb                      6a

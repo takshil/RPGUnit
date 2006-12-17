@@ -7,7 +7,7 @@
      D   errors                   32766a   Options(*VarSize) NoOpt
 
        // Structure of an entry in a QBNLSPGM list.
-     D dsSPGL0610      ds                  Qualified Based(@)
+     D dsSPGL0610      ds                  Qualified Based(template)
         // Size of this entry. Each entry has a different size.
      D  size                         10i 0
      D  srvPgm                       20a
