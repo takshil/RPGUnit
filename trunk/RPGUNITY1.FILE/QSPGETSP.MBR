@@ -12,7 +12,7 @@
      D   error                    32766a   Options(*varsize) NoOpt
 
        // QSP API Generic Header Section.
-     D qspGenHdr_t     ds                  Qualified Based(@)
+     D qspGenHdr_t     ds                  Qualified Based(template)
      D   genUsrAra                   64a
      D   hdrSize                     10i 0
      D   strLvl                       4a

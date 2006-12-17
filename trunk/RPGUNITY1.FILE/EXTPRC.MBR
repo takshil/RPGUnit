@@ -29,7 +29,7 @@
        //   Templates
        //----------------------------------------------------------------------
 
-     D ProcList_t      ds                  Qualified Based(@)
+     D ProcList_t      ds                  Qualified Based(template)
      D  hdr                            *
      D  current                        *
 

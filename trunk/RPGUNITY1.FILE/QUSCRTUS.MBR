@@ -15,7 +15,7 @@
 
        // User Space creation parameters.
      D UsrSpcCrtParm_t...
-     D                 ds                  Qualified Based(@)
+     D                 ds                  Qualified Based(template)
      D  nm                           20a
      D  attribute                    10a
      D  size                         10i 0
