@@ -45,7 +45,7 @@ Summary
     * Download the source code from the SourceForge repository.
     
 +-----+
-> svn export https://rpgunit.svn.sourceforge.net/svnroot/rpgunit/trunk RPGUnit
+> svn export https://rpgunit.svn.sourceforge.net/svnroot/rpgunit/trunk/src/main/ RPGUnit
 +-----+
     
     * Create the physical source files on your iSeries host. From there on, LIB should be replaced by the name of the library where you want to install RPGUnit.
@@ -63,11 +63,11 @@ Summary
 +-----+
 > cd RPGUnit
 > ftp your.iSeries.host
-> ascii
-> prompt
-> cd /QSYS.LIB/LIB.LIB
-> mput *.FILE/*.MBR
-> bye
+ftp> ascii
+ftp> prompt
+ftp> cd /QSYS.LIB/LIB.LIB
+ftp> mput *.FILE/*.MBR
+ftp> bye
 +-----+
 
     * Restore the source member meta-data.
