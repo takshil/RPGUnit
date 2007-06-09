@@ -36,6 +36,12 @@
         <tag>HEAD</tag>
         <url>http://rpgunit.svn.sourceforge.net/svnroot/rpgunit</url>
     </scm>
+    <distributionManagement> 
+        <site> 
+            <id>sourceforge.net</id> 
+            <url>scp://shell.sourceforge.net/home/groups/r/rp/rpgunit/htdocs</url> 
+        </site> 
+    </distributionManagement> 
 
 
     <!-- Report generation -->
