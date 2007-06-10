@@ -5,6 +5,7 @@
     <groupId>org.rpgunit</groupId>
     <artifactId>rpgunit</artifactId>
     <version>0.2</version>
+    <packaging>pom</packaging>
     
     
     <!-- Build Settings -->
@@ -62,7 +63,7 @@
     <licenses>
         <license>
             <name>Common Public License Version 1.0</name>
-            <url>http://www.opensource.org/licenses/cpl1.0.php</url>
+            <url>src/main/RPGUNIT1.FILE/LICENSE.MBR</url>
             <distribution>repo</distribution>
         </license>
     </licenses>
