@@ -1,0 +1,18 @@
+      //
+      // Prototypes for RPGUnit command line runner.
+      //
+
+       // The entry point of RUCMDRUN. Parameters are provided by RUCALLTST command.
+     D cmdRun          pr
+     D  testPgm                            Const LikeDs(Object_t)
+     D  testProc                     32a   Const
+     D  order                         8a   Const
+     D  detail                        6a   Const
+
+       // Run the test cases in a test suite.
+     D runTests        pr
+     D  testSuite                          Const LikeDs(TestSuite_t)
+     D  testProcToRun                      Const Like(ProcNm_t)
+     D  order                         8a   Const
+     D  detail                        6a   Const
+
