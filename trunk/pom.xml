@@ -19,6 +19,12 @@
                     </descriptors>
                 </configuration>
             </plugin>
+            <plugin>
+                <artifactId>maven-release-plugin</artifactId>
+                <configuration>
+                    <preparationGoals>assembly:assembly</preparationGoals>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
     <reporting>
