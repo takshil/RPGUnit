@@ -40,13 +40,9 @@ Summary
 * Installation
 ~~~~~~~~~~~~~~~
 
-    * Install a subversion client if you do not have one already.
+    * Download a source code archive, using the Downloads link on the left.
     
-    * Download the source code from the SourceForge repository.
-    
-+-----+
-> svn export https://rpgunit.svn.sourceforge.net/svnroot/rpgunit/trunk/src/main/ RPGUnit
-+-----+
+    * Extract it, using an application like WinZip or gzip.
     
     * Create the physical source files on your iSeries host. From there on, LIB should be replaced by the name of the library where you want to install RPGUnit.
     
@@ -61,7 +57,7 @@ Summary
     * Upload the source code to your iSeries host.
     
 +-----+
-> cd RPGUnit
+> cd THE/PATH/WHERE/YOU/EXTRACTED/THE/SOURCE/CODE/ARCHIVE
 > ftp your.iSeries.host
 ftp> ascii
 ftp> prompt
@@ -77,7 +73,7 @@ ftp> bye
 ===> CALL PGM(QTEMP/MKMETADATA) PARM(LIB)
 +-----+
 
-    * Compile the framework, with LIB the name of the library where you want RPGUnit's runnable objets to be.
+    * Compile the framework.
     
 +-----+
 ===> CRTBNDCL PGM(LIB/MKRPGUNIT) SRCFILE(LIB/RPGUNIT1)
