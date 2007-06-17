@@ -19,12 +19,6 @@
                     </descriptors>
                 </configuration>
             </plugin>
-            <plugin>
-                <artifactId>maven-release-plugin</artifactId>
-                <configuration>
-                    <goals>assembly:assembly site:site site:deploy</goals>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
     <reporting>
