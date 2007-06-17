@@ -4,7 +4,7 @@
     <!-- The Basics -->
     <groupId>org.rpgunit</groupId>
     <artifactId>rpgunit</artifactId>
-    <version>0.2-SNAPSHOT</version>
+    <version>0.2</version>
     <packaging>pom</packaging>
     
     
@@ -75,9 +75,9 @@
         <url>http://sourceforge.net/tracker/?group_id=176506</url>
     </issueManagement>
     <scm>
-        <connection>scm:svn:https://rpgunit.svn.sourceforge.net/svnroot/rpgunit</connection>
-        <developerConnection>scm:svn:https://rpgunit.svn.sourceforge.net/svnroot/rpgunit</developerConnection>
-        <url>http://rpgunit.svn.sourceforge.net/svnroot/rpgunit</url>
+        <connection>scm:svn:https://rpgunit.svn.sourceforge.net/svnroot/rpgunit/tags/0.2</connection>
+        <developerConnection>scm:svn:https://rpgunit.svn.sourceforge.net/svnroot/rpgunit/tags/0.2</developerConnection>
+        <url>http://rpgunit.svn.sourceforge.net/svnroot/rpgunit/tags/0.2</url>
     </scm>
     <distributionManagement>
         <site> 
