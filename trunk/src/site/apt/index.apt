@@ -37,67 +37,6 @@ Summary
     
     RPGUnit 0.2 released on {{{http://sourceforge.net}SourceForge}}.
     
-* Installation
-~~~~~~~~~~~~~~~
-
-    * Download a source code archive, using the Downloads link on the left.
-    
-    * Extract it, using an application like WinZip or gzip.
-    
-    * Create the physical source files on your iSeries host. From there on, LIB should be replaced by the name of the library where you want to install RPGUnit.
-    
-+-----+
-===> CRTSRCPF FILE(LIB/RPGUNIT1) RCDLEN(112) TEXT('RPGUnit - Framework.')
-===> CRTSRCPF FILE(LIB/RPGUNITC1) RCDLEN(112) TEXT('RPGUnit - Commands.')
-===> CRTSRCPF FILE(LIB/RPGUNITF1) RCDLEN(112) TEXT('RPGUnit - Test Fixtures.')
-===> CRTSRCPF FILE(LIB/RPGUNITT1) RCDLEN(112) TEXT('RPGUnit - Self-Test.')
-===> CRTSRCPF FILE(LIB/RPGUNITY1) RCDLEN(112) TEXT('RPGUnit - Prototypes.')
-+-----+
-
-    * Upload the source code to your iSeries host.
-    
-+-----+
-> cd THE/PATH/WHERE/YOU/EXTRACTED/THE/SOURCE/CODE/ARCHIVE
-> ftp your.iSeries.host
-ftp> ascii
-ftp> prompt
-ftp> cd /QSYS.LIB/LIB.LIB
-ftp> mput *.FILE/*.MBR
-ftp> bye
-+-----+
-
-    * Restore the source member meta-data.
-    
-+-----+
-===> CRTBNDCL PGM(QTEMP/MKMETADATA) SRCFILE(LIB/RPGUNIT1)
-===> CALL PGM(QTEMP/MKMETADATA) PARM(LIB)
-+-----+
-
-    * Compile the framework.
-    
-+-----+
-===> CRTBNDCL PGM(LIB/MKRPGUNIT) SRCFILE(LIB/RPGUNIT1)
-===> SBMJOB CMD(CALL PGM(LIB/MKRPGUNIT) PARM(LIB)) JOB(MKRPGUNIT)
-+-----+
-
-    * Start writing unit tests!
-
-    * If you want, you can check the framework by running its own regression test harness.
-
-        * Compile the test harness.
-    
-+-----+
-===> CRTBNDCL PGM(LIB/MKRPGUNITT) SRCFILE(LIB/RPGUNITT1)
-+-----+
-
-        * Run the test harness.
-    
-+-----+
-===> SBMJOB CMD(CALL PGM(LIB/MKRPGUNITT) PARM(QTEMP)) JOB(MKRPGUNITT)
-+-----+
-
-        * If the MKRPGUNITT job ends normally (without any error), it means the framework is sound and working.
-
 * Usage
 ~~~~~~~
 
