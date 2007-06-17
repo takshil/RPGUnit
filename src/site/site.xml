@@ -13,8 +13,6 @@
 	      href="http://maven.apache.org/"/>
     </poweredBy>
     
-    <version position="left"/>
-    
     <skin>
         <groupId>org.apache.maven.skins</groupId>
         <artifactId>maven-stylus-skin</artifactId>
