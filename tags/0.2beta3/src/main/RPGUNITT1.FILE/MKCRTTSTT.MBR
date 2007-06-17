@@ -1,0 +1,22 @@
+             PGM        PARM(&TARGETLIB)
+             DCL        VAR(&TARGETLIB) TYPE(*CHAR) LEN(10)
+
+             CHGVAR     VAR(&TARGETLIB) VALUE(&TARGETLIB)
+             MONMSG     MSGID(MCH3601) EXEC(SNDPGMMSG MSGID(CPF9898) +
+                          MSGF(QCPFMSG) MSGDTA('Target library +
+                          parameter required.') MSGTYPE(*ESCAPE))
+
+             CRTRPGMOD  MODULE(QTEMP/RUCRTTST) SRCFILE(RPGUNIT1) +
+                          OPTION(*SRCSTMT) DBGVIEW(*LIST)
+             CRTRPGMOD  MODULE(QTEMP/RUCRTTSTT) SRCFILE(RPGUNITT1) +
+                          OPTION(*SRCSTMT) DBGVIEW(*LIST)
+             CRTRPGMOD  MODULE(QTEMP/PGMMSG) SRCFILE(RPGUNIT1) +
+                          OPTION(*SRCSTMT) DBGVIEW(*LIST)
+
+             CRTSRVPGM  SRVPGM(&TARGETLIB/RUCRTTSTT) +
+                          MODULE(QTEMP/RUCRTTSTT QTEMP/RUCRTTST +
+                          QTEMP/PGMMSG) EXPORT(*ALL) TEXT('RPGUnit +
+                          - SelfTest - Test RUCRTTST.') +
+                          BNDSRVPGM(RUTESTCASE)
+
+             ENDPGM

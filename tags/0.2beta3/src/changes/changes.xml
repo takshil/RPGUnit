@@ -1,0 +1,13 @@
+<document>
+  <properties>
+    <title>RPGUnit Issues</title>
+    <author email="lacton@users.sourceforge.net">lacton</author>
+  </properties>
+  <body>
+    <release version="0.2" date="2006-09-05" description="Version 0.2 Release Notes">
+      <action dev="lacton" type="add">
+        Uploaded source code to sourceforge.
+      </action>
+    </release>
+  </body>
+</document>
