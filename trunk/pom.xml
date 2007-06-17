@@ -85,12 +85,13 @@
         <developerConnection>scm:svn:https://rpgunit.svn.sourceforge.net/svnroot/rpgunit</developerConnection>
         <url>http://rpgunit.svn.sourceforge.net/svnroot/rpgunit</url>
     </scm>
-    <distributionManagement> 
+    <distributionManagement>
         <site> 
             <id>sourceforge.net</id> 
             <url>scp://shell.sourceforge.net/home/groups/r/rp/rpgunit/htdocs</url> 
         </site> 
-    </distributionManagement> 
+        <downloadUrl>http://prdownloads.sourceforge.net/rpgunit</downloadUrl>
+    </distributionManagement>
 
 
 </project>
