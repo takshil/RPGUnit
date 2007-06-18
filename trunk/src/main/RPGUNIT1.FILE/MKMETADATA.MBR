@@ -260,6 +260,9 @@
              CHGPFM     FILE(&TARGETLIB/RPGUNITY1) MBR(QUSPTRUS) +
                           SRCTYPE(RPGLE) TEXT('Retrieve pointer to +
                           user space.')
+             CHGPFM     FILE(&TARGETLIB/RPGUNITY1) MBR(QWCRTVCA) +
+                          SRCTYPE(RPGLE) TEXT('Retrieve current +
+                          attributes.')
              CHGPFM     FILE(&TARGETLIB/RPGUNITY1) MBR(QWVRCSTK) +
                           SRCTYPE(RPGLE) TEXT('Retrieve call stack.')
              CHGPFM     FILE(&TARGETLIB/RPGUNITY1) MBR(RSLVSP) +
