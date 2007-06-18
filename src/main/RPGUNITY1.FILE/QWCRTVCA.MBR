@@ -1,0 +1,26 @@
+
+      // Prototype for API QWCRTVCA (Retrieve Current Attributes).
+
+     DQWCRTVCA         pr                  ExtPgm('QWCRTVCA')
+     D rcvVar                      5000a   Options(*VarSize)
+     D rcvVarLen                     10i 0 Const
+     D fmtNm                          8a   Const
+     D attribCnt                     10i 0 Const
+     D attribKeys                    10i 0 Const Dim(255) Options(*VarSize)
+     D errors                     32766a   Options(*VarSize) NoOpt
+
+     D dsRTVC0100      ds                  Qualified Based(template)
+     D  attribCnt                    10i 0
+     D  attribData                 5000a
+
+     D dsRTVC0100Ent   ds                   Qualified Based(template)
+     D  len                          10i 0
+     D  key                          10i 0
+     D  dataType                      1a
+     D                                3a
+     D  dataLen                      10i 0
+     D  data                       5000a
+
+       // Attribute Keys:
+       // - Output Queue Name
+     D OUTQ_NM         c                   Const(1501)
