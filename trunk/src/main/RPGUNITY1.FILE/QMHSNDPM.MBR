@@ -4,7 +4,7 @@
 
      D QMHSNDPM        PR                  ExtPgm('QMHSNDPM')
      D   msgID                        7a   Const
-     D   qualMsgF                    20a   Const
+     D   qlfMsgF                     20a   Const
          // TODO Add Options(*VarSize to msgData).
      D   msgData                    256a   Const
      D   msgDataLen                  10i 0 Const
