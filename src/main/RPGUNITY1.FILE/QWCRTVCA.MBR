@@ -10,9 +10,12 @@
      D errors                     32766a   Options(*VarSize) NoOpt
 
      D dsRTVC0100      ds                  Qualified Based(template)
+        // Job attribute entry count.
      D  attribCnt                    10i 0
-     D  attribData                32766a
+        // Job attribute entries.
+     D  attribEnts                32766a
 
+       // Job attribute entry.
      D dsRTVC0100Ent   ds                   Qualified Based(template)
      D  len                          10i 0
      D  key                          10i 0
