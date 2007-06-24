@@ -47,6 +47,12 @@
 
      D ProcNm_t        s            256a   Based(template)
 
+       // Qualified Job Name.
+     D QlfJobNm_t      ds                  Qualified Based(template)
+     D  jobNm                        10a
+     D  usrNm                        10a
+     D  jobNb                         6a
+
      D TestResult_t    ds                  Qualified Based(template)
      D  outcome                       1a
      D  details

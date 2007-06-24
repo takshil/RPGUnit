@@ -12,10 +12,3 @@
      D   splfNb                      10i 0 Const
      D   nbOfBuffers                 10i 0 Const
      D   error                    32766a   Options(*varsize) NoOpt
-
-       // Qualified Job Name.
-     D QlfJobNm_t      ds                  Qualified Based(template)
-     D  jobNm                        10a
-     D  usrNm                        10a
-     D  jobNb                         6a
-
