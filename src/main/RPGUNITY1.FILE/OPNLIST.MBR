@@ -16,6 +16,6 @@
      D  listStatusInd                 1a
      D                                1a
      D  rtnInfoLen                   10i 0
-     D  rcvVar1stRcd                 10i 0
+     D  firstRcdIdx                  10i 0
      D                               40a
 

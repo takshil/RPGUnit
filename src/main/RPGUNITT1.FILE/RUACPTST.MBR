@@ -785,7 +785,7 @@
                 'Indicator=' + listInfo.infoCompInd );  // TODO -> error()
         endif;
 
-        if ( listInfo.rcvVar1stRcd <> 0 );
+        if ( listInfo.firstRcdIdx <> 0 );
           fail( 'QGYOLSPL unexpectedly returned a first record' );  // TODO->error()
         endif;
 

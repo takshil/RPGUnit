@@ -178,7 +178,7 @@
      D                                     Based(ent_p)
      D ent_p           s               *
        // Big buffer to receive call stack info.
-     D rcvVar          s           5000a
+     D rawCallStk      s           5000a
        // Statement Id.
      D sttId           s             10a   Based(sttId_p)
      D sttId_p         s               *
@@ -198,14 +198,14 @@
         jobIdInfo.threadInd = 1;
         jobIdInfo.threadId  = *loval;
 
-        QWVRCSTK(rcvVar :
-                 %len(rcvVar) :
-                 'CSTK0100' :
-                 jobIdInfo :
-                 'JIDF0100' :
-                 dsECNull );
+        QWVRCSTK( rawCallStk :
+                  %size(rawCallStk) :
+                  'CSTK0100' :
+                  jobIdInfo :
+                  'JIDF0100' :
+                  dsECNull );
 
-        hdr_p = %addr(rcvVar);
+        hdr_p = %addr(rawCallStk);
         ent_p = hdr_p + hdr.callStkOff;
 
         // TODO Refactor the following piece of code.
