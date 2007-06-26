@@ -7,8 +7,8 @@
       //
 
      DQGYOLSPL         pr                  ExtPgm('QGYOLSPL')
-     D rcvVar                     32766a   Options(*VarSize)
-     D rcvVarLen                     10i 0 Const
+     D splfListEnt                32766a   Options(*VarSize)
+     D splfListEntLen                10i 0 Const
      D listInfo                      80a
      D nbOfRcdToRtn                  10i 0 Const
      D sortInfo                     256a   Const Options(*VarSize)

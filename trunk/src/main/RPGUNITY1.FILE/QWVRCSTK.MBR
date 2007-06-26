@@ -2,8 +2,8 @@
       // Prototype for API QWVRCSTK (Retrieve Call Stack).
 
      DQWVRCSTK         pr                  ExtPgm('QWVRCSTK')
-     D rcvVar                     32766a   Options(*VarSize)
-     D rcvVarLen                     10i 0 Const
+     D rawCallStk                 32766a   Options(*VarSize)
+     D rawCallStkLen                 10i 0 Const
      D fmtRcvInfo                     8a   Const
      D jobIdInfo                           Const LikeDs(dsJIDF0100)
      D fmtJobIdInfo                   8a   Const

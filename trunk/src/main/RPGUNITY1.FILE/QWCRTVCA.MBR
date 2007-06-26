@@ -2,8 +2,8 @@
       // Prototype for API QWCRTVCA (Retrieve Current Attributes).
 
      DQWCRTVCA         pr                  ExtPgm('QWCRTVCA')
-     D rcvVar                     32766a   Options(*VarSize)
-     D rcvVarLen                     10i 0 Const
+     D rawAttribs                 32766a   Options(*VarSize)
+     D rawAttribsLen                 10i 0 Const
      D fmtNm                          8a   Const
      D attribCnt                     10i 0 Const
      D attribKeys                    10i 0 Const Dim(255) Options(*VarSize)
