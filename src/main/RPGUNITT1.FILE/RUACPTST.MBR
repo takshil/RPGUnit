@@ -45,10 +45,15 @@
       //----------------------------------------------------------------------
 
       /copy RPGUNITY1,DSEC
+      /copy RPGUNITY1,QGYCLST
+      /copy RPGUNITY1,QGYGTLE
+      /copy RPGUNITY1,QGYOLSPL
       /copy RPGUNITY1,QMHRCVPM
+      /copy RPGUNITY1,OPNLIST
       /copy RPGUNITY1,QSPCLOSP
       /copy RPGUNITY1,QSPGETSP
       /copy RPGUNITY1,QSPOPNSP
+      /copy RPGUNITY1,QWCRTVCA
       /copy RPGUNITY1,TEMPLATES
       /copy RPGUNITY1,USRSPC
       /copy RPGUNIT1,TESTCASE
@@ -76,8 +81,16 @@
      DopnSplf          pr
      D splfNm                        10a   Const
 
+     DrtvJobUsrNm      pr                  Like(UsrNm_t)
+
+     DrtvLatestSplf    pr                  LikeDs(SplfId_t)
+     D usrNm                               Const Like(UsrNm_t)
+
      DrtvMsg           pr           256a
      D msgType                       10a   Const
+
+     DrtvSplfHdl       pr            10i 0
+     D splfNm                        10a   Const
 
      Drun              pr
      D cmd                        32767a   Const Varying
@@ -101,6 +114,16 @@
        // SNA Character String (in spool files).
        // - New Line
      D NL              c                   Const(x'15')
+
+
+      //----------------------------------------------------------------------
+      //   Templates
+      //----------------------------------------------------------------------
+
+     D SplfId_t        ds                  Qualified Based(template)
+     D  qlfJobNm                           LikeDs(QlfJobNm_t)
+     D  nm                           10a
+     D  nb                           10i 0
 
 
       //----------------------------------------------------------------------
@@ -627,22 +650,12 @@
      D qspGenHdr_p     s               *
      D qspGenHdr       ds                  LikeDs(qspGenHdr_t)
      D                                     Based(qspGenHdr_p)
-       // QSP API buffer (print data).
-     D qspBuf          s            300a   Based(splf.bufPos_p)
-     D qspBufChar      s              1a   Based(splf.bufPos_p)
        // User Space to store spool contents.
      D usrSpcNm        ds                  LikeDs(Object_t)
 
       /free
 
-        QSPOPNSP( splf.hdl :
-                  '*' :
-                  *blank :
-                  *blank :
-                  splfNm :
-                  -1 :
-                  1 :
-                  dsECNull );
+        splf.hdl = rtvSplfHdl( splfNm );
 
         usrSpcNm.nm  = 'RUSPOOL';
         usrSpcNm.lib = 'QTEMP';
@@ -666,43 +679,143 @@
      P                 e
 
 
-     PsplfLineStartsWith...
-     P                 b
-     DsplfLineStartsWith...
-     D                 pi
-     D expString                    256a   Const Varying
+     PrtvJobUsrNm      b
+     DrtvJobUsrNm      pi            10a
+
+       // Job attributes.
+     D jobAttribs      ds                  LikeDs(dsRTVC0100)
+       // Job attribute keys.
+     D attribKeys      s             10i 0 Dim(1)
+       // Current user profile name job attribute entry.
+     D usrNmEnt        ds                  LikeDs(dsRTVC0100Ent)
 
       /free
 
-        splf.bufPos_p = findInSpool( NL : splf.bufPos_p : splf.usrSpcEnd_p );
-        splf.bufPos_p = bufEqual( expString : splf.bufPos_p + 1 );
+        attribKeys(1) = CUR_USR_NM;
+
+        QWCRTVCA( jobAttribs :
+                  %size(jobAttribs) :
+                  'RTVC0100' :
+                  %elem(attribKeys) :
+                  attribKeys :
+                  dsECNull );
+
+        if (jobAttribs.attribCnt <> 1);
+          fail( 'QWCRTVCA returned an unexpected number of job attributes' );  // TODO ->error()
+        endif;
+
+        usrNmEnt = jobAttribs.attribEnts;
+
+        if (usrNmEnt.key <> CUR_USR_NM) or
+           (usrNmEnt.dataType <> 'C') or
+           (usrNmEnt.dataLen <> 10);
+          fail( 'QWCRTVA returned an unexpected attribute format' );  // TODO ->error()
+        endif;
+
+        return usrNmEnt.data;
 
       /end-free
      P                 e
 
 
-     Prun              b
-     Drun              pi
-     D cmd                        32767a   Const Varying
-     D errorExpected                   n   Const Options(*NoPass)
-     D msgType                       10a   Const Options(*NoPass)
-     D msgTxt                       256a   Options(*NoPass)
+     PrtvLatestSplf    b
+     DrtvLatestSplf    pi                  LikeDs(SplfId_t)
+     D usrNm                               Const Like(UsrNm_t)
+
+       // Retrieve only one record.
+     D ONE_RECORD      c                   Const(1)
+       // Retrieve spool files from all jobs.
+     D ALL_JOBS        c                   Const(*blank)
+       // Do not retrieve any record.
+     D NO_RETRIEVAL    c                   Const(*zero)
+       // The entire list is build synchronously.
+     D BUILD_ENTIRE_LIST_SYNCHRONOUSLY...
+     D                 c                   Const(-1)
+       // Latest spool file id.
+     D latestSplfId    ds                  LikeDs(SplfId_t)
+       // Latest spool file info from QGYOLSPL API.
+     D latestSplfInfo  ds                  LikeDs(dsOSPL0300)
+       // Open list information for QGYOLSPL API.
+     D listInfo        ds                  LikeDs(dsOpnList)
+       // Open list handle.
+     D opnListHdl      s                   Like(dsOpnList.rqsHdl)
+       // Last spool file record index.
+     D lastRcdIdx      s             10i 0
+       // Spool file sorting information.
+     D sortInfo        ds                  LikeDs(SortInfo_t)
+       // Spool file filtering information, according to OSPF0100 format.
+     D filterInfo      ds                  Qualified
+     D  usrNmCnt                     10i 0 Inz(1)
+     D   usrNm                       10a
+     D                                2a   Inz(x'00')
+     D  outqNmCnt                    10i 0 Inz(1)
+     D   outqNm                      10a   Inz('*ALL')
+     D   outqLibNm                   10a   Inz(*blank)
+     D  formType                     10a   Inz('*ALL')
+     D  usrData                      10a   Inz('RUCMDRUN')
+     D  statusCnt                    10i 0 Inz(1)
+     D   splfStatus                  10a   Inz('*READY')
+     D                                2a   Inz(x'00')
+     D  deviceNmCnt                  10i 0 Inz(1)
+     D   deviceNm                    10a   Inz('*ALL')
+     D                                2a   Inz(x'00')
 
       /free
 
-        if %parms >= 2 and errorExpected;
-          callp(e) qcmdexc( cmd: %len(cmd) );
-          assert( %error: 'Expected error missing' );
-        else;
-          qcmdexc( cmd: %len(cmd) );
+        filterInfo.usrNm = usrNm;
+
+        sortInfo = *allx'00';
+
+        QGYOLSPL( latestSplfInfo :
+                  NO_RETRIEVAL :
+                  listInfo :
+                  BUILD_ENTIRE_LIST_SYNCHRONOUSLY :
+                  sortInfo :
+                  filterInfo :
+                  ALL_JOBS :
+                  'OSPL0300' :
+                  dsECNull );
+
+        if ( listInfo.retRcdCnt <> 0 );
+          fail( 'QGYOLSPL unexpectedly returned a record' );  // TODO -> error()
         endif;
 
-        if %parms >= 4;
-          msgTxt = rtvMsg( msgType );
+        if ( listInfo.infoCompInd <> 'C' );
+          fail( 'QGYOLSPL could not retrieve complete info. ' +
+                'Indicator=' + listInfo.infoCompInd );  // TODO -> error()
         endif;
+
+        if ( listInfo.rcvVar1stRcd <> 0 );
+          fail( 'QGYOLSPL unexpectedly returned a first record' );  // TODO->error()
+        endif;
+
+        if ( listInfo.totalRcdCnt <= 0 );
+          fail( 'No spool file found for user ' + usrNm );
+        endif;
+
+        opnListHdl = listInfo.rqsHdl;
+        lastRcdIdx = listInfo.totalRcdCnt;
+
+        QGYGTLE( latestSplfInfo :
+                 %size(latestSplfInfo) :
+                 opnListHdl :
+                 listInfo :
+                 ONE_RECORD :
+                 lastRcdIdx :
+                 dsECNull );
+
+        QGYCLST( listInfo.rqsHdl : dsECNull );
+
+        latestSplfId.qlfJobNm.jobNm = latestSplfInfo.jobNm;
+        latestSplfId.qlfJobNm.usrNm = latestSplfInfo.usrNm;
+        latestSplfId.qlfJobNm.jobNb = latestSplfInfo.jobNb;
+        latestSplfId.nm             = latestSplfInfo.splfNm;
+        latestSplfId.nb             = latestSplfInfo.splfNb;
+
+        return latestSplfId;
 
       /end-free
-     Prun              e
+     P                 e
 
 
      PrtvMsg           b
@@ -751,3 +864,82 @@
 
       /end-free
      P                 e
+
+
+     PrtvSplfHdl       b
+     DrtvSplfHdl       pi            10i 0
+     D splfNm                        10a   Const
+
+       // Latest spool file handle.
+     D latestSplfHdl   s             10i 0
+       // Latest spool file id.
+     D latestSplfId    ds                  LikeDs(SplfId_t)
+       // Current user profile name.
+     D curUsrNm        s                   Like(UsrNm_t)
+
+      /free
+
+        // A simple QSPOPNSP( splfHdl : '*' : *blank : *blank : splfNm : -1 : 1 : dsECNull )
+        // would be enough for regular (i.e., interactive and submitted) jobs, but it does
+        // not work for remote commands (a.k.a. server jobs).  In the latter, the spool file
+        // is created by a special job named QPRTJOB.
+
+        curUsrNm = rtvJobUsrNm();
+        latestSplfId = rtvLatestSplf( curUsrNm );
+
+        aEqual( splfNm : latestSplfId.nm );    // Sanity check.
+
+        QSPOPNSP( latestSplfHdl :
+                  latestSplfId.qlfJobNm :
+                  *blank :
+                  *blank :
+                  latestSplfId.nm :
+                  latestSplfId.nb :
+                  1 :
+                  dsECNull );
+
+        return latestSplfHdl;
+
+      /end-free
+     P                 e
+
+
+     Prun              b
+     Drun              pi
+     D cmd                        32767a   Const Varying
+     D errorExpected                   n   Const Options(*NoPass)
+     D msgType                       10a   Const Options(*NoPass)
+     D msgTxt                       256a   Options(*NoPass)
+
+      /free
+
+        if %parms >= 2 and errorExpected;
+          callp(e) qcmdexc( cmd: %len(cmd) );
+          assert( %error: 'Expected error missing' );
+        else;
+          qcmdexc( cmd: %len(cmd) );
+        endif;
+
+        if %parms >= 4;
+          msgTxt = rtvMsg( msgType );
+        endif;
+
+      /end-free
+     P                 e
+
+
+     PsplfLineStartsWith...
+     P                 b
+     DsplfLineStartsWith...
+     D                 pi
+     D expString                    256a   Const Varying
+
+      /free
+
+        splf.bufPos_p = findInSpool( NL : splf.bufPos_p : splf.usrSpcEnd_p );
+        splf.bufPos_p = bufEqual( expString : splf.bufPos_p + 1 );
+
+      /end-free
+     P                 e
+
+

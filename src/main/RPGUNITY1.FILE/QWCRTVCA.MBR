@@ -25,5 +25,7 @@
      D  data                      32766a
 
        // Attribute Keys:
+       // - Current User Profile
+     D CUR_USR_NM      c                   CONST(0305)
        // - Output Queue Name
      D OUTQ_NM         c                   Const(1501)

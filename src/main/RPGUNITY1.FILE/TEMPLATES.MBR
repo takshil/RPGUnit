@@ -69,6 +69,8 @@
      D  tearDown                           LikeDs(Proc_t)
      D  teardownSuite                      LikeDs(Proc_t)
 
+       // User profile name.
+     D UsrNm_t         s             10a   Based(template)
 
      D MAX_CALL_STK_SIZE...
      D                 c                   Const(64)
