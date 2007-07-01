@@ -21,8 +21,10 @@
         // Exception data
      D  msgData                     240a
 
-     D dsECNull        ds                  Qualified
-        // No bytes provided. If an error occurs, an exception is returned to the application
+       // Error Code data structure to force error message percolation.
+     D percolateErrors...
+     D                 ds                  Qualified
+        // No bytes provided. If an error occurs, an exception is returned to the caller
         // to indicate that the requested function failed.
      D  bytesP                       10i 0 Inz(0)
 

@@ -177,10 +177,10 @@
           srvPgm.lib = '*LIBL';
         endif;
 
-        QBNLSPGM( usrSpc:
-                  'SPGL0610':
-                  srvPgm:
-                  dsECNull );
+        QBNLSPGM( usrSpc :
+                  'SPGL0610' :
+                  srvPgm :
+                  percolateErrors );
 
       /end-free
      P rtvProcInfo     e
