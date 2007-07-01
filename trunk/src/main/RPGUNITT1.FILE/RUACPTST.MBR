@@ -701,7 +701,7 @@
                   dsECNull );
 
         if (jobAttribs.attribCnt <> 1);
-          fail( 'QWCRTVCA returned an unexpected number of job attributes' );  // TODO ->error()
+          fail( 'QWCRTVCA returned an unexpected number of job attributes' );
         endif;
 
         usrNmEnt = jobAttribs.attribEnts;
@@ -709,7 +709,7 @@
         if (usrNmEnt.key <> CUR_USR_NM) or
            (usrNmEnt.dataType <> 'C') or
            (usrNmEnt.dataLen <> 10);
-          fail( 'QWCRTVA returned an unexpected attribute format' );  // TODO ->error()
+          fail( 'QWCRTVA returned an unexpected attribute format' );
         endif;
 
         return usrNmEnt.data;
@@ -777,21 +777,20 @@
                   dsECNull );
 
         if ( listInfo.retRcdCnt <> 0 );
-          fail( 'QGYOLSPL unexpectedly returned a record' );  // TODO -> error()
+          fail( 'QGYOLSPL unexpectedly returned a record' );
         endif;
 
         if ( listInfo.infoCompInd <> 'C' );
           fail( 'QGYOLSPL could not retrieve complete info. ' +
-                'Indicator=' + listInfo.infoCompInd );  // TODO -> error()
+                'Indicator=' + listInfo.infoCompInd );
         endif;
 
         if ( listInfo.firstRcdIdx <> 0 );
-          fail( 'QGYOLSPL unexpectedly returned a first record' );  // TODO->error()
+          fail( 'QGYOLSPL unexpectedly returned a first record' );
         endif;
 
-        if ( listInfo.totalRcdCnt <= 0 );
-          fail( 'No spool file found for user ' + usrNm );
-        endif;
+        assert( listInfo.totalRcdCnt > 0 :
+                'No spool file found for user ' + usrNm );
 
         opnListHdl = listInfo.rqsHdl;
         lastRcdIdx = listInfo.totalRcdCnt;
@@ -822,44 +821,45 @@
      DrtvMsg           pi           256a
      D msgType                       10a   Const
 
-       // TODO I don't need this powerful format.
-     D fmtNm           c                   Const('RCVM0300')
+     D fmtNm           c                   Const('RCVM0200')
      D callStkEnt      c                   Const('*')
      D callStkCnt      c                   Const(1)
      D msgKey          c                   Const(*blank)
      D waitTime        c                   Const(0)
      D msgAction       c                   Const('*REMOVE')
 
-     D rawInfo         ds                  LikeDs(RCVM0300)
-     D                                     Based(rawInfo_p)
-     D rawInfo_p       s               *
-     D rawInfoBuf      s          32565a
+     D rawMsgInfo      ds                  LikeDs(RCVM0200Hdr)
+     D                                     Based(rawMsgInfo_p)
+     D rawMsgInfo_p    s               *
+     D rawMsgInfoBuf   s          32565a
      D msg             s            256a   Based(msg_p)
      D msg_p           s               *
 
       /free
 
-        rawInfo_p = %addr( rawInfoBuf );
+        rawMsgInfo_p = %addr( rawMsgInfoBuf );
 
-        QMHRCVPM( rawInfo:
-                  %size(rawInfoBuf):
-                  fmtNm:
-                  callStkEnt:
-                  callStkCnt:
-                  msgType:
-                  msgKey:
-                  waitTime:
-                  msgAction:
-                  dsECNull );
+        QMHRCVPM( rawMsgInfoBuf :
+                  %size(rawMsgInfoBuf) :
+                  fmtNm :
+                  callStkEnt :
+                  callStkCnt :
+                  msgType :
+                  msgKey :
+                  waitTime :
+                  msgAction :
+                  dsECNull );    // TODO rename to 'percolateErrors'
 
-        assert( rawInfo.bytesA > 0: %trim(msgType) + ' Message Not Found' );
+        assert( rawMsgInfo.bytesA > 0 : %trim(msgType) + ' message not found' );
 
-        if rawInfo.msgLenR > 0;    // If there is a Message, return it.
-          msg_p = %addr(rawInfo) + %size(rawInfo) + rawInfo.rplDataLenR;
-          return %subst( msg: 1: rawInfo.msgLenR );
+        if rawMsgInfo.msgLenR > 0;    // If there is a Message, return it.
+          msg_p = %addr(rawMsgInfo)
+                + %size(rawMsgInfo)
+                + rawMsgInfo.rplDataLenR;
+          return %subst( msg : 1 : rawMsgInfo.msgLenR );
         else;    // Else return 'Replacement data or impromptu message text'.
-          msg_p = %addr(rawInfo) + %size(rawInfo) + 0;
-          return %subst( msg: 1: rawInfo.rplDataLenR );
+          msg_p = %addr(rawMsgInfo) + %size(rawMsgInfo) + 0;
+          return %subst( msg : 1 : rawMsgInfo.rplDataLenR );
         endif;
 
       /end-free

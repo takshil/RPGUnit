@@ -39,13 +39,13 @@
 
      D msgInfo         ds                  LikeDs(ExcpMsgInfo_t)
 
-     D rawInfoSize     ds                  Qualified
+     D rawMsgInfoSize  ds                  Qualified
      D  bytesR                       10i 0
      D  bytesA                       10i 0
 
-     D rawInfo         ds                  LikeDs(RCVM0300)
-     D                                     Based(rawInfo_p)
-     D rawInfo_p       s               *
+     D rawMsgInfo      ds                  LikeDs(RCVM0300Hdr)
+     D                                     Based(rawMsgInfo_p)
+     D rawMsgInfo_p    s               *
 
      D msg             s            256a   Based(msg_p)
      D msg_p           s               *
@@ -58,21 +58,23 @@
 
         // Call rcvPgmMsg twice to get the number of bytes available.
 
-        rcvPgmMsg( rawInfoSize: %size(rawInfoSize) );
-        rawInfo_p = %alloc( rawInfoSize.bytesA );
-        rcvPgmMsg( rawInfo: rawInfoSize.bytesA );
+        rcvPgmMsg( rawMsgInfoSize : %size(rawMsgInfoSize) );
+        rawMsgInfo_p = %alloc( rawMsgInfoSize.bytesA );
+        rcvPgmMsg( rawMsgInfo : rawMsgInfoSize.bytesA );
 
-        msgInfo.msgId = rawInfo.msgId;
+        msgInfo.msgId = rawMsgInfo.msgId;
 
-        msg_p = %addr(rawInfo) + %size(rawInfo) + rawInfo.rplDataLenR;
-        msgInfo.msg = %subst( msg: 1: rawInfo.msgLenR );
+        msg_p = %addr(rawMsgInfo)
+              + %size(rawMsgInfo)
+              + rawMsgInfo.rplDataLenR;
+        msgInfo.msg = %subst( msg : 1 : rawMsgInfo.msgLenR );
 
-        senderInfo_p = msg_p + rawInfo.msgLenR + rawInfo.msgHlpLenR;
+        senderInfo_p = msg_p + rawMsgInfo.msgLenR + rawMsgInfo.msgHlpLenR;
         msgInfo.pgmNm  = senderInfo.sndPgmNm;
         msgInfo.procNm = senderInfo.sndProcNm;
         msgInfo.sttNb  = senderInfo.SndPgmSttNb;
 
-        dealloc rawInfo_p;
+        dealloc rawMsgInfo_p;
 
         return msgInfo;
 
