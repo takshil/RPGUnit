@@ -236,6 +236,8 @@
              CHGPFM     FILE(&TARGETLIB/RPGUNITY1) MBR(QBNLSPGM) +
                           SRCTYPE(RPGLE) TEXT('List ILE service +
                           program information API.')
+             CHGPFM     FILE(&TARGETLIB/RPGUNITY1) MBR(QCMDEXC) +
+                          SRCTYPE(RPGLE) TEXT('Execute command.')
              CHGPFM     FILE(&TARGETLIB/RPGUNITY1) MBR(QLEACTBNDP) +
                           SRCTYPE(RPGLE) TEXT('Activate bound +
                           program.')

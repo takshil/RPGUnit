@@ -7,11 +7,8 @@
        //----------------------------------------------------------------------
 
       /copy RPGUNITY1,PGMMSG
+      /copy RPGUNITY1,QCMDEXC
       /copy RPGUNITY1,TEMPLATES
-
-     Dqcmdexc          pr                  ExtPgm('QCMDEXC')
-     D cmd                         1024a   Const Options(*VarSize)
-     D len                           15p 5 Const
 
 
        //----------------------------------------------------------------------
