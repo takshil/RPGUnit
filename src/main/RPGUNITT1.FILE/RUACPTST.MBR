@@ -45,6 +45,7 @@
       //----------------------------------------------------------------------
 
       /copy RPGUNITY1,DSEC
+      /copy RPGUNITY1,QCMDEXC
       /copy RPGUNITY1,QGYCLST
       /copy RPGUNITY1,QGYGTLE
       /copy RPGUNITY1,QGYOLSPL
@@ -57,10 +58,6 @@
       /copy RPGUNITY1,TEMPLATES
       /copy RPGUNITY1,USRSPC
       /copy RPGUNIT1,TESTCASE
-
-     Dqcmdexc          pr                  ExtPgm('QCMDEXC')
-     D cmd                         1024a   Const Options(*VarSize)
-     D len                           15p 5 Const
 
 
       //----------------------------------------------------------------------
