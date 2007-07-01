@@ -67,7 +67,7 @@
         endif;
 
         // Get object type as hex value.
-        QLICVTTP( '*SYMTOHEX': '*SRVPGM': hexType: dsECNull );
+        QLICVTTP( '*SYMTOHEX' : '*SRVPGM' : hexType : percolateErrors );
 
         // Retrieve system pointer.
         monitor;
@@ -116,13 +116,13 @@
       /free
 
         // Get export.
-        QleGetExp( actMark:
-                   0:
-                   %len(%trimr(proc.procNm)):
-                   %trimr(proc.procNm):
-                   proc.procPtr:
-                   exportType:
-                   dsECNull );
+        QleGetExp( actMark :
+                   0 :
+                   %len(%trimr(proc.procNm)) :
+                   %trimr(proc.procNm) :
+                   proc.procPtr :
+                   exportType :
+                   percolateErrors );
 
         if exportType <> PROCEDURE;
           proc.procPtr = *null;

@@ -203,7 +203,7 @@
                   'CSTK0100' :
                   jobIdInfo :
                   'JIDF0100' :
-                  dsECNull );
+                  percolateErrors );
 
         hdr_p = %addr(rawCallStk);
         ent_p = hdr_p + hdr.callStkOff;
@@ -306,15 +306,15 @@
           callStkCnt = 2;    // Up to the caller's caller.
         endif;
 
-        QMHSNDPM('CPF9897':
-                 'QCPFMSG   *LIBL':
-                 msg:
-                 %len(%trimr(msg)):
-                 '*ESCAPE':
-                 '*':
-                 callStkCnt:
-                 msgKey:
-                 dsECNull);
+        QMHSNDPM( 'CPF9897' :
+                  'QCPFMSG   *LIBL' :
+                  msg :
+                  %len(%trimr(msg)) :
+                  '*ESCAPE' :
+                  '*' :
+                  callStkCnt :
+                  msgKey :
+                  percolateErrors );
 
       /end-free
      P sndEscapeMsg    e

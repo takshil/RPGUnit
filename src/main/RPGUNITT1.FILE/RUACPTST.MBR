@@ -609,7 +609,7 @@
      DcloSplf          pi
       /free
 
-        QSPCLOSP( splf.hdl : dsECNull );
+        QSPCLOSP( splf.hdl : percolateErrors );
 
       /end-free
      P                 e
@@ -668,7 +668,7 @@
                   'SPFR0300' :
                   -1 :    // Reading an entire spooled file.
                   '*ERROR' :
-                  dsECNull );
+                  percolateErrors );
 
         aEqual( 'C' : qspGenHdr.compInd );
 
@@ -698,7 +698,7 @@
                   'RTVC0100' :
                   %elem(attribKeys) :
                   attribKeys :
-                  dsECNull );
+                  percolateErrors );
 
         if (jobAttribs.attribCnt <> 1);
           fail( 'QWCRTVCA returned an unexpected number of job attributes' );
@@ -774,7 +774,7 @@
                   filterInfo :
                   ALL_JOBS :
                   'OSPL0300' :
-                  dsECNull );
+                  percolateErrors );
 
         if ( listInfo.retRcdCnt <> 0 );
           fail( 'QGYOLSPL unexpectedly returned a record' );
@@ -801,9 +801,9 @@
                  listInfo :
                  ONE_RECORD :
                  lastRcdIdx :
-                 dsECNull );
+                 percolateErrors );
 
-        QGYCLST( listInfo.rqsHdl : dsECNull );
+        QGYCLST( listInfo.rqsHdl : percolateErrors );
 
         latestSplfId.qlfJobNm.jobNm = latestSplfInfo.jobNm;
         latestSplfId.qlfJobNm.usrNm = latestSplfInfo.usrNm;
@@ -848,7 +848,7 @@
                   msgKey :
                   waitTime :
                   msgAction :
-                  dsECNull );    // TODO rename to 'percolateErrors'
+                  percolateErrors );
 
         assert( rawMsgInfo.bytesA > 0 : %trim(msgType) + ' message not found' );
 
@@ -879,7 +879,7 @@
 
       /free
 
-        // A simple QSPOPNSP( splfHdl : '*' : *blank : *blank : splfNm : -1 : 1 : dsECNull )
+        // A simple QSPOPNSP( splfHdl : '*' : *blank : *blank : splfNm : -1 : 1 : percolateErrors )
         // would be enough for regular (i.e., interactive and submitted) jobs, but it does
         // not work for remote commands (a.k.a. server jobs).  In the latter, the spool file
         // is created by a special job named QPRTJOB.
@@ -896,7 +896,7 @@
                   latestSplfId.nm :
                   latestSplfId.nb :
                   1 :
-                  dsECNull );
+                  percolateErrors );
 
         return latestSplfHdl;
 

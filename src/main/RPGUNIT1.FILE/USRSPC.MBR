@@ -62,7 +62,7 @@
                   usrSpcCrtParm.auth :
                   usrSpcCrtParm.text :
                   usrSpcCrtParm.replace :
-                  dsECNull );
+                  percolateErrors );
 
         QUSPTRUS( usrSpc : usrSpc_p );
 

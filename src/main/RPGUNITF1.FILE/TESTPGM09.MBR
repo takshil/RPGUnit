@@ -66,7 +66,7 @@
                   '*CTLBDY' :
                   callStkCnt :
                   msgKey :
-                  dsECNull );
+                  percolateErrors );
 
       /end-free
      P sndInfoMsg      e

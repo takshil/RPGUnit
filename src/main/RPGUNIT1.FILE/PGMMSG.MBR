@@ -100,16 +100,16 @@
 
       /free
 
-        QMHRCVPM( info:
-                  size:
-                  fmtNm:
-                  callStkEnt:
-                  callStkCnt:
-                  msgType:
-                  msgKey:
-                  waitTime:
-                  msgAction:
-                  dsECNull );
+        QMHRCVPM( info :
+                  size :
+                  fmtNm :
+                  callStkEnt :
+                  callStkCnt :
+                  msgType :
+                  msgKey :
+                  waitTime :
+                  msgAction :
+                  percolateErrors );
 
       /end-free
      P rcvPgmMsg       e
@@ -128,15 +128,15 @@
 
       /free
 
-        QMHSNDPM( 'CPF9897':
-                  'QCPFMSG   *LIBL':
-                  %trimr(msg):
-                  %len(%trimr(msg)):
-                  '*COMP':
-                  '*CTLBDY':
-                  1:
-                  msgKey:
-                  dsECNull );
+        QMHSNDPM( 'CPF9897' :
+                  'QCPFMSG   *LIBL' :
+                  %trimr(msg) :
+                  %len(%trimr(msg)) :
+                  '*COMP' :
+                  '*CTLBDY' :
+                  1 :
+                  msgKey :
+                  percolateErrors );
 
       /end-free
      P sndCompMsg      e
@@ -155,15 +155,15 @@
 
       /free
 
-        QMHSNDPM( 'CPF9897':
-                  'QCPFMSG   *LIBL':
-                  %trimr(msg):
-                  %len(%trimr(msg)):
-                  '*ESCAPE':
-                  '*CTLBDY':
-                  1:
-                  msgKey:
-                  dsECNull );
+        QMHSNDPM( 'CPF9897' :
+                  'QCPFMSG   *LIBL' :
+                  %trimr(msg) :
+                  %len(%trimr(msg)) :
+                  '*ESCAPE' :
+                  '*CTLBDY' :
+                  1 :
+                  msgKey :
+                  percolateErrors );
 
       /end-free
      P sndEscapeMsg    e
@@ -190,7 +190,7 @@
                   '*' :
                   1 :
                   msgKey :
-                  dsECNull );
+                  percolateErrors );
 
       /end-free
      P sndInfoMsg      e
