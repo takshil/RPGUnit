@@ -9,7 +9,6 @@
       /copy RPGUNITY1,DSEC
       /copy RPGUNITY1,PGMMSG
       /copy RPGUNITY1,QCMDEXC
-      /copy RPGUNITY1,QMHRCVPM
       /copy RPGUNITY1,TEMPLATES
 
 
@@ -231,41 +230,12 @@
      DrtvMsg           pi           256a
      D msgType                       10a   Const
 
-     D fmtNm           c                   Const('RCVM0200')
-     D callStkEnt      c                   Const('*')
-     D callStkCnt      c                   Const(1)
-     D msgKey          c                   Const(*blank)
-     D waitTime        c                   Const(0)
-     D msgAction       c                   Const('*REMOVE')
-
-     D rawMsgInfo      ds                  LikeDs(RCVM0200Hdr)
-     D                                     Based(rawMsgInfo_p)
-     D rawMsgInfo_p    s               *
-     D rawMsgInfoBuf   s          32565a
-     D msg             s            256a   Based(msg_p)
-     D msg_p           s               *
+     D msg             ds                  LikeDs(Msg_t)
 
       /free
 
-        rawMsgInfo_p = %addr( rawMsgInfoBuf );
-
-        QMHRCVPM( rawMsgInfoBuf :
-                  %size(rawMsgInfoBuf) :
-                  fmtNm :
-                  callStkEnt :
-                  callStkCnt :
-                  msgType :
-                  msgKey :
-                  waitTime :
-                  msgAction :
-                  percolateErrors );
-
-        if (rawMsgInfo.bytesA = 0);
-          sndEscapeMsg( %trim(msgType) + ' message not found' );
-        endif;
-
-        msg_p = %addr(rawMsgInfo) + %size(rawMsgInfo) + 0;
-        return %subst( msg : 1 : rawMsgInfo.rplDataLenR );
+        msg = rcvPgmMsg( msgType : ONE_CALL_STK_LVL_ABOVE_HERE );
+        return msg.rplData;
 
       /end-free
      P                 e
