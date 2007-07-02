@@ -38,6 +38,8 @@
      DtestChooseTest   pr
      DtestChooseNonExistingTest...
      D                 pr
+     DtestTestCreationSuccess...
+     D                 pr
 
 
       //----------------------------------------------------------------------
@@ -45,6 +47,7 @@
       //----------------------------------------------------------------------
 
       /copy RPGUNITY1,DSEC
+      /copy RPGUNITY1,PGMMSG
       /copy RPGUNITY1,QCMDEXC
       /copy RPGUNITY1,QGYCLST
       /copy RPGUNITY1,QGYGTLE
@@ -579,6 +582,23 @@
      P                 e
 
 
+     PtestTestCreationSuccess...
+     P                 b                   Export
+     DtestTestCreationSuccess...
+     D                 pi
+      /free
+
+        run( 'RUCRTTST PGM(QTEMP/TESTPGM01) SRCFILE(RPGUNITF1)' :
+             noError :
+             '*COMP' :
+             msgTxt );
+
+        aEqual( 'Test program TESTPGM01 created in library QTEMP.' : msgTxt );
+
+      /end-free
+     P                 e
+
+
       //----------------------------------------------------------------------
       //   Helper Procedures
       //----------------------------------------------------------------------
@@ -818,45 +838,17 @@
      DrtvMsg           pi           256a
      D msgType                       10a   Const
 
-     D fmtNm           c                   Const('RCVM0200')
-     D callStkEnt      c                   Const('*')
-     D callStkCnt      c                   Const(1)
-     D msgKey          c                   Const(*blank)
-     D waitTime        c                   Const(0)
-     D msgAction       c                   Const('*REMOVE')
-
-     D rawMsgInfo      ds                  LikeDs(RCVM0200Hdr)
-     D                                     Based(rawMsgInfo_p)
-     D rawMsgInfo_p    s               *
-     D rawMsgInfoBuf   s          32565a
-     D msg             s            256a   Based(msg_p)
-     D msg_p           s               *
+       // Message info.
+     D msg             ds                  LikeDs(Msg_t)
 
       /free
 
-        rawMsgInfo_p = %addr( rawMsgInfoBuf );
+        msg = rcvPgmMsg( msgType : ONE_CALL_STK_LVL_ABOVE_HERE );
 
-        QMHRCVPM( rawMsgInfoBuf :
-                  %size(rawMsgInfoBuf) :
-                  fmtNm :
-                  callStkEnt :
-                  callStkCnt :
-                  msgType :
-                  msgKey :
-                  waitTime :
-                  msgAction :
-                  percolateErrors );
-
-        assert( rawMsgInfo.bytesA > 0 : %trim(msgType) + ' message not found' );
-
-        if rawMsgInfo.msgLenR > 0;    // If there is a Message, return it.
-          msg_p = %addr(rawMsgInfo)
-                + %size(rawMsgInfo)
-                + rawMsgInfo.rplDataLenR;
-          return %subst( msg : 1 : rawMsgInfo.msgLenR );
-        else;    // Else return 'Replacement data or impromptu message text'.
-          msg_p = %addr(rawMsgInfo) + %size(rawMsgInfo) + 0;
-          return %subst( msg : 1 : rawMsgInfo.rplDataLenR );
+        if %len( msg.txt ) > 0;
+          return msg.txt;
+        else;
+          return msg.rplData;
         endif;
 
       /end-free

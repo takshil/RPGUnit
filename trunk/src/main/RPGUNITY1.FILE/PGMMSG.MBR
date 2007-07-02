@@ -1,19 +1,37 @@
-      //
-      // Prototype for PGMMSG.
-      //
+      //----------------------------------------------------------------------
+      //   Exported Procedure Prototypes
+      //----------------------------------------------------------------------
 
+       // Receive exception message.
      D getExcpMsgInfo  pr                  LikeDs(ExcpMsgInfo_t)
      D                                     ExtProc('getExcpMsgInfo')
 
-       // Sends a completion message.
+       // Receive a program message.
+     D rcvPgmMsg       pr                  LikeDs(Msg_t)
+     D                                     ExtProc('rcvPgmMsg')
+        // Message type: *ANY, *COMP, *EXCP...
+     D  msgType                      10a   Const
+        // If the message was sent to a procedure above in the call stack,
+        // indicate how many level above it is.
+     D  callStkCnt                   10i 0 Const Options(*NoPass)
+
+       // Send a completion message.
      D sndCompMsg      pr                  ExtProc('sndCompMsg')
      D  msg                         256a   Const
 
-       // Sends an escape message.
+       // Send an escape message.
      D sndEscapeMsg    pr                  ExtProc('sndEscapeMsg')
      D  msg                         256a   Const
 
-       // Sends an information message.
+       // Send an information message.
      D sndInfoMsg      pr                  ExtProc('sndInfoMsg')
      D  msg                         256a   Const
 
+
+      //----------------------------------------------------------------------
+      //   Exported Constants
+      //----------------------------------------------------------------------
+
+       // One stack level above the current stack entry.
+     D ONE_CALL_STK_LVL_ABOVE_HERE...
+     D                 c                   Const(1)

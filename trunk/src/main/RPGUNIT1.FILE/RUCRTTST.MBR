@@ -6,8 +6,10 @@
        //   IMPORTS
        //----------------------------------------------------------------------
 
+      /copy RPGUNITY1,DSEC
       /copy RPGUNITY1,PGMMSG
       /copy RPGUNITY1,QCMDEXC
+      /copy RPGUNITY1,QMHRCVPM
       /copy RPGUNITY1,TEMPLATES
 
 
@@ -16,6 +18,26 @@
        //----------------------------------------------------------------------
 
       /copy RPGUNITY1,RUCRTTST
+
+
+       //----------------------------------------------------------------------
+       //   PRIVATE PROTOTYPES
+       //----------------------------------------------------------------------
+
+     D crtRpgMod       pr
+     D  testPgm                            Const LikeDs(Object_t)
+     D  srcFile                            Const LikeDs(Object_t)
+     D  cOption                            Const LikeDs(Options_t)
+     D  dbgView                      10a   Const
+
+     D crtSrvPgm       pr                  LikeDs(Object_t)
+     D  testPgm                            Const LikeDs(Object_t)
+     D  bndSrvPgm                          Const LikeDs(ObjectArray_t)
+     D  bndDir                             Const LikeDs(ObjectArray_t)
+     D  bOption                            Const LikeDs(Options_t)
+
+     DrtvMsg           pr           256a
+     D msgType                       10a   Const
 
 
        //----------------------------------------------------------------------
@@ -30,12 +52,15 @@
        //   GLOBAL VARIABLES
        //----------------------------------------------------------------------
 
+     D srvPgm          ds                  LikeDs(Object_t)
+
+
        //----------------------------------------------------------------------
        //   MAIN PROGRAM
        //----------------------------------------------------------------------
 
      DRUcrtTst         pr
-     D pgm                                 Const LikeDs(Object_t)
+     D testPgm                             Const LikeDs(Object_t)
      D srcFile                             Const LikeDs(Object_t)
      D cOption                             Const LikeDs(Options_t)
      D dbgView                       10a   Const
@@ -44,7 +69,7 @@
      D bOption                             Const LikeDs(Options_t)
 
      DRUcrtTst         pi
-     D pgm                                 Const LikeDs(Object_t)
+     D testPgm                             Const LikeDs(Object_t)
      D srcFile                             Const LikeDs(Object_t)
      D cOption                             Const LikeDs(Options_t)
      D dbgView                       10a   Const
@@ -52,37 +77,17 @@
      D bndDir                              Const LikeDs(ObjectArray_t)
      D bOption                             Const LikeDs(Options_t)
 
-       // A command to be executed.
-     D cmd             s            256a   Varying
-       // Export option for service program.
-     D export          s             10a
-       // Bound Service Programs, with RPGUnit services included.
-     D bndSrvPgmWithRU...
-     D                 ds                  LikeDs(ObjectArray_t)
-
       /free
 
        monitor;
-         cmd = getCrtRpgModCmd( pgm : srcFile : cOption : dbgView );
-         sndInfoMsg( cmd );
-         qcmdexc( cmd : %len(cmd) );
+         crtRpgMod( testPgm : srcFile : cOption : dbgView );
+         srvPgm = crtSrvPgm( testPgm : bndSrvPgm : bndDir : bOption );
 
-         export = '*ALL';
-         bndSrvPgmWithRU = bndSrvPgm;
-         bndSrvPgmWithRU.size += 1;
-         bndSrvPgmWithRU.object(bndSrvPgmWithRU.size).nm = 'RUTESTCASE';
-         bndSrvPgmWithRU.object(bndSrvPgmWithRU.size).lib = '*LIBL';
+         sndCompMsg( 'Test program ' + %trim(srvPgm.nm)
+                   + ' created in library ' + %trim(srvPgm.lib) + '.' );
 
-         cmd = getCrtSrvPgmCmd( pgm :
-                                bndSrvPgmWithRU :
-                                bndDir :
-                                bOption :
-                                export );
-         sndInfoMsg( cmd );
-         qcmdexc( cmd : %len(cmd) );
-
-         on-error;
-           sndEscapeMsg( 'Unable to create test ' + %trim(pgm.nm) + '.' );
+       on-error;
+         sndEscapeMsg( 'Unable to create test ' + %trim(testPgm.nm) + '.' );
        endmon;
 
        *inlr = *on;
@@ -90,11 +95,73 @@
       /end-free
 
 
+     P crtRpgMod       b
+     D crtRpgMod       pi
+     D  testPgm                            Const LikeDs(Object_t)
+     D  srcFile                            Const LikeDs(Object_t)
+     D  cOption                            Const LikeDs(Options_t)
+     D  dbgView                      10a   Const
+
+       // A command to be executed.
+     D cmd             s            256a   Varying
+      /free
+
+         cmd = getCrtRpgModCmd( testPgm : srcFile : cOption : dbgView );
+         sndInfoMsg( cmd );
+         qcmdexc( cmd : %len(cmd) );
+
+      /end-free
+     P                 e
+
+
+     P crtSrvPgm       b
+     D crtSrvPgm       pi                  LikeDs(Object_t)
+     D  testPgm                            Const LikeDs(Object_t)
+     D  bndSrvPgm                          Const LikeDs(ObjectArray_t)
+     D  bndDir                             Const LikeDs(ObjectArray_t)
+     D  bOption                            Const LikeDs(Options_t)
+
+       // Export all procedures from the service program.
+     D EXPORT_ALL      c                   Const('*ALL')
+       // A command to be executed.
+     D cmd             s            256a   Varying
+       // Bound Service Programs, with RPGUnit services included.
+     D bndSrvPgmWithRU...
+     D                 ds                  LikeDs(ObjectArray_t)
+       // Completion message data.
+     D compMsgData     s            256a
+       // Target service program.
+     D targetSrvPgm    ds                  LikeDs(Object_t)
+
+      /free
+
+         bndSrvPgmWithRU = bndSrvPgm;
+         bndSrvPgmWithRU.size += 1;
+         bndSrvPgmWithRU.object(bndSrvPgmWithRU.size).nm = 'RUTESTCASE';
+         bndSrvPgmWithRU.object(bndSrvPgmWithRU.size).lib = '*LIBL';
+
+         cmd = getCrtSrvPgmCmd( testPgm :
+                                bndSrvPgmWithRU :
+                                bndDir :
+                                bOption :
+                                EXPORT_ALL );
+         sndInfoMsg( cmd );
+         qcmdexc( cmd : %len(cmd) );
+
+         compMsgData = rtvMsg( '*COMP' );
+         targetSrvPgm = %subst( compMsgData : 1 : 20 );
+
+         return targetSrvPgm;
+
+      /end-free
+     P                 e
+
+
      P getCrtSrvPgmCmd...
      P                 b                   Export
      D getCrtSrvPgmCmd...
      D                 pi           256a
-     D  pgm                                Const LikeDs(Object_t)
+     D  testPgm                            Const LikeDs(Object_t)
      D  bndSrvPgm                          Const LikeDs(ObjectArray_t)
      D  bndDir                             Const LikeDs(ObjectArray_t)
      D  options                            Const LikeDs(Options_t)
@@ -107,8 +174,8 @@
 
       /free
 
-        cmd = 'CRTSRVPGM SRVPGM(' + serializeObjectName( pgm ) + ') ';
-        cmd += 'MODULE(QTEMP/' + %trim(pgm.nm) + ') ';
+        cmd = 'CRTSRVPGM SRVPGM(' + serializeObjectName( testPgm ) + ') ';
+        cmd += 'MODULE(QTEMP/' + %trim(testPgm.nm) + ') ';
         cmd += serializeObjectArray( 'BNDSRVPGM' : bndSrvPgm );
         cmd += serializeObjectArray( 'BNDDIR'    : bndDir    );
         cmd += serializeOptions( 'OPTION' : options );
@@ -128,7 +195,7 @@
      P                 b                   Export
      D getCrtRpgModCmd...
      D                 pi           256a
-     D  pgm                                Const LikeDs(Object_t)
+     D  testPgm                            Const LikeDs(Object_t)
      D  srcFile                            Const LikeDs(Object_t)
      D  options                            Const LikeDs(Options_t)
      D  dbgView                      10a   Const
@@ -140,7 +207,7 @@
 
       /free
 
-        cmd = 'CRTRPGMOD MODULE(QTEMP/' + %trim(pgm.nm) + ') ';
+        cmd = 'CRTRPGMOD MODULE(QTEMP/' + %trim(testPgm.nm) + ') ';
 
         if srcFile <> *blank;
           cmd += 'SRCFILE(' + serializeObjectName(srcFile) + ') ';
@@ -156,6 +223,51 @@
 
       /end-free
      P getCrtRpgModCmd...
+     P                 e
+
+
+      // TODO Duplicated procedure from RUACPTST.
+     PrtvMsg           b
+     DrtvMsg           pi           256a
+     D msgType                       10a   Const
+
+     D fmtNm           c                   Const('RCVM0200')
+     D callStkEnt      c                   Const('*')
+     D callStkCnt      c                   Const(1)
+     D msgKey          c                   Const(*blank)
+     D waitTime        c                   Const(0)
+     D msgAction       c                   Const('*REMOVE')
+
+     D rawMsgInfo      ds                  LikeDs(RCVM0200Hdr)
+     D                                     Based(rawMsgInfo_p)
+     D rawMsgInfo_p    s               *
+     D rawMsgInfoBuf   s          32565a
+     D msg             s            256a   Based(msg_p)
+     D msg_p           s               *
+
+      /free
+
+        rawMsgInfo_p = %addr( rawMsgInfoBuf );
+
+        QMHRCVPM( rawMsgInfoBuf :
+                  %size(rawMsgInfoBuf) :
+                  fmtNm :
+                  callStkEnt :
+                  callStkCnt :
+                  msgType :
+                  msgKey :
+                  waitTime :
+                  msgAction :
+                  percolateErrors );
+
+        if (rawMsgInfo.bytesA = 0);
+          sndEscapeMsg( %trim(msgType) + ' message not found' );
+        endif;
+
+        msg_p = %addr(rawMsgInfo) + %size(rawMsgInfo) + 0;
+        return %subst( msg : 1 : rawMsgInfo.rplDataLenR );
+
+      /end-free
      P                 e
 
 
