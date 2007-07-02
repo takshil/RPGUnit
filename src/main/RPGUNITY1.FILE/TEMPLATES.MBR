@@ -30,11 +30,25 @@
         // Sending Statement Number.
      D  sttNb                        10a
 
+       // Program Message.
+     D Msg_t           ds                  Qualified Based(template)
+     D  id                            7a
+     D  txt                         254a   Varying
+     D  rplData                     254a   Varying
+     D  sender                             LikeDs(MsgSender_t)
+
+       // Program message sender.
+     D MsgSender_t     ds                  Qualified Based(template)
+     D  pgmNm                        12a
+     D  procNm                      256a
+     D  sttNb                         6a
+
        // Object Qualified Name.
      D Object_t        ds                  Qualified Based(template)
      D  nm                           10a
      D  lib                          10a
 
+       // Named callable procedure.
      D Proc_t          ds                  Qualified Based(template)
      D  procNm                             Like(ProcNm_t)
      D  procPtr                        *   ProcPtr
