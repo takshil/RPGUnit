@@ -26,8 +26,6 @@
 
      D sndEscapeMsg    pr
      D  msg                         256a   Const
-        // Call Stack Counter Increase. Pass 1 to ignore the caller's stack entry.
-     D  callStkInc                   10u 0 Const Options(*NoPass)
 
 
        //----------------------------------------------------------------------
@@ -264,31 +262,12 @@
      P iEqual          e
 
 
-     P raiseInternalError...
-     P                 b                   Export
-       //----------------------------------------------------------------------
-       // Raises an internal error message. See prototype.
-       //----------------------------------------------------------------------
-     D raiseInternalError...
-     D                 pi
-     D  msg                         256a   Value
-      /free
-
-        msg = 'RPGUnit Internal Error - ' + %trimr(msg);
-        sndEscapeMsg( msg: 1 );    // 1 = ignore this stack entry.
-
-      /end-free
-     P raiseInternalError...
-     P                 e
-
-
      P sndEscapeMsg    b
        //----------------------------------------------------------------------
        // Sends an escape message. See prototype.
        //----------------------------------------------------------------------
      D sndEscapeMsg    pi
      D  msg                         256a   Const
-     D  callStkInc                   10u 0 Const Options(*NoPass)
 
        // Message key (identifies a particular instance of a message in a queue).
      D msgKey          s              4a
@@ -300,11 +279,7 @@
 
       /free
 
-        if %parms >= 2;
-          callStkCnt = 2 + callStkInc;
-        else;
-          callStkCnt = 2;    // Up to the caller's caller.
-        endif;
+        callStkCnt = 2;    // Up to the caller's caller.
 
         QMHSNDPM( 'CPF9897' :
                   'QCPFMSG   *LIBL' :
