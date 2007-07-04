@@ -11,8 +11,3 @@
      D getAssertFailEvt...
      D                 pr                  ExtProc('getAssertFailEvt')
      D                                     LikeDs(AssertFailEvt_t)
-
-     D raiseInternalError...
-     D                 pr                  ExtProc('raiseInternalError')
-     D  msg                         256a   Value
-

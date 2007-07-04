@@ -8,8 +8,8 @@
       //   Exported Procedures
       //----------------------------------------------------------------------
 
-      /copy RPGUNITY1,ASSERT
       /copy RPGUNITY1,CALLPROC
+      /copy RPGUNITY1,RUNNER
       /copy RPGUNITY1,TEMPLATES
 
 
@@ -76,7 +76,7 @@
                              srvPgm.lib:
                              auth );
         on-error;
-          raiseInternalError( 'Failed to retrieve system pointer for '
+          raiseRUError( 'Failed to retrieve system pointer for '
                             + %trimr(srvPgm.nm)
                             + '.' );
         endmon;
