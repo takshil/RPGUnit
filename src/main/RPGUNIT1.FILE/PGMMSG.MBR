@@ -15,7 +15,7 @@
       //   Imported Procedures
       //----------------------------------------------------------------------
 
-      /copy RPGUNITY1,DSEC
+      /copy RPGUNITY1,ERRORCODE
       /copy RPGUNITY1,QMHRCVPM
       /copy RPGUNITY1,QMHSNDPM
       /copy RPGUNITY1,TEMPLATES

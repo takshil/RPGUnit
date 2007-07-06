@@ -6,10 +6,10 @@
        // http://publib.boulder.ibm.com/iseries/v5r2/
        // ic2924/index.htm?info/apis/error.htm
 
-     D dsEC            ds                  Qualified
+     D errorCode       ds                  Qualified
         // Bytes provided. The number of bytes that the calling application
         // provides for the error code.
-     D  bytesP                       10i 0 Inz(%size(dsEC))
+     D  bytesP                       10i 0 Inz(%size(errorCode))
         // Bytes available. The length of the error information available to
         // the API to return, in bytes. If this is 0, no error was detected and
         // none of the fields that follow this field in the structure are changed.
