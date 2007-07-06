@@ -11,7 +11,7 @@
 
       /copy RPGUNITY1,ASSERT
       /copy RPGUNITY1,DSEC
-      /copy RPGUNITY1,QMHSNDPM
+      /copy RPGUNITY1,PGMMSG
       /copy RPGUNITY1,QWVRCSTK
       /copy RPGUNITY1,TEMPLATES
       /copy RPGUNIT1,TESTCASE
@@ -23,9 +23,6 @@
 
      D getCallStk      pr                  LikeDs(CallStkEnt_t)
      D                                     Dim(MAX_CALL_STK_SIZE)
-
-     D sndEscapeMsg    pr
-     D  msg                         256a   Const
 
 
        //----------------------------------------------------------------------
@@ -118,7 +115,7 @@
         assertFailEvt.msg = msg;
         assertFailEvt.callStkEnt = getCallStk();
 
-        sndEscapeMsg( msg );
+        sndEscapeMsgToCaller( msg );
 
       /end-free
      P fail            e
@@ -260,37 +257,3 @@
 
       /end-free
      P iEqual          e
-
-
-     P sndEscapeMsg    b
-       //----------------------------------------------------------------------
-       // Sends an escape message. See prototype.
-       //----------------------------------------------------------------------
-     D sndEscapeMsg    pi
-     D  msg                         256a   Const
-
-       // Message key (identifies a particular instance of a message in a queue).
-     D msgKey          s              4a
-       // Message destination call stack counter.
-       // 0 = this stack entry.
-       // 1 = this procedure's caller.
-       // 2 = this procedure's caller's caller.
-     D callStkCnt      s             10i 0
-
-      /free
-
-        callStkCnt = 2;    // Up to the caller's caller.
-
-        QMHSNDPM( 'CPF9897' :
-                  'QCPFMSG   *LIBL' :
-                  msg :
-                  %len(%trimr(msg)) :
-                  '*ESCAPE' :
-                  '*' :
-                  callStkCnt :
-                  msgKey :
-                  percolateErrors );
-
-      /end-free
-     P sndEscapeMsg    e
-

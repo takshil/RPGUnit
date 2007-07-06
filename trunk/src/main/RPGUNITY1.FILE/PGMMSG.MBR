@@ -20,7 +20,12 @@
      D  msg                         256a   Const
 
        // Send an escape message.
-     D sndEscapeMsg    pr                  ExtProc('sndEscapeMsg')
+     D sndEscapeMsgToCaller...
+     D                 pr                  ExtProc('sndEscapeMsgToCaller')
+     D  msg                         256a   Const
+
+     D sndEscapeMsgAboveCtlBdy...
+     D                 pr                  ExtProc('sndEscapeMsgAboveCtlBdy')
      D  msg                         256a   Const
 
        // Send an information message.

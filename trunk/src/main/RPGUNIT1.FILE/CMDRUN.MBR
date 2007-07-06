@@ -84,6 +84,8 @@
      D failureCnt      s             10i 0
      D testCasesCnt    s             10i 0
 
+       // TODO Remove me.
+     D msgKey          s              4a
 
        //----------------------------------------------------------------------
        //   Main Procedure
@@ -142,7 +144,7 @@
         if failureCnt = 0 and errorCnt = 0;
           sndCompMsg( msg );
         else;
-          sndEscapeMsg( msg );
+          sndEscapeMsgAboveCtlBdy( msg );
         endif;
 
         *inlr = *on;

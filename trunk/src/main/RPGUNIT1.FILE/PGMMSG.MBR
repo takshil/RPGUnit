@@ -105,7 +105,7 @@
         rawMsgHdr_p = %addr( rawMsgBuf );
 
         if (rawMsgHdr.bytesA = 0);
-          sndEscapeMsg( %trim(msgType) + ' message not found' );
+          sndEscapeMsgToCaller( %trim(msgType) + ' message not found' );
         endif;
 
         msg.id = rawMsgHdr.msgId;
@@ -140,8 +140,7 @@
      D sndCompMsg      pi
      D  msg                         256a   Const
 
-       // The message reference key (unique string of characters that identifies
-       // a particular instance of a message in a queue).
+       // The message reference key.
      D msgKey          s              4a
 
       /free
@@ -160,15 +159,39 @@
      P sndCompMsg      e
 
 
-     P sndEscapeMsg    b                   Export
-       //----------------------------------------------------------------------
-       // Send an escape message. See prototype.
-       //----------------------------------------------------------------------
-     D sndEscapeMsg    pi
+     P sndEscapeMsgToCaller...
+     P                 b                   Export
+     D sndEscapeMsgToCaller...
+     D                 pi
      D  msg                         256a   Const
 
-       // The message reference key (unique string of characters that identifies
-       // a particular instance of a message in a queue).
+       // The message reference key.
+     D msgKey          s              4a
+
+      /free
+
+        QMHSNDPM( 'CPF9897' :
+                  'QCPFMSG   *LIBL' :
+                  %trimr(msg) :
+                  %len(%trimr(msg)) :
+                  '*ESCAPE' :
+                  '*' :
+                  2 :    // TODO Symbolic constant.
+                  msgKey :
+                  percolateErrors );
+
+      /end-free
+     P sndEscapeMsgToCaller...
+     P                 e
+
+
+     P sndEscapeMsgAboveCtlBdy...
+     P                 b                   Export
+     D sndEscapeMsgAboveCtlBdy...
+     D                 pi
+     D  msg                         256a   Const
+
+       // The message reference key.
      D msgKey          s              4a
 
       /free
@@ -184,7 +207,8 @@
                   percolateErrors );
 
       /end-free
-     P sndEscapeMsg    e
+     P sndEscapeMsgAboveCtlBdy...
+     P                 e
 
 
      P sndInfoMsg      b                   Export
@@ -194,8 +218,7 @@
      D sndInfoMsg      pi
      D  msg                         256a   Const
 
-       // The message reference key (unique string of characters that identifies
-       // a particular instance of a message in a queue).
+       // The message reference key.
      D msgKey          s              4a
 
       /free

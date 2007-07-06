@@ -86,7 +86,8 @@
                    + ' created in library ' + %trim(srvPgm.lib) + '.' );
 
        on-error;
-         sndEscapeMsg( 'Unable to create test ' + %trim(testPgm.nm) + '.' );
+         sndEscapeMsgAboveCtlBdy( 'Unable to create test '
+                                  + %trim(testPgm.nm) + '.' );
        endmon;
 
        *inlr = *on;
