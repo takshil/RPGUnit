@@ -14,3 +14,21 @@
      D   msgKey                       4a
      D   error                     1024a   Options(*VarSize) NoOpt
 
+
+       //----------------------------------------------------------------------
+       //   Symbolic Constants
+       //----------------------------------------------------------------------
+
+       // Call stack entry:
+       // - current call stack entry
+     D CUR_CALL_STK_ENT...
+     D                 c                   Const('*')
+       // - control boundary
+     D CONTROL_BOUNDARY...
+     D                 c                   Const('*CTLBDY')
+
+       // Call stack count:
+     D ONE_CALL_STK_LVL_ABOVE...
+     D                 c                   Const(1)
+     D TWO_CALL_STK_LVL_ABOVE...
+     D                 c                   Const(2)
