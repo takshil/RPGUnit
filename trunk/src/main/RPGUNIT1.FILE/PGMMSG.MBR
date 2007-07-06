@@ -52,20 +52,6 @@
      D  msgType                      10a   Const
      D  callStkCnt                   10i 0 Const Options(*NoPass)
 
-       // TODO move these constants to QMHRC member.
-       // Most detailed format for QMHRCVPM API.
-     D ALL_MSG_INFO_WITH_SENDER_INFO...
-     D                 c                   Const('RCVM0300')
-       // The current call stack entry.
-     D THIS_CALL_STK_ENT...
-     D                 c                   Const('*')
-       // No message key.
-     D NO_MSG_KEY      c                   Const(*blank)
-       // Do not wait for receiving the message.
-     D NO_WAIT         c                   Const(0)
-       // Remove the message after receiving it.
-     D REMOVE_MSG      c                   Const('*REMOVE')
-
        // Safe value for the NoPass parameter callStkCnt.
      D safeCallStkCnt  s                   Like(callStkCnt)
        // Buffer for message info.
@@ -149,8 +135,8 @@
                   %trimr(msg) :
                   %len(%trimr(msg)) :
                   '*COMP' :
-                  '*CTLBDY' :
-                  1 :
+                  CONTROL_BOUNDARY :
+                  ONE_CALL_STK_LVL_ABOVE :
                   msgKey :
                   percolateErrors );
 
@@ -174,8 +160,8 @@
                   %trimr(msg) :
                   %len(%trimr(msg)) :
                   '*ESCAPE' :
-                  '*' :
-                  2 :    // TODO Symbolic constant.
+                  CUR_CALL_STK_ENT :
+                  TWO_CALL_STK_LVL_ABOVE :
                   msgKey :
                   percolateErrors );
 
@@ -200,8 +186,8 @@
                   %trimr(msg) :
                   %len(%trimr(msg)) :
                   '*ESCAPE' :
-                  '*CTLBDY' :
-                  1 :
+                  CONTROL_BOUNDARY :
+                  ONE_CALL_STK_LVL_ABOVE :
                   msgKey :
                   percolateErrors );
 
@@ -227,8 +213,8 @@
                   %trimr(msg) :
                   %len(%trimr(msg)) :
                   '*INFO' :
-                  '*' :
-                  1 :
+                  CUR_CALL_STK_ENT :
+                  ONE_CALL_STK_LVL_ABOVE :
                   msgKey :
                   percolateErrors );
 

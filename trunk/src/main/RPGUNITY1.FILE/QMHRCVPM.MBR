@@ -104,3 +104,26 @@
      D                                2a
       // ...last fields omitted.
 
+
+      //----------------------------------------------------------------------
+      //   Symbolic Constants
+      //----------------------------------------------------------------------
+
+       // Format Name:
+       // - most detailed format for QMHRCVPM API.
+     D ALL_MSG_INFO_WITH_SENDER_INFO...
+     D                 c                   Const('RCVM0300')
+
+       // The current call stack entry.
+     D THIS_CALL_STK_ENT...
+     D                 c                   Const('*')
+
+       // No message key.
+     D NO_MSG_KEY      c                   Const(*blank)
+
+       // Do not wait for receiving the message.
+     D NO_WAIT         c                   Const(0)
+
+       // Remove the message after receiving it.
+     D REMOVE_MSG      c                   Const('*REMOVE')
+
