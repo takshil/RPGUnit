@@ -20,17 +20,21 @@
 
      D testInternalEscapeMessage...
      D                 pr
+     D testSndEscapeMsgToCaller...
+     D                 pr
 
 
       //----------------------------------------------------------------------
       //   Private Procedures
       //----------------------------------------------------------------------
 
+     D callSndEscapeMsgToCaller...
+     D                 pr
      D procWithError   pr            10i 0
 
 
       //----------------------------------------------------------------------
-      //   Procedure Definitions
+      //   Test Procedure Definitions
       //----------------------------------------------------------------------
 
      P testInternalEscapeMessage...
@@ -58,9 +62,52 @@
             // do that, since it depends on the locale.
         aEqual( 'PGMMSGT': excpMsgInfo.pgmNm );
         aEqual( 'PROCWITHERROR': excpMsgInfo.procNm );
-        aEqual( '7300': excpMsgInfo.sttNb );
+        aEqual( '12000': excpMsgInfo.sttNb );
 
       /end-free
+     P                 e
+
+
+     P testSndEscapeMsgToCaller...
+     P                 b                   Export
+     D testSndEscapeMsgToCaller...
+     D                 pi
+
+     D excpMsgInfo     ds                  LikeDs(ExcpMsgInfo_t)
+
+      /free
+
+        monitor;
+          callSndEscapeMsgToCaller();
+          fail( 'sndEscapeMsgToCaller() did not raise an exception.' );
+
+        on-error;
+          // Success.
+        endmon;
+
+        excpMsgInfo = rcvExcpMsgInfo();
+
+        aEqual( 'Dummy error message' : excpMsgInfo.msg );
+
+      /end-free
+     P testSndEscapeMsgToCaller...
+     P                 e
+
+
+      //----------------------------------------------------------------------
+      //   Helper Procedures Definitions
+      //----------------------------------------------------------------------
+
+     P callSndEscapeMsgToCaller...
+     P                 b
+     D callSndEscapeMsgToCaller...
+     D                 pi
+      /free
+
+        sndEscapeMsgToCaller( 'Dummy error message' );
+
+      /end-free
+     P callSndEscapeMsgToCaller...
      P                 e
 
 
