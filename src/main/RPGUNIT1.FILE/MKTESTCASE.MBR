@@ -7,12 +7,13 @@
                           parameter required.') MSGTYPE(*ESCAPE))
 
              CRTRPGMOD  MODULE(QTEMP/ASSERT) SRCFILE(RPGUNIT1) DBGVIEW(*LIST)
+             CRTRPGMOD  MODULE(QTEMP/PGMMSG) SRCFILE(RPGUNIT1) DBGVIEW(*LIST)
              CRTRPGMOD  MODULE(QTEMP/SETUP) SRCFILE(RPGUNIT1) DBGVIEW(*LIST)
 
              CRTSRVPGM  SRVPGM(&TARGETLIB/RUTESTCASE) +
-                          MODULE(QTEMP/ASSERT QTEMP/SETUP) +
-                          EXPORT(*SRCFILE) SRCFILE(RPGUNITY1) +
-                          SRCMBR(TESTCASEBN) TEXT('RPGUnit - +
-                          TestCase Toolkit.')
+                          MODULE(QTEMP/ASSERT QTEMP/SETUP +
+                          QTEMP/PGMMSG) EXPORT(*SRCFILE) +
+                          SRCFILE(RPGUNITY1) SRCMBR(TESTCASEBN) +
+                          TEXT('RPGUnit - TestCase Toolkit.')
 
              ENDPGM

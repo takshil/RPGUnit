@@ -63,7 +63,7 @@
      D  msg                         256a   Const Varying
       /free
 
-        sndEscapeMsg( 'RPGUnit Error. ' + msg );
+        sndEscapeMsgAboveCtlBdy( 'RPGUnit Error. ' + msg );
 
       /end-free
      P raiseRUError    e
