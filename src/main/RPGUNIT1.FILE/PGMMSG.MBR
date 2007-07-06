@@ -25,12 +25,11 @@
       //   Procedure Definitions
       //----------------------------------------------------------------------
 
-       // TODO Rename to rcvExcpMsgInfo.
-     P getExcpMsgInfo  b                   Export
-     D getExcpMsgInfo  pi                  LikeDs(ExcpMsgInfo_t)
+     P rcvExcpMsgInfo  b                   Export
+     D rcvExcpMsgInfo  pi                  LikeDs(ExcpMsgInfo_t)
 
-     D msg             ds                  LikeDs(Msg_t)
-     D excpMsgInfo     ds                  LikeDs(ExcpMsgInfo_t)
+     D  msg            ds                  LikeDs(Msg_t)
+     D  excpMsgInfo    ds                  LikeDs(ExcpMsgInfo_t)
 
       /free
 
@@ -45,7 +44,7 @@
         return excpMsgInfo;
 
       /end-free
-     P getExcpMsgInfo  e
+     P rcvExcpMsgInfo  e
 
 
      P rcvPgmMsg       b                   Export

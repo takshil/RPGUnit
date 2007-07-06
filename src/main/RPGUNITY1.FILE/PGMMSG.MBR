@@ -3,8 +3,8 @@
       //----------------------------------------------------------------------
 
        // Receive exception message.
-     D getExcpMsgInfo  pr                  LikeDs(ExcpMsgInfo_t)
-     D                                     ExtProc('getExcpMsgInfo')
+     D rcvExcpMsgInfo  pr                  LikeDs(ExcpMsgInfo_t)
+     D                                     ExtProc('rcvExcpMsgInfo')
 
        // Receive a program message.
      D rcvPgmMsg       pr                  LikeDs(Msg_t)
