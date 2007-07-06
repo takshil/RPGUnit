@@ -222,7 +222,7 @@
              CHGPFM     FILE(&TARGETLIB/RPGUNITY1) MBR(CMDRUNPRT) +
                           SRCTYPE(RPGLE) TEXT('RPGUnit Prototype - +
                           Printing for CMDRUN.')
-             CHGPFM     FILE(&TARGETLIB/RPGUNITY1) MBR(DSEC) +
+             CHGPFM     FILE(&TARGETLIB/RPGUNITY1) MBR(ERRORCODE) +
                           SRCTYPE(RPGLE) TEXT('API error code struct.')
              CHGPFM     FILE(&TARGETLIB/RPGUNITY1) MBR(EXTPRC) +
                           SRCTYPE(RPGLE) TEXT('RPGUnit Prototype - +

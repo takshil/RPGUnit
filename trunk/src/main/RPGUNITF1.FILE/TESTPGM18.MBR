@@ -2,7 +2,7 @@
      H NoMain Option(*SrcStmt)
 
       /copy RPGUNIT1,TESTCASE
-      /copy RPGUNITY1,DSEC
+      /copy RPGUNITY1,ERRORCODE
       /copy RPGUNITY1,QMHSNDPM
 
      DsetupSuite       pr
