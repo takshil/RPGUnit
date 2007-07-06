@@ -35,9 +35,6 @@
      D  bndDir                             Const LikeDs(ObjectArray_t)
      D  bOption                            Const LikeDs(Options_t)
 
-     DrtvMsg           pr           256a
-     D msgType                       10a   Const
-
 
        //----------------------------------------------------------------------
        //   CONSTANTS
@@ -148,7 +145,7 @@
          sndInfoMsg( cmd );
          qcmdexc( cmd : %len(cmd) );
 
-         compMsgData = rtvMsg( '*COMP' );
+         compMsgData = rcvMsgTxt( '*COMP' );
          targetSrvPgm = %subst( compMsgData : 1 : 20 );
 
          return targetSrvPgm;
@@ -223,22 +220,6 @@
 
       /end-free
      P getCrtRpgModCmd...
-     P                 e
-
-
-      // TODO Duplicated procedure from RUACPTST.
-     PrtvMsg           b
-     DrtvMsg           pi           256a
-     D msgType                       10a   Const
-
-     D msg             ds                  LikeDs(Msg_t)
-
-      /free
-
-        msg = rcvPgmMsg( msgType : ONE_CALL_STK_LVL_ABOVE_HERE );
-        return msg.rplData;
-
-      /end-free
      P                 e
 
 

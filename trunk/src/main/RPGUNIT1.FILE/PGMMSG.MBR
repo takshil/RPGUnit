@@ -47,6 +47,27 @@
      P rcvExcpMsgInfo  e
 
 
+     P rcvMsgTxt       b                   Export
+     D rcvMsgTxt       pi           256a
+     D msgType                       10a   Const
+
+       // Message info.
+     D msg             ds                  LikeDs(Msg_t)
+
+      /free
+
+        msg = rcvPgmMsg( msgType : ONE_CALL_STK_LVL_ABOVE_HERE );
+
+        if %len( msg.rplData ) > 0;
+          return msg.rplData;
+        else;
+          return msg.txt;
+        endif;
+
+      /end-free
+     P rcvMsgTxt       e
+
+
      P rcvPgmMsg       b                   Export
      D rcvPgmMsg       pi                  LikeDs(Msg_t)
      D  msgType                      10a   Const

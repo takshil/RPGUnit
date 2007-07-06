@@ -85,9 +85,6 @@
      DrtvLatestSplf    pr                  LikeDs(SplfId_t)
      D usrNm                               Const Like(UsrNm_t)
 
-     DrtvMsg           pr           256a
-     D msgType                       10a   Const
-
      DrtvSplfHdl       pr            10i 0
      D splfNm                        10a   Const
 
@@ -265,12 +262,12 @@
         aEqual( 'FAILURE! 2 test cases, 0 assertions, 1 failures, 0 errors.':
                 msgTxt );
 
-        aEqual( 'setup'        : rtvMsg('*INFO') );
-        aEqual( 'test1'        : rtvMsg('*INFO') );
-        aEqual( 'teardown'     : rtvMsg('*INFO') );
-        aEqual( 'setup'        : rtvMsg('*INFO') );
-        aEqual( 'test2'        : rtvMsg('*INFO') );    // Raises a failure.
-        aEqual( 'teardown'     : rtvMsg('*INFO') );    // Call 'teardown' anyway.
+        aEqual( 'setup'        : rcvMsgTxt('*INFO') );
+        aEqual( 'test1'        : rcvMsgTxt('*INFO') );
+        aEqual( 'teardown'     : rcvMsgTxt('*INFO') );
+        aEqual( 'setup'        : rcvMsgTxt('*INFO') );
+        aEqual( 'test2'        : rcvMsgTxt('*INFO') );    // Raises a failure.
+        aEqual( 'teardown'     : rcvMsgTxt('*INFO') );    // Call 'teardown' anyway.
 
       /end-free
      P                 e
@@ -365,9 +362,9 @@
         aEqual( 'ERROR! 1 test cases, 0 assertions, 0 failures, 1 errors.' :
                 msgTxt );
 
-        aEqual( 'setup'        : rtvMsg('*INFO') );    // Error during setup.
+        aEqual( 'setup'        : rcvMsgTxt('*INFO') );    // Error during setup.
               // Test should not be called.
-        aEqual( 'teardown'     : rtvMsg('*INFO') );    // Teardown should be called anyway.
+        aEqual( 'teardown'     : rcvMsgTxt('*INFO') );    // Teardown should be called anyway.
 
         opnSplf( 'QSYSPRT' );
         splfLineStartsWith( '*** Tests from TESTPGM09 ***' );
@@ -433,14 +430,14 @@
         aEqual( 'FAILURE! 2 test cases, 0 assertions, 1 failures, 0 errors.':
                 msgTxt );
 
-        aEqual( 'setupSuite'   : rtvMsg('*INFO') );
-        aEqual( 'setup'        : rtvMsg('*INFO') );
-        aEqual( 'test1'        : rtvMsg('*INFO') );
-        aEqual( 'teardown'     : rtvMsg('*INFO') );
-        aEqual( 'setup'        : rtvMsg('*INFO') );
-        aEqual( 'test2'        : rtvMsg('*INFO') );    // Raises a failure.
-        aEqual( 'teardown'     : rtvMsg('*INFO') );    // Call 'teardown' anyway.
-        aEqual( 'teardownSuite': rtvMsg('*INFO') );    // Call 'teardownsuite' anyway.
+        aEqual( 'setupSuite'   : rcvMsgTxt('*INFO') );
+        aEqual( 'setup'        : rcvMsgTxt('*INFO') );
+        aEqual( 'test1'        : rcvMsgTxt('*INFO') );
+        aEqual( 'teardown'     : rcvMsgTxt('*INFO') );
+        aEqual( 'setup'        : rcvMsgTxt('*INFO') );
+        aEqual( 'test2'        : rcvMsgTxt('*INFO') );    // Raises a failure.
+        aEqual( 'teardown'     : rcvMsgTxt('*INFO') );    // Call 'teardown' anyway.
+        aEqual( 'teardownSuite': rcvMsgTxt('*INFO') );    // Call 'teardownsuite' anyway.
 
       /end-free
      P                 e
@@ -517,12 +514,12 @@
         aEqual( 'Success. 2 test cases, 0 assertions, 0 failures, 0 errors.':
                 msgTxt );
 
-        aEqual( 'setup'        : rtvMsg('*INFO') );
-        aEqual( 'test2'        : rtvMsg('*INFO') );
-        aEqual( 'teardown'     : rtvMsg('*INFO') );
-        aEqual( 'setup'        : rtvMsg('*INFO') );
-        aEqual( 'test1'        : rtvMsg('*INFO') );
-        aEqual( 'teardown'     : rtvMsg('*INFO') );
+        aEqual( 'setup'        : rcvMsgTxt('*INFO') );
+        aEqual( 'test2'        : rcvMsgTxt('*INFO') );
+        aEqual( 'teardown'     : rcvMsgTxt('*INFO') );
+        aEqual( 'setup'        : rcvMsgTxt('*INFO') );
+        aEqual( 'test1'        : rcvMsgTxt('*INFO') );
+        aEqual( 'teardown'     : rcvMsgTxt('*INFO') );
 
       /end-free
      P                 e
@@ -538,9 +535,9 @@
         aEqual( 'FAILURE! 1 test cases, 0 assertions, 1 failures, 0 errors.':
                 msgTxt );
 
-        aEqual( 'setup'        : rtvMsg('*INFO') );
-        aEqual( 'test2'        : rtvMsg('*INFO') );
-        aEqual( 'teardown'     : rtvMsg('*INFO') );
+        aEqual( 'setup'        : rcvMsgTxt('*INFO') );
+        aEqual( 'test2'        : rcvMsgTxt('*INFO') );
+        aEqual( 'teardown'     : rcvMsgTxt('*INFO') );
 
         opnSplf( 'QSYSPRT' );
         splfLineStartsWith( '*** Tests from TESTPGM05 ***' );
@@ -833,27 +830,6 @@
      P                 e
 
 
-     PrtvMsg           b
-     DrtvMsg           pi           256a
-     D msgType                       10a   Const
-
-       // Message info.
-     D msg             ds                  LikeDs(Msg_t)
-
-      /free
-
-        msg = rcvPgmMsg( msgType : ONE_CALL_STK_LVL_ABOVE_HERE );
-
-        if %len( msg.txt ) > 0;
-          return msg.txt;
-        else;
-          return msg.rplData;
-        endif;
-
-      /end-free
-     P                 e
-
-
      PrtvSplfHdl       b
      DrtvSplfHdl       pi            10i 0
      D splfNm                        10a   Const
@@ -909,7 +885,7 @@
         endif;
 
         if %parms >= 4;
-          msgTxt = rtvMsg( msgType );
+          msgTxt = rcvMsgTxt( msgType );
         endif;
 
       /end-free
