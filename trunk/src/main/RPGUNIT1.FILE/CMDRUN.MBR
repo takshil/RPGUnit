@@ -84,8 +84,6 @@
      D failureCnt      s             10i 0
      D testCasesCnt    s             10i 0
 
-       // TODO Remove me.
-     D msgKey          s              4a
 
        //----------------------------------------------------------------------
        //   Main Procedure

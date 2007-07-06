@@ -50,7 +50,7 @@
           // Success.
         endmon;
 
-        excpMsgInfo = getExcpMsgInfo();
+        excpMsgInfo = rcvExcpMsgInfo();
 
         aEqual( 'MCH1211': excpMsgInfo.msgId );
         assert( excpMsgInfo.msg <> *blank : 'Exception message not retrieved' );

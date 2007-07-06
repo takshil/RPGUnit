@@ -128,7 +128,7 @@
             callProcByPtr( setUp );
           on-error;
             result.outcome = TEST_CASE_ERROR;
-            result.error = getExcpMsgInfo();
+            result.error = rcvExcpMsgInfo();
           endmon;
 
         endif;
@@ -141,7 +141,7 @@
             failureEvt = getAssertFailEvt();
             if failureEvt = *blank;
               result.outcome = TEST_CASE_ERROR;
-              result.error = getExcpMsgInfo();
+              result.error = rcvExcpMsgInfo();
             else;
               result.outcome = TEST_CASE_FAILURE;
               result.failure = failureEvt;
@@ -156,7 +156,7 @@
             callProcByPtr( tearDown );
           on-error;
             result.outcome = TEST_CASE_ERROR;
-            result.error = getExcpMsgInfo();
+            result.error = rcvExcpMsgInfo();
           endmon;
 
         endif;
