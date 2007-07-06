@@ -6,6 +6,12 @@
      D rcvExcpMsgInfo  pr                  LikeDs(ExcpMsgInfo_t)
      D                                     ExtProc('rcvExcpMsgInfo')
 
+       // Receive a message text, either its replacement data if possible,
+       // or its true text if there is no replacement data.
+     D rcvMsgTxt       pr           256a   ExtProc('rcvMsgTxt')
+        // Message type: *ANY, *COMP, *EXCP...
+     D  msgType                      10a   Const
+
        // Receive a program message.
      D rcvPgmMsg       pr                  LikeDs(Msg_t)
      D                                     ExtProc('rcvPgmMsg')
