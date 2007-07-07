@@ -242,3 +242,27 @@
       /end-free
      P sndInfoMsg      e
 
+
+     P sndStsMsg       b                   Export
+     D sndStsMsg       pi
+     D  msg                         256a   Const
+
+       // The message reference key.
+     D msgKey          s              4a
+
+      /free
+
+        QMHSNDPM( 'CPF9897' :
+                  'QCPFMSG   *LIBL' :
+                  %trimr(msg) :
+                  %len(%trimr(msg)) :
+                  '*STATUS' :
+                  '*EXT' :
+                  *zero :
+                  msgKey :
+                  percolateErrors );
+
+      /end-free
+     P sndStsMsg       e
+
+

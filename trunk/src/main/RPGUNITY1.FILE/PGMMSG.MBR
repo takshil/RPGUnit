@@ -38,6 +38,10 @@
      D sndInfoMsg      pr                  ExtProc('sndInfoMsg')
      D  msg                         256a   Const
 
+       // Send a status message.
+     D sndStsMsg       pr                  ExtProc('sndStsMsg')
+     D  msg                         256a   Const
+
 
       //----------------------------------------------------------------------
       //   Exported Constants
