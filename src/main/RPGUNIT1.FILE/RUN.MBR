@@ -49,6 +49,8 @@
         actMark = activateSrvPgm( srvPgm );
         activateTestSuite( testSuite : actMark );
 
+        callProcByPtr( testSuite.setUpSuite.procPtr );
+
         return testSuite;
 
       /end-free

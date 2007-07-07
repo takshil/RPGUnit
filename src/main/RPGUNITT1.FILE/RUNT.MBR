@@ -110,8 +110,8 @@
      D RT_tearDownSuite_was_called...
      D                 s               n
 
-     D**setUpSuiteWasCalled...
-     D**                s               n
+     D setUpSuiteWasCalled...
+     D                 s               n
 
 
       //----------------------------------------------------------------------
@@ -124,7 +124,7 @@
 
         // Used by testLoadTestSuite.
 
-        // setUpSuiteWasCalled = *on;
+        setUpSuiteWasCalled = *on;
 
       /end-free
      P                 e
@@ -363,7 +363,7 @@
 
         // Setup.
 
-        //setUpSuiteWasCalled = *off;
+        setUpSuiteWasCalled = *off;
         srvPgm.nm  = pgmStatusDS.pgmNm;
         srvPgm.lib = pgmStatusDS.lib;
 
@@ -373,10 +373,13 @@
 
         // Controls.
 
-        //assert( setUpSuiteWasCalled :
-        //        'setUpSuite not called by loadTestSuite' );
+        assert( setUpSuiteWasCalled :
+                'setUpSuite not called by loadTestSuite' );
+        aEqual( 'SETUPSUITE' : testSuite.setUpSuite.procNm );
+        assert( %paddr(setUpSuite) = testSuite.setUpSuite.procPtr :
+                'Wrong SetUpSuite procedure pointer' );
         aEqual( 'SETUP' : testSuite.setUp.procNm );
-        assert( %paddr(setup) = testSuite.setUp.procPtr :
+        assert( %paddr(setUp) = testSuite.setUp.procPtr :
                 'Wrong SetUp procedure pointer' );
 
       /end-free
