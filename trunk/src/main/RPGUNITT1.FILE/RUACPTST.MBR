@@ -66,37 +66,40 @@
       //   Private Procedures
       //----------------------------------------------------------------------
 
-     DbufEqual         pr              *
-     D expBuf                       256a   Const Varying
-     D actBuf_p                        *   Const
+     D bufEqual        pr              *
+     D  expBuf                      256a   Const Varying
+     D  actBuf_p                       *   Const
 
-     DcloSplf          pr
+     D cloSplf         pr
 
-     DfindInSpool      pr              *
-     D charToFind                     1a   Const
-     D startPos                        *   Const
-     D endPos                          *   Const
+     D findInSpool     pr              *
+     D  charToFind                    1a   Const
+     D  startPos                       *   Const
+     D  endPos                         *   Const
 
-     DopnSplf          pr
-     D splfNm                        10a   Const
+     D opnSplf         pr
+     D  splfNm                       10a   Const
+     D  usrData                      10a   Const
 
-     DrtvJobUsrNm      pr                  Like(UsrNm_t)
+     D rtvJobUsrNm     pr                  Like(UsrNm_t)
 
-     DrtvLatestSplf    pr                  LikeDs(SplfId_t)
-     D usrNm                               Const Like(UsrNm_t)
+     D rtvLatestSplf   pr                  LikeDs(SplfId_t)
+     D  usrNm                              Const Like(UsrNm_t)
+     D  usrData                      10a   Const
 
-     DrtvSplfHdl       pr            10i 0
-     D splfNm                        10a   Const
+     D rtvSplfHdl      pr            10i 0
+     D  splfNm                       10a   Const
+     D  usrData                      10a   Const
 
-     Drun              pr
-     D cmd                        32767a   Const Varying
-     D errorExpected                   n   Const Options(*NoPass)
-     D msgType                       10a   Const Options(*NoPass)
-     D msgTxt                       256a   Options(*NoPass)
+     D run             pr
+     D  cmd                       32767a   Const Varying
+     D  errorExpected                  n   Const Options(*NoPass)
+     D  msgType                      10a   Const Options(*NoPass)
+     D  msgTxt                      256a   Options(*NoPass)
 
-     DsplfLineStartsWith...
+     D splfLineStartsWith...
      D                 pr
-     D expString                    256a   Const Varying
+     D  expString                   256a   Const Varying
 
 
       //----------------------------------------------------------------------
@@ -214,7 +217,7 @@
         aEqual( 'FAILURE! 2 test cases, 2 assertions, 2 failures, 0 errors.':
                 msgTxt );
 
-        opnSplf( 'QSYSPRT' );
+        opnSplf( 'RPGUNIT' : 'TESTPGM03' );
         splfLineStartsWith( '*** Tests from TESTPGM03 ***' );
         splfLineStartsWith( 'TESTFALSE - FAILURE' );
         splfLineStartsWith( 'Expected 5, but was 4.' );
@@ -282,7 +285,7 @@
         aEqual( 'ERROR! 1 test cases, 0 assertions, 0 failures, 1 errors.':
                 msgTxt );
 
-        opnSplf( 'QSYSPRT' );
+        opnSplf( 'RPGUNIT' : 'TESTPGM06' );
         splfLineStartsWith( '*** Tests from TESTPGM06 ***' );
         splfLineStartsWith( 'TESTERROR - ERROR' );
         splfLineStartsWith( 'MCH1211 - ' );
@@ -318,7 +321,7 @@
         aEqual( 'FAILURE! 1 test cases, 1 assertions, 1 failures, 0 errors.':
                 msgTxt );
 
-        opnSplf( 'QSYSPRT' );
+        opnSplf( 'RPGUNIT' : 'TESTPGM07' );
         splfLineStartsWith( '*** Tests from TESTPGM07 ***' );
         splfLineStartsWith( 'TESTSTACK - FAILURE' );
         splfLineStartsWith( 'Expected 5, but was 4.' );
@@ -366,7 +369,7 @@
               // Test should not be called.
         aEqual( 'teardown'     : rcvMsgTxt('*INFO') );    // Teardown should be called anyway.
 
-        opnSplf( 'QSYSPRT' );
+        opnSplf( 'RPGUNIT' : 'TESTPGM09' );
         splfLineStartsWith( '*** Tests from TESTPGM09 ***' );
         splfLineStartsWith( 'TEST - ERROR' );
         splfLineStartsWith( 'MCH1211 - ' );
@@ -391,7 +394,7 @@
         aEqual( 'ERROR! 1 test cases, 0 assertions, 0 failures, 1 errors.' :
                 msgTxt );
 
-        opnSplf( 'QSYSPRT' );
+        opnSplf( 'RPGUNIT' : 'TESTPGM10' );
         splfLineStartsWith( '*** Tests from TESTPGM10 ***' );
         splfLineStartsWith( 'TEST - ERROR' );
         splfLineStartsWith( 'MCH1211 - ' );
@@ -452,7 +455,7 @@
         aEqual( 'FAILURE! 2 test cases, 2 assertions, 1 failures, 0 errors.' :
                 msgTxt );
 
-        opnSplf( 'QSYSPRT' );
+        opnSplf( 'RPGUNIT' : 'TESTPGM14' );
         splfLineStartsWith( '*** Tests from TESTPGM14 ***' );
         splfLineStartsWith( 'TEST_DIFFERENT - FAILURE' );
         splfLineStartsWith( 'Expected 1234567890123456789012345678901,'
@@ -484,7 +487,7 @@
         aEqual( 'Success. 2 test cases, 3 assertions, 0 failures, 0 errors.' :
                 msgTxt );
 
-        opnSplf( 'QSYSPRT' );
+        opnSplf( 'RPGUNIT' : 'TESTPGM15' );
         splfLineStartsWith( '*** Tests from TESTPGM15 ***' );
         splfLineStartsWith( 'TESTTRUE - Success' );
         splfLineStartsWith( '  1 assertions' );
@@ -539,7 +542,7 @@
         aEqual( 'test2'        : rcvMsgTxt('*INFO') );
         aEqual( 'teardown'     : rcvMsgTxt('*INFO') );
 
-        opnSplf( 'QSYSPRT' );
+        opnSplf( 'RPGUNIT' : 'TESTPGM05' );
         splfLineStartsWith( '*** Tests from TESTPGM05 ***' );
         splfLineStartsWith( 'TEST2 - FAILURE' );
         splfLineStartsWith( 'test2' );
@@ -565,7 +568,7 @@
         aEqual( 'ERROR! 0 test cases, 0 assertions, 0 failures, 1 errors.':
                 msgTxt );
 
-        opnSplf( 'QSYSPRT' );
+        opnSplf( 'RPGUNIT' : 'TESTPGM05' );
         splfLineStartsWith( '*** Tests from TESTPGM05 ***' );
         splfLineStartsWith( 'NON_EXISTING_TEST - ERROR' );
         splfLineStartsWith( 'Test procedure not found.' );
@@ -655,10 +658,14 @@
      P                 e
 
 
-     PopnSplf          b
-     DopnSplf          pi
-     D splfNm                        10a   Const
+     P opnSplf         b
+     D opnSplf         pi
+     D  splfNm                       10a   Const
+     D  usrData                      10a   Const
 
+       // QSPGETSP API: Reading an entire spooled file.
+     D READ_ENTIRE_SPLF...
+     D                 c                   Const(-1)
        // QSP API generic header.
      D qspGenHdr_p     s               *
      D qspGenHdr       ds                  LikeDs(qspGenHdr_t)
@@ -668,7 +675,7 @@
 
       /free
 
-        splf.hdl = rtvSplfHdl( splfNm );
+        splf.hdl = rtvSplfHdl( splfNm : usrData );
 
         usrSpcNm.nm  = 'RUSPOOL';
         usrSpcNm.lib = 'QTEMP';
@@ -679,7 +686,7 @@
         QSPGETSP( splf.hdl :
                   usrSpcNm :
                   'SPFR0300' :
-                  -1 :    // Reading an entire spooled file.
+                  READ_ENTIRE_SPLF :
                   '*ERROR' :
                   percolateErrors );
 
@@ -731,9 +738,10 @@
      P                 e
 
 
-     PrtvLatestSplf    b
-     DrtvLatestSplf    pi                  LikeDs(SplfId_t)
-     D usrNm                               Const Like(UsrNm_t)
+     P rtvLatestSplf   b
+     D rtvLatestSplf   pi                  LikeDs(SplfId_t)
+     D  usrNm                              Const Like(UsrNm_t)
+     D  usrData                      10a   Const
 
        // Retrieve only one record.
      D ONE_RECORD      c                   Const(1)
@@ -765,7 +773,7 @@
      D   outqNm                      10a   Inz('*ALL')
      D   outqLibNm                   10a   Inz(*blank)
      D  formType                     10a   Inz('*ALL')
-     D  usrData                      10a   Inz('RUCMDRUN')
+     D  usrData                      10a
      D  statusCnt                    10i 0 Inz(1)
      D   splfStatus                  10a   Inz('*READY')
      D                                2a   Inz(x'00')
@@ -775,7 +783,8 @@
 
       /free
 
-        filterInfo.usrNm = usrNm;
+        filterInfo.usrNm   = usrNm;
+        filterInfo.usrData = usrData;
 
         sortInfo = *allx'00';
 
@@ -803,7 +812,8 @@
         endif;
 
         assert( listInfo.totalRcdCnt > 0 :
-                'No spool file found for user ' + usrNm );
+                'No spool file found for user ' + %trimr(usrNm)
+                + ' and user data ' + %trimr(usrData) );
 
         opnListHdl = listInfo.rqsHdl;
         lastRcdIdx = listInfo.totalRcdCnt;
@@ -830,9 +840,10 @@
      P                 e
 
 
-     PrtvSplfHdl       b
-     DrtvSplfHdl       pi            10i 0
-     D splfNm                        10a   Const
+     P rtvSplfHdl      b
+     D rtvSplfHdl      pi            10i 0
+     D  splfNm                       10a   Const
+     D  usrData                      10a   Const
 
        // Latest spool file handle.
      D latestSplfHdl   s             10i 0
@@ -849,9 +860,7 @@
         // is created by a special job named QPRTJOB.
 
         curUsrNm = rtvJobUsrNm();
-        latestSplfId = rtvLatestSplf( curUsrNm );
-
-        aEqual( splfNm : latestSplfId.nm );    // Sanity check.
+        latestSplfId = rtvLatestSplf( curUsrNm : usrData );
 
         QSPOPNSP( latestSplfHdl :
                   latestSplfId.qlfJobNm :
@@ -868,12 +877,12 @@
      P                 e
 
 
-     Prun              b
-     Drun              pi
-     D cmd                        32767a   Const Varying
-     D errorExpected                   n   Const Options(*NoPass)
-     D msgType                       10a   Const Options(*NoPass)
-     D msgTxt                       256a   Options(*NoPass)
+     P run             b
+     D run             pi
+     D  cmd                       32767a   Const Varying
+     D  errorExpected                  n   Const Options(*NoPass)
+     D  msgType                      10a   Const Options(*NoPass)
+     D  msgTxt                      256a   Options(*NoPass)
 
       /free
 
