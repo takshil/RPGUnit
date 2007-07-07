@@ -11,6 +11,7 @@
 
        // Run the test cases in a test suite.
      D runTests        pr
+     D  testPgmNm                          Const Like(Object_t.nm)
      D  testSuite                          Const LikeDs(TestSuite_t)
      D  testProcToRun                      Const Like(ProcNm_t)
      D  order                         8a   Const

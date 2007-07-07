@@ -28,6 +28,7 @@ STRPGMEXP  PGMLVL(*CURRENT) SIGNATURE('RPGUNIT V0.3')
   EXPORT SYMBOL("sndEscapeMsgToCaller")
   EXPORT SYMBOL("sndEscapeMsgAboveCtlBdy")
   EXPORT SYMBOL("sndInfoMsg")
+  EXPORT SYMBOL("sndStsMsg")
 
   /* RUN */
 

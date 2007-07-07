@@ -62,10 +62,15 @@
      D                 pr
      D  testSuite                          Const LikeDs(TestSuite_t)
      D  order                         8a   Const
-        // [Output] Starting index.
+        // (Output) Starting index.
      D  startIdx                     10i 0
-        // [Output] Step from one test index to the next.
+        // (Output) Step from one test index to the next.
      D  step                         10i 0
+
+       // Give a status to the user.
+     D status          pr
+     D  pgmNm                              Const Like(Object_t.nm)
+     D  testNm                       64a   Const Varying
 
 
       //----------------------------------------------------------------------
@@ -109,6 +114,8 @@
                       + %trimr(testPgm.lib) + '/' + %trimr(testPgm.nm) + '.' );
         endif;
 
+        // TODO Calling the setUpSuite should not be here, but either in loadTestSuite or
+        // in runTest.
         monitor;
           callProcByPtr( testSuite.setUpSuite.procPtr );
         on-error;
@@ -122,7 +129,7 @@
 
         setLogContext( testPgm );
 
-        runTests( testSuite : testProc : order : detail );
+        runTests( testPgm.nm : testSuite : testProc : order : detail );
 
         monitor;
           rclTestSuite( testSuite );
@@ -212,7 +219,7 @@
         endsl;
 
         msg += %char(testCaseCnt)  + testCases
-             + %char(assertCnt) + assertions
+             + %char(assertCnt)    + assertions
              + %char(failureCnt)   + failures
              + %char(errorCnt)     + errors;
 
@@ -275,6 +282,7 @@
        // Run the tests in a test suite. See prototype.
        //----------------------------------------------------------------------
      D runTests        pi
+     D  testPgmNm                          Const Like(Object_t.nm)
      D  testSuite                          Const LikeDs(TestSuite_t)
      D  testProcToRun                      Const Like(ProcNm_t)
      D  order                         8a   Const
@@ -300,6 +308,7 @@
           if testProcToRun = '*ALL' or testProcToRun = testNm;
             testCasesCnt += 1;
             assertionCntBeforeRun = getAssertCalled();
+            status( testPgmNm : testNm );
             testResult = runTest( testSuite : testIdx );
             assertionCntAfterRun = getAssertCalled();
 
@@ -358,3 +367,14 @@
       /end-free
      P                 e
 
+
+     P status          b
+     D status          pi
+     D  testPgmNm                          Const Like(Object_t.nm)
+     D  testNm                       64a   Const Varying
+      /free
+
+        sndStsMsg( 'Running ' + %trimr(testPgmNm) + ' - ' + testNm );
+
+      /end-free
+     P status          e
