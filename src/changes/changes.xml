@@ -5,8 +5,17 @@
   </properties>
   <body>
     <release version="0.3" date="SVN" description="Version 0.3 Release Notes">
+      <action>
+        RUCALLTST command generates spool files with more helpful names than QSYSPRT. The spool file name is RPGUNIT and its associated user data is the name of the test program.
+      </action>
+      <action dev="lacton" type="add">
+        RUCALLTST command sends status messages during test execution.
+      </action>
+      <action dev="lacton" type="add">
+        RUCRTTST command gives a completion message when it ends successfully.
+      </action>
       <action dev="lacton" type="fix">
-        Fixed RPGUnit's acceptance test so that they pass when submitted from a server job (e.g., using RMTCMD).
+        Fixed RPGUnit's acceptance tests so that they pass when submitted from a server job (e.g., using RMTCMD).
       </action>	      
     </release>
     <release version="0.2" date="2006-09-05" description="Version 0.2 Release Notes">

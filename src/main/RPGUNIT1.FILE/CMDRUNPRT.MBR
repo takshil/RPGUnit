@@ -1,6 +1,8 @@
       //
       // Command Line Runner Printing Facilities.
       //
+      // Design choice: this program should not contain any logic, because it is not tested.
+      //
 
      H NoMain Option(*SrcStmt)
 
@@ -16,6 +18,8 @@
       //----------------------------------------------------------------------
 
       /copy RPGUNITY1,CMDRUNPRT
+      /copy RPGUNITY1,TEMPLATES
+      /copy RPGUNIT1,TESTCASE
 
 
       //----------------------------------------------------------------------
@@ -52,9 +56,8 @@
      D clsPrt          pi
       /free
 
-        if %open(QSYSPRT);
-          close QSYSPRT;
-        endif;
+        close QSYSPRT;
+        runCmd( 'DLTOVR FILE(QSYSPRT)' );
 
       /end-free
      P                 e
@@ -70,6 +73,20 @@
      P                 e
 
 
+     P opnPrt          b                   Export
+     D opnPrt          pi
+     D  testPgmNm                          Const Like(Object_t.nm)
+      /free
+
+        runCmd( 'OVRPRTF FILE(QSYSPRT) '
+             + 'USRDTA(' + testPgmNm + ') '
+             + 'SPLFNAME(RPGUNIT)' );
+        open QSYSPRT;
+
+      /end-free
+     P opnPrt          e
+
+
      P prtLine         b                   Export
        //----------------------------------------------------------------------
        // Print a line. See prototype.
@@ -78,13 +95,10 @@
      D  line                         80a   Const
       /free
 
-        if not %open(QSYSPRT);
-          open QSYSPRT;
-        endif;
-
         logLine = line;
         except ExcpLine;
 
       /end-free
      P                 e
+
 

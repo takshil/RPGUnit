@@ -169,6 +169,7 @@
       /free
 
         if not hdrWasPrinted;
+          opnPrt( srvPgm );
           logRawLine( '*** Tests from ' + %trim(srvPgm.nm) + ' ***' );
           hdrWasPrinted = *on;
         endif;
@@ -221,8 +222,8 @@
      P                 e
 
 
-     P setlogContext   b                   Export
-     D setlogContext   pi
+     P setLogContext   b                   Export
+     D setLogContext   pi
      D  testPgm                            Const LikeDs(Object_t)
       /free
 
