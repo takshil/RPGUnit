@@ -114,19 +114,6 @@
                       + %trimr(testPgm.lib) + '/' + %trimr(testPgm.nm) + '.' );
         endif;
 
-        // TODO Calling the setUpSuite should not be here, but either in loadTestSuite or
-        // in runTest.
-        monitor;
-          callProcByPtr( testSuite.setUpSuite.procPtr );
-        on-error;
-          // TODO Should log the error.
-          // TODO Should run TearDownSuite anyway.
-          raiseRUError( 'Error while running '
-                      + %trim(testSuite.setUpSuite.procNm)
-                      + ' in '
-                      + %trimr(testPgm.lib) + '/' + %trimr(testPgm.nm) + '.' );
-        endmon;
-
         setLogContext( testPgm );
 
         runTests( testPgm.nm : testSuite : testProc : order : detail );
