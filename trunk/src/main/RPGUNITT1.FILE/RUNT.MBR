@@ -22,35 +22,37 @@
      D setUpSuite      pr
      D setup           pr
 
-     D testSuccessfulTest...
+     D test_runTestProc_successfulTest...
      D                 pr
-     D testFailureInTest...
+     D test_runTestProc_failureInTest...
      D                 pr
-     D testErrorInTest...
+     D test_runTestProc_errorInTest...
      D                 pr
-     D testSetup       pr
-     D testErrorInSetup...
+     D test_runTestProc_withSetup...
      D                 pr
-     D testTearDown    pr
-     D testErrorInTearDown...
+     D test_runTestProc_errorInSetup...
      D                 pr
-     D testTearDownAfterFailureInTest...
+     D test_runTestProc_withTearDown...
      D                 pr
-     D testTearDownAfterErrorInSetup...
+     D test_runTestProc_errorInTearDown...
      D                 pr
-     D testLoadTestSuite...
+     D test_runTestProc_tearDownAfterFailureInTest...
      D                 pr
-     D testRunTestWithOneSuccessfulTest...
+     D test_runTestProc_tearDownAfterErrorInSetup...
      D                 pr
-     D testRunTestWithOneFailingTest...
+     D test_loadTestSuite...
      D                 pr
-     D testRunTestWithSetupAndTearDown...
+     D test_runTest_successfulTest...
      D                 pr
-     D testRclTestSuite_BlankTestSuite...
+     D test_runTest_failureInTest...
      D                 pr
-     D testRclTestSuite...
+     D test_runTest_withSetupAndTearDown...
      D                 pr
-     D testRclTestSuite_WithTearDownSuite...
+     D test_rclTestSuite_blankTestSuite...
+     D                 pr
+     D test_rclTestSuite...
+     D                 pr
+     D test_rclTestSuite_withTearDownSuite...
      D                 pr
 
 
@@ -58,19 +60,13 @@
       //   Private Procedures
       //----------------------------------------------------------------------
 
-     D RT_failing_test...
-     D                 pr
-     D RT_setUp        pr
-     D RT_successful_test...
-     D                 pr
-     D RT_tearDown     pr
-     D RT_tearDownSuite...
-     D                 pr
      D setup_proc      pr
      D setup_with_error...
      D                 pr
      D teardown_proc   pr
      D teardown_with_error...
+     D                 pr
+     D tearDownSuite_success...
      D                 pr
      D test_error      pr
      D test_fail       pr
@@ -102,14 +98,6 @@
        // Result of a test case run.
      D result          ds                  LikeDs(TestResult_t)
 
-       // Flags for mock procedure calls.
-     D RT_setUp_was_called...
-     D                 s               n
-     D RT_tearDown_was_called...
-     D                 s               n
-     D RT_tearDownSuite_was_called...
-     D                 s               n
-
      D setUpSuiteWasCalled...
      D                 s               n
 
@@ -139,17 +127,14 @@
         clear execTrace;
         execTraceIdx = 1;
         clear result;
-        clear RT_setUp_was_called;
-        clear RT_tearDown_was_called;
-        clear RT_tearDownSuite_was_called;
 
       /end-free
      P                 e
 
 
-     P testSuccessfulTest...
+     P test_runTestProc_successfulTest...
      P                 b                   Export
-     D testSuccessfulTest...
+     D test_runTestProc_successfulTest...
      D                 pi
       /free
 
@@ -166,9 +151,9 @@
      P                 e
 
 
-     P testFailureInTest...
+     P test_runTestProc_failureInTest...
      P                 b                   Export
-     D testFailureInTest...
+     D test_runTestProc_failureInTest...
      D                 pi
       /free
 
@@ -187,9 +172,9 @@
      P                 e
 
 
-     P testErrorInTest...
+     P test_runTestProc_errorInTest...
      P                 b                   Export
-     D testErrorInTest...
+     D test_runTestProc_errorInTest...
      D                 pi
       /free
 
@@ -207,8 +192,10 @@
      P                 e
 
 
-     P testSetup       b                   Export
-     D testSetup       pi
+     P test_runTestProc_withSetup...
+     P                 b                   Export
+     D test_runTestProc_withSetup...
+     D                 pi
       /free
 
         // Execution.
@@ -227,9 +214,9 @@
      P                 e
 
 
-     P testErrorInSetup...
+     P test_runTestProc_errorInSetup...
      P                 b                   Export
-     D testErrorInSetup...
+     D test_runTestProc_errorInSetup...
      D                 pi
       /free
 
@@ -254,8 +241,10 @@
      P                 e
 
 
-     P testTearDown    b                   Export
-     D testTearDown    pi
+     P test_runTestProc_withTearDown...
+     P                 b                   Export
+     D test_runTestProc_withTearDown...
+     D                 pi
       /free
 
         // Execution.
@@ -274,9 +263,9 @@
      P                 e
 
 
-     P testErrorInTearDown...
+     P test_runTestProc_errorInTearDown...
      P                 b                   Export
-     D testErrorInTearDown...
+     D test_runTestProc_errorInTearDown...
      D                 pi
       /free
 
@@ -301,9 +290,9 @@
      P                 e
 
 
-     P testTearDownAfterFailureInTest...
+     P test_runTestProc_tearDownAfterFailureInTest...
      P                 b                   Export
-     D testTearDownAfterFailureInTest...
+     D test_runTestProc_tearDownAfterFailureInTest...
      D                 pi
       /free
 
@@ -323,9 +312,9 @@
      P                 e
 
 
-     P testTearDownAfterErrorInSetup...
+     P test_runTestProc_tearDownAfterErrorInSetup...
      P                 b                   Export
-     D testTearDownAfterErrorInSetup...
+     D test_runTestProc_tearDownAfterErrorInSetup...
      D                 pi
       /free
 
@@ -351,9 +340,9 @@
      P                 e
 
 
-     P testLoadTestSuite...
+     P test_loadTestSuite...
      P                 b                   Export
-     D testLoadTestSuite...
+     D test_loadTestSuite...
      D                 pi
 
      D srvPgm          ds                  LikeDs(Object_t)
@@ -386,22 +375,23 @@
      P                 e
 
 
-     P testRunTestWithOneSuccessfulTest...
+     P test_runTest_successfulTest...
      P                 b                   Export
-     D testRunTestWithOneSuccessfulTest...
+     D test_runTest_successfulTest...
      D                 pi
 
      D testSuite       ds                  LikeDs(TestSuite_t)
      D testCase        ds                  Dim(1) LikeDs(Proc_t)
      D testResult      ds                  LikeDs(TestResult_t)
+
       /free
 
         // Setup.
 
         testSuite.testCasesCnt = 1;
         testSuite.testList = %addr( testCase );
-        testCase(1).procNm = 'RT_successful_test';
-        testCase(1).procPtr = %paddr( RT_successful_test );
+        testCase(1).procNm  =        'test_proc' ;
+        testCase(1).procPtr = %paddr( test_proc );
 
         // Execution.
 
@@ -415,9 +405,9 @@
      P                 e
 
 
-     P testRunTestWithOneFailingTest...
+     P test_runTest_failureInTest...
      P                 b                   Export
-     D testRunTestWithOneFailingTest...
+     D test_runTest_failureInTest...
      D                 pi
 
      D testSuite       ds                  LikeDs(TestSuite_t)
@@ -429,8 +419,8 @@
 
         testSuite.testCasesCnt = 1;
         testSuite.testList = %addr( testCase );
-        testCase(1).procNm = 'RT_failing_test';
-        testCase(1).procPtr = %paddr( RT_failing_test );
+        testCase(1).procNm  =        'test_fail' ;
+        testCase(1).procPtr = %paddr( test_fail );
 
         // Execution.
 
@@ -444,9 +434,9 @@
      P                 e
 
 
-     P testRunTestWithSetupAndTearDown...
+     P test_runTest_withSetupAndTearDown...
      P                 b                   Export
-     D testRunTestWithSetupAndTearDown...
+     D test_runTest_withSetupAndTearDown...
      D                 pi
 
      D testSuite       ds                  LikeDs(TestSuite_t)
@@ -455,19 +445,16 @@
 
         // Setup.
 
-        testSuite.setUp.procNm = 'RT_setUp';
-        testSuite.setUp.procPtr = %paddr( RT_setUp );
+        testSuite.setUp.procNm  =        'setup_proc';
+        testSuite.setUp.procPtr = %paddr( setup_proc );
 
         testSuite.testCasesCnt = 1;
         testSuite.testList = %addr( testCase );
-        testCase(1).procNm = 'RT_succesful_test';
-        testCase(1).procPtr = %paddr( RT_successful_test );
+        testCase(1).procNm  =        'test_proc' ;
+        testCase(1).procPtr = %paddr( test_proc );
 
-        testSuite.tearDown.procNm = 'RT_tearDown';
-        testSuite.tearDown.procPtr = %paddr( RT_tearDown );
-
-        RT_setUp_was_called = *off;
-        RT_tearDown_was_called = *off;
+        testSuite.tearDown.procNm  =        'teardown_proc' ;
+        testSuite.tearDown.procPtr = %paddr( teardown_proc );
 
         // Execution.
 
@@ -475,19 +462,21 @@
 
         // Controls.
 
-        assert( RT_setUp_was_called = *on : 'RT_setUp not called' );
-        assert( RT_tearDown_was_called = *on : 'RT_tearDown not called' );
+        aEqual( 'setup_proc was called'    : execTrace(1) );
+        aEqual( 'test_proc was called'     : execTrace(2) );
+        aEqual( 'teardown_proc was called' : execTrace(3) );
 
       /end-free
      P                 e
 
 
-     P testRclTestSuite_BlankTestSuite...
+     P test_rclTestSuite_blankTestSuite...
      P                 b                   Export
-     D testRclTestSuite_BlankTestSuite...
+     D test_rclTestSuite_blankTestSuite...
      D                 pi
 
      D testSuite       ds                  LikeDs(TestSuite_t)
+
       /free
 
         clear testSuite;
@@ -502,12 +491,13 @@
      P                 e
 
 
-     P testRclTestSuite...
+     P test_rclTestSuite...
      P                 b                   Export
-     D testRclTestSuite...
+     D test_rclTestSuite...
      D                 pi
 
      D testSuite       ds                  LikeDs(TestSuite_t)
+
       /free
 
         clear testSuite;
@@ -521,20 +511,21 @@
      P                 e
 
 
-     P testRclTestSuite_WithTearDownSuite...
+     P test_rclTestSuite_withTearDownSuite...
      P                 b                   Export
-     D testRclTestSuite_WithTearDownSuite...
+     D test_rclTestSuite_withTearDownSuite...
      D                 pi
 
      D testSuite       ds                  LikeDs(TestSuite_t)
+
       /free
 
         clear testSuite;
-        testSuite.tearDownSuite.procPtr = %paddr( RT_tearDownSuite );
+        testSuite.tearDownSuite.procPtr = %paddr( tearDownSuite_success );
 
         rclTestSuite( testSuite );
 
-        assert( RT_tearDownSuite_was_called : 'tearDownSuite not called' );
+        aEqual( 'tearDownSuite_success was called' : execTrace(1) );
 
       /end-free
      P                 e
@@ -543,62 +534,6 @@
       //----------------------------------------------------------------------
       //   Support Procedure Definitions
       //----------------------------------------------------------------------
-
-     P RT_failing_test...
-     P                 b
-     D RT_failing_test...
-     D                 pi
-      /free
-
-        iEqual( 5 : 2+2 );
-
-      /end-free
-     P                 e
-
-
-     P RT_setUp        b
-     D RT_setUp        pi
-      /free
-
-        RT_setUp_was_called = *on;
-
-      /end-free
-     P                 e
-
-
-     P RT_successful_test...
-     P                 b
-     D RT_successful_test...
-     D                 pi
-      /free
-
-        iEqual( 4 : 2+2 );
-
-      /end-free
-     P                 e
-
-
-     P RT_tearDown     b
-     D RT_tearDown     pi
-      /free
-
-        RT_tearDown_was_called = *on;
-
-      /end-free
-     P                 e
-
-
-     P RT_tearDownSuite...
-     P                 b
-     D RT_tearDownSuite...
-     D                 pi
-      /free
-
-        RT_tearDownSuite_was_called = *on;
-
-      /end-free
-     P                 e
-
 
      P setup_proc      b
      D setup_proc      pi
@@ -647,6 +582,18 @@
         traceCall( 'teardown_with_error' );
 
         x = 1 / x;    // Divide by zero error.
+
+      /end-free
+     P                 e
+
+
+     P tearDownSuite_success...
+     P                 b
+     D tearDownSuite_success...
+     D                 pi
+      /free
+
+        traceCall( 'tearDownSuite_success' );
 
       /end-free
      P                 e
