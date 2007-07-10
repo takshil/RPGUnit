@@ -145,7 +145,7 @@
          sndInfoMsg( cmd );
          qcmdexc( cmd : %len(cmd) );
 
-         compMsgData = rcvMsgTxt( '*COMP' );
+         compMsgData = rcvMsgData( '*COMP' );
          targetSrvPgm = %subst( compMsgData : 1 : 20 );
 
          return targetSrvPgm;

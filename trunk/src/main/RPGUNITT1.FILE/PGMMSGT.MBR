@@ -9,6 +9,7 @@
       //   Imported Procedures
       //----------------------------------------------------------------------
 
+      /copy RPGUNITY1,ERRORCODE
       /copy RPGUNITY1,PGMMSG
       /copy RPGUNITY1,TEMPLATES
       /copy RPGUNIT1,TESTCASE
@@ -18,9 +19,11 @@
       //   Exported Procedures
       //----------------------------------------------------------------------
 
-     D testInternalEscapeMessage...
+     D test_rcvExcpMsgInfo...
      D                 pr
-     D testSndEscapeMsgToCaller...
+     D test_sndEscapeMsgToCaller...
+     D                 pr
+     D test_resendEscapeMsg...
      D                 pr
 
 
@@ -30,6 +33,8 @@
 
      D callSndEscapeMsgToCaller...
      D                 pr
+     D monitorEscapeMsgAndResendIt...
+     D                 pr
      D procWithError   pr            10i 0
 
 
@@ -37,9 +42,9 @@
       //   Test Procedure Definitions
       //----------------------------------------------------------------------
 
-     P testInternalEscapeMessage...
+     P test_rcvExcpMsgInfo...
      P                 b                   Export
-     D testInternalEscapeMessage...
+     D test_rcvExcpMsgInfo...
      D                 pi
 
      D excpMsgInfo     ds                  LikeDs(ExcpMsgInfo_t)
@@ -62,15 +67,15 @@
             // do that, since it depends on the locale.
         aEqual( 'PGMMSGT': excpMsgInfo.pgmNm );
         aEqual( 'PROCWITHERROR': excpMsgInfo.procNm );
-        aEqual( '12000': excpMsgInfo.sttNb );
+        aEqual( '16500': excpMsgInfo.sttNb );
 
       /end-free
      P                 e
 
 
-     P testSndEscapeMsgToCaller...
+     P test_sndEscapeMsgToCaller...
      P                 b                   Export
-     D testSndEscapeMsgToCaller...
+     D test_sndEscapeMsgToCaller...
      D                 pi
 
      D excpMsgInfo     ds                  LikeDs(ExcpMsgInfo_t)
@@ -90,7 +95,32 @@
         aEqual( 'Dummy error message' : excpMsgInfo.msg );
 
       /end-free
-     P testSndEscapeMsgToCaller...
+     P test_sndEscapeMsgToCaller...
+     P                 e
+
+
+     P test_resendEscapeMsg...
+     P                 b                   Export
+     D test_resendEscapeMsg...
+     D                 pi
+
+     D resentMsgSeen   s               n
+     D msg             ds                  LikeDs(Msg_t)
+
+      /free
+
+        monitor;
+          monitorEscapeMsgAndResendIt();
+          resentMsgSeen = *off;
+        on-error;
+          resentMsgSeen = *on;
+        endmon;
+
+        assert( resentMsgSeen : 'Resent msg not seen' );
+        msg = rcvPgmMsg( '*ESCAPE' );
+        aEqual( 'MCH1211'       : msg.id );
+
+      /end-free
      P                 e
 
 
@@ -111,13 +141,28 @@
      P                 e
 
 
-     P procWithError   b
-     D procWithError   pi            10i 0
-     D  x              s             10i 0 Inz(1)
-     D  y              s             10i 0 Inz(0)
+     P monitorEscapeMsgAndResendIt...
+     P                 b
+     D monitorEscapeMsgAndResendIt...
+     D                 pi
       /free
 
-        return (x / y);
+        monitor;
+          procWithError();
+        on-error;
+          resendEscapeMsg( LAST_NEW_ESCAPE_MSG : percolateErrors );
+        endmon;
+
+      /end-free
+     P                 e
+
+
+     P procWithError   b
+     D procWithError   pi            10i 0
+     D  zero           s             10i 0 Inz(0)
+      /free
+
+        return (1 / zero);
 
       /end-free
      P procWithError   e

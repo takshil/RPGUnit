@@ -67,7 +67,7 @@
         // (Output) Step from one test index to the next.
      D  step                         10i 0
 
-       // Give a status to the user.
+       // Give a status message to the user.
      D status          pr
      D  pgmNm                              Const Like(Object_t.nm)
      D  testNm                       64a   Const Varying
@@ -102,26 +102,34 @@
 
       /free
 
+        setLogContext( testPgm );
+
         monitor;
           testSuite = loadTestSuite( testPgm );
         on-error;
           raiseRUError( 'Error while loading the test suite in '
-                      + %trimr(testPgm.lib) + '/' + %trimr(testPgm.nm) + '.' );
+                      + %trimr(testPgm.lib) + '/' + %trimr(testPgm.nm) + '.' );  // TODO fmtObjNm
         endmon;
 
         if testSuite.testCasesCnt = 0;
           raiseRUError( 'No test case found in service program '
-                      + %trimr(testPgm.lib) + '/' + %trimr(testPgm.nm) + '.' );
+                      + %trimr(testPgm.lib) + '/' + %trimr(testPgm.nm) + '.' );  // TODO fmtObjNm
         endif;
 
-        setLogContext( testPgm );
+        monitor;
+          callProcByPtr( testSuite.setUpSuite.procPtr );
+        on-error;
+          handleError( 'SETUPSUITE' : rcvExcpMsgInfo() );
+        endmon;
 
-        runTests( testPgm.nm : testSuite : testProc : order : detail );
+        if errorCnt = 0;
+          runTests( testPgm.nm : testSuite : testProc : order : detail );
+        endif;
 
         monitor;
           rclTestSuite( testSuite );
         on-error;
-          raiseRUError( 'Error while tearing down the test suite.' );
+          handleError( 'TEARDOWNSUITE' : rcvExcpMsgInfo() );
         endmon;
 
         assertCnt = getAssertCalled();

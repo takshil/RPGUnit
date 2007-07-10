@@ -8,6 +8,7 @@
       //   Exported Procedures
       //----------------------------------------------------------------------
 
+      /copy RPGUNITY1,ERRORCODE
       /copy RPGUNITY1,RUNNER
       /copy RPGUNITY1,RUN
 
@@ -49,8 +50,6 @@
         actMark = activateSrvPgm( srvPgm );
         activateTestSuite( testSuite : actMark );
 
-        callProcByPtr( testSuite.setUpSuite.procPtr );
-
         return testSuite;
 
       /end-free
@@ -79,8 +78,8 @@
      D  testSuite                          LikeDs(TestSuite_t)
       /free
 
-        callProcByPtr( testSuite.tearDownSuite.procPtr );
         dealloc(n) testSuite.testList;
+        callProcByPtr( testSuite.tearDownSuite.procPtr );
 
       /end-free
      P                 e

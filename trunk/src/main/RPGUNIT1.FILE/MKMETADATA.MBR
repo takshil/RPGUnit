@@ -142,6 +142,9 @@
              CHGPFM     FILE(&TARGETLIB/RPGUNITF1) MBR(TESTPGM18) +
                           SRCTYPE(RPGLE) TEXT('RPGUnit Fixture - +
                           Error in tearDownSuite.')
+             CHGPFM     FILE(&TARGETLIB/RPGUNITF1) MBR(TESTPGM19) +
+                          SRCTYPE(RPGLE) TEXT('RPGUnit Fixture - +
+                          Errors in setUp/tearDownSuite.')
 
              CHGPFM     FILE(&TARGETLIB/RPGUNITT1) MBR(ASSERTT) +
                           SRCTYPE(RPGLE) TEXT('RPGUnit SelfTest - +

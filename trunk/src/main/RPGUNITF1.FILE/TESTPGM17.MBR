@@ -6,9 +6,7 @@
       /copy RPGUNITY1,QMHSNDPM
 
      DsetupSuite       pr
-     Dsetup            pr
      Dtest1            pr
-     Dteardown         pr
      DteardownSuite    pr
      D sndInfoMsg      pr
      D  msg                         256a   Const
@@ -25,15 +23,6 @@
       /end-free
      PsetupSuite       e
 
-     Psetup            b                   Export
-     Dsetup            pi
-      /free
-
-        sndInfoMsg( 'setup' );
-
-      /end-free
-     Psetup            e
-
      Ptest1            b                   Export
      Dtest1            pi
       /free
@@ -42,15 +31,6 @@
 
       /end-free
      Ptest1            e
-
-     Pteardown         b                   Export
-     Dteardown         pi
-      /free
-
-        sndInfoMsg( 'teardown' );
-
-      /end-free
-     Pteardown         e
 
      PteardownSuite    b                   Export
      DteardownSuite    pi
