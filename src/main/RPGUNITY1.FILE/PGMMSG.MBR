@@ -6,8 +6,12 @@
      D rcvExcpMsgInfo  pr                  LikeDs(ExcpMsgInfo_t)
      D                                     ExtProc('rcvExcpMsgInfo')
 
-       // Receive a message text, either its replacement data if possible,
-       // or its true text if there is no replacement data.
+       // Receive a program message replacement data.
+     D rcvMsgData      pr           256a   ExtProc('rcvMsgData')
+        // Message type: *ANY, *COMP, *EXCP...
+     D  msgType                      10a   Const
+
+       // Receive a program message text.
      D rcvMsgTxt       pr           256a   ExtProc('rcvMsgTxt')
         // Message type: *ANY, *COMP, *EXCP...
      D  msgType                      10a   Const
@@ -20,6 +24,12 @@
         // If the message was sent to a procedure above in the call stack,
         // indicate how many level above it is.
      D  callStkCnt                   10i 0 Const Options(*NoPass)
+
+       // Resend an escape message that was monitored in a monitor block.
+     D resendEscapeMsg...
+     D                 pr                  ExtPgm('QMHRSNEM')
+     D  msgKey                        4a   Const
+     D  errorCode                 32565a   Const Options(*VarSize) NoOpt
 
        // Send a completion message.
      D sndCompMsg      pr                  ExtProc('sndCompMsg')
@@ -50,3 +60,7 @@
        // One stack level above the current stack entry.
      D ONE_CALL_STK_LVL_ABOVE_HERE...
      D                 c                   Const(1)
+
+       // To resend the last new escape message
+     D LAST_NEW_ESCAPE_MSG...
+     D                 c                   Const(*blank)

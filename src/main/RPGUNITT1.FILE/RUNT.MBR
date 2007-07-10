@@ -9,6 +9,7 @@
       //   Imported Procedures
       //----------------------------------------------------------------------
 
+      /copy RPGUNITY1,PGMMSG
       /copy RPGUNITY1,RUNNER
       /copy RPGUNITY1,RUN
       /copy RPGUNITY1,TEMPLATES
@@ -54,12 +55,15 @@
      D                 pr
      D test_rclTestSuite_withTearDownSuite...
      D                 pr
+     D test_rclTestSuite_withErrorInTearDownSuite...
+     D                 pr
 
 
       //----------------------------------------------------------------------
       //   Private Procedures
       //----------------------------------------------------------------------
 
+     D raiseError      pr
      D setup_proc      pr
      D setup_with_error...
      D                 pr
@@ -67,6 +71,8 @@
      D teardown_with_error...
      D                 pr
      D tearDownSuite_success...
+     D                 pr
+     D tearDownSuite_error...
      D                 pr
      D test_error      pr
      D test_fail       pr
@@ -108,9 +114,12 @@
 
      P setUpSuite      b                   Export
      D setUpSuite      pi
+
+     D x               s             10i 0 Inz(0)
+
       /free
 
-        // Used by testLoadTestSuite.
+        // Used by test_loadTestSuite...
 
         setUpSuiteWasCalled = *on;
 
@@ -122,11 +131,12 @@
      D setUp           pi
       /free
 
-        // Clear all global variables.
+        // Clear global variables.
 
         clear execTrace;
         execTraceIdx = 1;
         clear result;
+        clear setUpSuiteWasCalled;
 
       /end-free
      P                 e
@@ -362,8 +372,8 @@
 
         // Controls.
 
-        assert( setUpSuiteWasCalled :
-                'setUpSuite not called by loadTestSuite' );
+        assert( setUpSuiteWasCalled = *off :
+                'setUpSuite called by loadTestSuite' );
         aEqual( 'SETUPSUITE' : testSuite.setUpSuite.procNm );
         assert( %paddr(setUpSuite) = testSuite.setUpSuite.procPtr :
                 'Wrong SetUpSuite procedure pointer' );
@@ -531,9 +541,50 @@
      P                 e
 
 
+     P test_rclTestSuite_withErrorInTearDownSuite...
+     P                 b                   Export
+     D test_rclTestSuite_withErrorInTearDownSuite...
+     D                 pi
+
+     D testSuite       ds                  LikeDs(TestSuite_t)
+     D errorWasSeen    s               n
+
+      /free
+
+        clear testSuite;
+        testSuite.testList = %alloc(10);
+        testSuite.tearDownSuite.procPtr = %paddr( tearDownSuite_error );
+
+        monitor;
+          rclTestSuite( testSuite );
+          errorWasSeen = *off;
+        on-error;
+          errorWasSeen = *on;
+        endmon;
+
+        assert( errorWasSeen : 'rclTestSuite should have raised an error' );
+        assert( testSuite.testList = *null : 'Test list not deallocated' );
+
+      /end-free
+     P                 e
+
+
       //----------------------------------------------------------------------
       //   Support Procedure Definitions
       //----------------------------------------------------------------------
+
+     P raiseError      b
+     D raiseError      pi
+
+     D zero            s             10i 0 Inz(0)
+
+      /free
+
+        zero = 1 / zero;
+
+      /end-free
+     P                 e
+
 
      P setup_proc      b
      D setup_proc      pi
@@ -594,6 +645,19 @@
       /free
 
         traceCall( 'tearDownSuite_success' );
+
+      /end-free
+     P                 e
+
+
+     P tearDownSuite_error...
+     P                 b
+     D tearDownSuite_error...
+     D                 pi
+      /free
+
+        traceCall( 'tearDownSuite_error' );
+        raiseError();
 
       /end-free
      P                 e

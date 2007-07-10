@@ -19,6 +19,7 @@
      D  procNm                      256a
      D  specNb                       10a
 
+       // TODO Deprecate this template in favor of Msg_t.
        // Exception Message Information.
      D ExcpMsgInfo_t   ds                  Qualified Based(template)
      D  msgId                         7a
@@ -40,7 +41,7 @@
        // Program message sender.
      D MsgSender_t     ds                  Qualified Based(template)
      D  pgmNm                        12a
-     D  procNm                      256a
+     D  procNm                             Like(ProcNm_t)
      D  sttNb                         6a
 
        // Object Qualified Name.

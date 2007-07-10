@@ -5,7 +5,11 @@
   </properties>
   <body>
     <release version="0.3" date="SVN" description="Version 0.3 Release Notes">
-      <action>
+      <action dev="lacton" type="fix">
+        If the setUpSuite procedure raises an error, RUCALLTST command tries to execute the tearDownSuite procedure anyway before ending. That way, the clean-up activities in tearDownSuite get a chance to run.
+	Also, an error during setUpSuite is no longer a special case. It is simply reported in the spool file, like any error raised during a test run. Same for tearDownSuite.
+      </action>
+      <action dev="lacton" type="fix">
         RUCALLTST command generates spool files with more helpful names than QSYSPRT. The spool file name is RPGUNIT and its associated user data is the name of the test program.
       </action>
       <action dev="lacton" type="add">

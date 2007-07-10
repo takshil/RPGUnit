@@ -5,33 +5,36 @@
       /copy RPGUNITY1,ERRORCODE
       /copy RPGUNITY1,QMHSNDPM
 
-     DsetupSuite       pr
-     Dtest1            pr
-     DteardownSuite    pr
+     D setupSuite      pr
+     D test1           pr
+     D teardownSuite   pr
      D sndInfoMsg      pr
      D  msg                         256a   Const
 
-     PsetupSuite       b                   Export
-     DsetupSuite       pi
+     P setupSuite      b                   Export
+     D setupSuite      pi
+     D  x              s             10i 0 Inz(0)
       /free
 
         sndInfoMsg( 'setupSuite' );
 
-      /end-free
-     PsetupSuite       e
+        x = 1 / x;    // Generate error.
 
-     Ptest1            b                   Export
-     Dtest1            pi
+      /end-free
+     P setupSuite      e
+
+     P test1           b                   Export
+     D test1           pi
       /free
 
         sndInfoMsg( 'test1' );
 
       /end-free
-     Ptest1            e
+     P test1           e
 
-     PteardownSuite    b                   Export
-     DteardownSuite    pi
-     D x               s             10i 0 Inz(0)
+     P teardownSuite   b                   Export
+     D teardownSuite   pi
+     D  x              s             10i 0 Inz(0)
       /free
 
         sndInfoMsg( 'teardownSuite' );
@@ -39,7 +42,7 @@
         x = 1 / x;    // Generate error.
 
       /end-free
-     PteardownSuite    e
+     P teardownSuite   e
 
 
      P sndInfoMsg      b                   Export
