@@ -114,9 +114,6 @@
 
      P setUpSuite      b                   Export
      D setUpSuite      pi
-
-     D x               s             10i 0 Inz(0)
-
       /free
 
         // Used by test_loadTestSuite...
@@ -196,7 +193,7 @@
 
         aEqual( 'test_error was called' : execTrace(1) );
         aEqual( TEST_CASE_ERROR : result.outcome );
-        aEqual( 'TEST_ERROR' : result.error.procNm );
+        aEqual( 'RAISEERROR' : result.error.procNm );
 
       /end-free
      P                 e
@@ -245,7 +242,7 @@
         aEqual( 'setup_with_error was called' : execTrace(1) );
         aEqual( *blank                        : execTrace(2) );    // test_proc not called.
         aEqual( TEST_CASE_ERROR : result.outcome );
-        aEqual( 'SETUP_WITH_ERROR' : result.error.procNm );
+        aEqual( 'RAISEERROR' : result.error.procNm );
 
       /end-free
      P                 e
@@ -294,7 +291,7 @@
         aEqual( 'test_proc was called'           : execTrace(1) );
         aEqual( 'teardown_with_error was called' : execTrace(2) );
         aEqual( TEST_CASE_ERROR : result.outcome );
-        aEqual( 'TEARDOWN_WITH_ERROR' : result.error.procNm );
+        aEqual( 'RAISEERROR' : result.error.procNm );
 
       /end-free
      P                 e
@@ -344,7 +341,7 @@
         // test_proc not called.
         aEqual( 'teardown_proc was called'    : execTrace(2) );
         aEqual( TEST_CASE_ERROR : result.outcome );
-        aEqual( 'SETUP_WITH_ERROR' : result.error.procNm );
+        aEqual( 'RAISEERROR' : result.error.procNm );
 
       /end-free
      P                 e
@@ -605,8 +602,7 @@
       /free
 
         traceCall( 'setup_with_error' );
-
-        x = 1 / x;    // Divide by zero error.
+        raiseError();
 
       /end-free
      P                 e
@@ -631,8 +627,7 @@
       /free
 
         traceCall( 'teardown_with_error' );
-
-        x = 1 / x;    // Divide by zero error.
+        raiseError();
 
       /end-free
      P                 e
@@ -670,8 +665,7 @@
       /free
 
         traceCall( 'test_error' );
-
-        x = 1 / x;    // Divide by zero error.
+        raiseError();
 
       /end-free
      P                 e

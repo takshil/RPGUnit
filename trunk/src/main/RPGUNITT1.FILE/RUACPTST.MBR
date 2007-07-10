@@ -313,7 +313,7 @@
 
         run( 'RUCRTTST PGM(QTEMP/TESTPGM07) SRCFILE(RPGUNITF1)' );
 
-        run( 'RUCALLTST QTEMP/TESTPGM07' : errorExpected : '*ESCAPE': msgTxt );
+        run( 'RUCALLTST QTEMP/TESTPGM07' : errorExpected : '*ESCAPE' : msgTxt );
 
         aEqual( 'FAILURE! 1 test cases, 1 assertions, 1 failures, 0 errors.':
                 msgTxt );
