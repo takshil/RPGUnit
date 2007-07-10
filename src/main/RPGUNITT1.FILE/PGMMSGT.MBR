@@ -118,7 +118,7 @@
 
         assert( resentMsgSeen : 'Resent msg not seen' );
         msg = rcvPgmMsg( '*ESCAPE' );
-        aEqual( 'MCH1211'       : msg.id );
+        aEqual( 'MCH1211' : msg.id );
 
       /end-free
      P                 e
