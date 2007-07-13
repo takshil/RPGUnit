@@ -108,34 +108,26 @@
           testSuite = loadTestSuite( testPgm );
         on-error;
           raiseRUError( 'Error while loading the test suite in '
-                      + %trimr(testPgm.lib) + '/' + %trimr(testPgm.nm) + '.' );  // TODO fmtObjNm
+                      + fmtObjNm(testPgm) + '.' );
         endmon;
 
         if testSuite.testCasesCnt = 0;
           raiseRUError( 'No test case found in service program '
-                      + %trimr(testPgm.lib) + '/' + %trimr(testPgm.nm) + '.' );  // TODO fmtObjNm
+                      + fmtObjNm(testPgm) + '.' );
         endif;
 
-        monitor;
-          callProcByPtr( testSuite.setUpSuite.procPtr );
-        on-error;
-          handleError( testSuite.setUpSuite.procNm : rcvExcpMsgInfo() );
-        endmon;
+        callWithLogging( testSuite.setUpSuite );
 
         if errorCnt = 0;
           runTests( testPgm.nm : testSuite : testProc : order : detail );
         endif;
 
-        monitor;
-          callProcByPtr( testSuite.tearDownSuite.procPtr );
-        on-error;
-          handleError( testSuite.tearDownSuite.procNm : rcvExcpMsgInfo() );
-        endmon;
+        callWithLogging( testSuite.tearDownSuite );
 
         monitor;
           rclTestSuite( testSuite );
         on-error;
-          raiseRUError( 'Failed to reclaim the test suite ressources.' );
+          raiseRUError( 'Failed to reclaim the test suite''s resources.' );
         endmon;
 
         assertCnt = getAssertCalled();
@@ -183,6 +175,24 @@
      P                 e
 
 
+     P callWithLogging...
+     P                 b                   Export
+     D callWithLogging...
+     D                 pi
+     D  proc                               Const LikeDs(Proc_t)
+      /free
+
+        monitor;
+          callProcByPtr( proc.procPtr );
+        on-error;
+          handleError( proc.procNm : rcvExcpMsgInfo() );
+        endmon;
+
+      /end-free
+     P callWithLogging...
+     P                 e
+
+
      P fmtCompMsg      b
        //----------------------------------------------------------------------
        // Format a test run completion message. See prototype.
@@ -226,6 +236,17 @@
 
       /end-free
      P fmtCompMsg      e
+
+
+     P fmtObjNm        b                   Export
+     D fmtObjNm        pi            21a   Varying
+     D  obj                                Const LikeDs(Object_t)
+      /free
+
+        return %trimr(obj.lib) + '/' + %trimr(obj.nm);
+
+      /end-free
+     P fmtObjNm        e
 
 
      P handleError     b

@@ -13,6 +13,7 @@
       /copy RPGUNITY1,CMDRUNLOG
 
       /copy RPGUNITY1,CMDRUN
+      /copy RPGUNITY1,PGMMSG
       /copy RPGUNITY1,TEMPLATES
       /copy RPGUNIT1,TESTCASE
 
@@ -43,6 +44,14 @@
        // Test runTests, choosing a non existing TSTPRC option.
      D test_runTests_ChooseNonExistingTestProc...
      D                 pr
+       // Test fmtObjNm.
+     D test_fmtObjNm   pr
+       // Test callWithLogging when the call is successful.
+     D test_callWithLogging_withSuccess...
+     D                 pr
+       // Test callWithLogging when the call raises an error.
+     D test_callWithLogging_withError...
+     D                 pr
 
 
       //----------------------------------------------------------------------
@@ -52,6 +61,10 @@
      D successful_test_with_one_assertion...
      D                 pr
      D successful_test_with_two_assertions...
+     D                 pr
+     D proc_with_no_error...
+     D                 pr
+     D proc_with_error...
      D                 pr
 
 
@@ -89,6 +102,10 @@
        // A test suite, for testing purpose.
      D testSuite       ds                  LikeDs(TestSuite_t)
 
+       // Spying flag.
+     D procWithNoErrorWasCalled...
+     D                 s               n
+
 
       //----------------------------------------------------------------------
       //   Test Definitions
@@ -104,6 +121,8 @@
         clear testCase;
         clear testSuite;
         testSuite.testList = %addr(testCase);
+
+        clear procWithNoErrorWasCalled;
 
       /end-free
      P                 e
@@ -292,11 +311,76 @@
      P                 e
 
 
+     P test_fmtObjNm   b                   Export
+     D test_fmtObjNm   pi
+
+     D object          ds                  LikeDs(Object_t)
+
+      /free
+
+        object.nm  = 'MYOBJ';
+        object.lib = 'MYLIB';
+
+        aEqual( 'MYLIB/MYOBJ' : fmtObjNm( object ) );
+        iEqual( %len( 'MYLIB/MYOBJ' ) : %len( fmtObjNm( object ) ) );
+
+      /end-free
+     P                 e
+
+
+     P test_callWithLogging_withSuccess...
+     P                 b                   Export
+     D test_callWithLogging_withSuccess...
+     D                 pi
+
+     D procWithNoError...
+     D                 ds                  LikeDs(Proc_t)
+
+      /free
+
+        procWithNoError.procNm  =        'proc_with_no_error';
+        procWithNoError.procPtr = %paddr( proc_with_no_error );
+        callWithLogging( procWithNoError );
+
+        assert( procWithNoErrorWasCalled : 'proc_with_no_error not called' );
+        iEqual( 0 : logIdx );    // No logging if success.
+
+      /end-free
+     P                 e
+
+
+     P test_callWithLogging_withError...
+     P                 b                   Export
+     D test_callWithLogging_withError...
+     D                 pi
+
+     D procWithError   ds                  LikeDs(Proc_t)
+
+      /free
+
+        procWithError.procNm  =        'proc_with_error';
+        procWithError.procPtr = %paddr( proc_with_error );
+
+        monitor;
+          callWithLogging( procWithError );
+        on-error;
+          fail( 'callWithLogging should never raise an error' );
+        endmon;
+
+        iEqual( 1 : logIdx );
+        aEqual( 'proc_with_error'  : logLine(1).procNm );
+        aEqual( TEST_CASE_ERROR    : logLine(1).type );
+        aEqual( 'Artificial error' : logLine(1).msg );
+
+
+      /end-free
+     P                 e
+
+
       //----------------------------------------------------------------------
-      //   Support Procedures
+      //   Mock Procedures (mocking CMDRUNLOG)
       //----------------------------------------------------------------------
 
-       // Mock a procedure provided by CMDRUNLOG.
      P logCompMsg      b                   Export
      D logCompMsg      pi
      D  msg                         256a   Const
@@ -306,7 +390,6 @@
      P                 e
 
 
-       // Mock a procedure provided by CMDRUNLOG.
      P logError        b                   Export
      D logError        pi
      D  testNm                             Const Like(ProcNm_t)
@@ -322,7 +405,6 @@
      P                 e
 
 
-       // Mock a procedure provided by CMDRUNLOG.
      P logFailure      b                   Export
      D logFailure      pi
      D  testNm                             Const Like(ProcNm_t)
@@ -333,7 +415,6 @@
      P                 e
 
 
-       // Mock a procedure provided by CMDRUNLOG.
      P logSuccess      b                   Export
      D logSuccess      pi
      D  testNm                             Const Like(ProcNm_t)
@@ -349,12 +430,41 @@
      P                 e
 
 
-       // Mock a procedure provided by CMDRUNLOG.
      P setLogContext   b                   Export
      D setLogContext   pi
      D  testPgm                            Const LikeDs(Object_t)
       /free
         fail( 'Mock setLogContext not implemented' );
+      /end-free
+     P                 e
+
+
+      //----------------------------------------------------------------------
+      //   Support Procedures
+      //----------------------------------------------------------------------
+
+       // Dummy procedure with error.
+     P proc_with_error...
+     P                 b
+     D proc_with_error...
+     D                 pi
+      /free
+
+        sndEscapeMsgToCaller( 'Artificial error' );
+
+      /end-free
+     P                 e
+
+
+       // Dummy procedure with no error.
+     P proc_with_no_error...
+     P                 b
+     D proc_with_no_error...
+     D                 pi
+      /free
+
+        procWithNoErrorWasCalled = *on;
+
       /end-free
      P                 e
 
