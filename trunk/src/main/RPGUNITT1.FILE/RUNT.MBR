@@ -55,8 +55,6 @@
      D                 pr
      D test_rclTestSuite_withTearDownSuite...
      D                 pr
-     D test_rclTestSuite_withErrorInTearDownSuite...
-     D                 pr
 
 
       //----------------------------------------------------------------------
@@ -71,8 +69,6 @@
      D teardown_with_error...
      D                 pr
      D tearDownSuite_success...
-     D                 pr
-     D tearDownSuite_error...
      D                 pr
      D test_error      pr
      D test_fail       pr
@@ -532,35 +528,8 @@
 
         rclTestSuite( testSuite );
 
-        aEqual( 'tearDownSuite_success was called' : execTrace(1) );
-
-      /end-free
-     P                 e
-
-
-     P test_rclTestSuite_withErrorInTearDownSuite...
-     P                 b                   Export
-     D test_rclTestSuite_withErrorInTearDownSuite...
-     D                 pi
-
-     D testSuite       ds                  LikeDs(TestSuite_t)
-     D errorWasSeen    s               n
-
-      /free
-
-        clear testSuite;
-        testSuite.testList = %alloc(10);
-        testSuite.tearDownSuite.procPtr = %paddr( tearDownSuite_error );
-
-        monitor;
-          rclTestSuite( testSuite );
-          errorWasSeen = *off;
-        on-error;
-          errorWasSeen = *on;
-        endmon;
-
-        assert( errorWasSeen : 'rclTestSuite should have raised an error' );
-        assert( testSuite.testList = *null : 'Test list not deallocated' );
+        assert( *blank = execTrace(1) :
+                'Should not have called tearDownSuite' );
 
       /end-free
      P                 e
@@ -640,19 +609,6 @@
       /free
 
         traceCall( 'tearDownSuite_success' );
-
-      /end-free
-     P                 e
-
-
-     P tearDownSuite_error...
-     P                 b
-     D tearDownSuite_error...
-     D                 pi
-      /free
-
-        traceCall( 'tearDownSuite_error' );
-        raiseError();
 
       /end-free
      P                 e

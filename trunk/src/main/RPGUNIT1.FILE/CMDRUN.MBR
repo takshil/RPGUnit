@@ -119,7 +119,7 @@
         monitor;
           callProcByPtr( testSuite.setUpSuite.procPtr );
         on-error;
-          handleError( 'SETUPSUITE' : rcvExcpMsgInfo() );
+          handleError( testSuite.setUpSuite.procNm : rcvExcpMsgInfo() );
         endmon;
 
         if errorCnt = 0;
@@ -127,9 +127,15 @@
         endif;
 
         monitor;
+          callProcByPtr( testSuite.tearDownSuite.procPtr );
+        on-error;
+          handleError( testSuite.tearDownSuite.procNm : rcvExcpMsgInfo() );
+        endmon;
+
+        monitor;
           rclTestSuite( testSuite );
         on-error;
-          handleError( 'TEARDOWNSUITE' : rcvExcpMsgInfo() );
+          raiseRUError( 'Failed to reclaim the test suite ressources.' );
         endmon;
 
         assertCnt = getAssertCalled();
@@ -168,11 +174,9 @@
       /free
 
         if testCasesCnt = 0;
-          errorCnt += 1;
-
           excpMsgInfo.msgId = *blank;
-          excpMsgInfo.msg = 'Test procedure not found.';
-          logError( testProcToRun : excpMsgInfo );
+          excpMsgInfo.msg   = 'Test procedure not found.';
+          handleError( testProcToRun : excpMsgInfo );
         endif;
 
       /end-free

@@ -78,7 +78,6 @@
       /free
 
         dealloc(n) testSuite.testList;
-        callProcByPtr( testSuite.tearDownSuite.procPtr );
 
       /end-free
      P                 e
