@@ -9,20 +9,23 @@
       //   Exported Procedures
       //----------------------------------------------------------------------
 
-     DtestHelloEqualsHello...
+     D testFailShouldRiseAboveAnEnclosingMonitorBlock...
      D                 pr
-     DtestGoodByeIsNotHello...
+     D testHelloEqualsHello...
      D                 pr
-     DtestTwoAndTwoEqualsFour...
+     D testGoodByeIsNotHello...
      D                 pr
-     DtestTwoAndTwoIsNotEqualToFive...
+     D testTwoAndTwoEqualsFour...
      D                 pr
-     DtestAssertCount  pr
-     DtestAssertWithFailure...
+     D testTwoAndTwoIsNotEqualToFive...
      D                 pr
-     DtestAssertWithSuccess...
+     D testAssertCount...
      D                 pr
-     DtestBigIntegerEquality...
+     D testAssertWithFailure...
+     D                 pr
+     D testAssertWithSuccess...
+     D                 pr
+     D testBigIntegerEquality...
      D                 pr
 
 
@@ -36,8 +39,47 @@
 
 
       //----------------------------------------------------------------------
+      //   Private Procedures
+      //----------------------------------------------------------------------
+
+     D callFailInAMonitorBlock...
+     D                 pr              n
+
+
+      //----------------------------------------------------------------------
       //   Test Procedures
       //----------------------------------------------------------------------
+
+     P testFailShouldRiseAboveAnEnclosingMonitorBlock...
+     P                 b                   Export
+     D testFailShouldRiseAboveAnEnclosingMonitorBlock...
+     D                 pi
+
+     D excpWasCaught   s               n   Inz(*off)
+     D success         s               n   Inz(*off)
+
+      /free
+
+        monitor;
+          excpWasCaught = callFailInAMonitorBlock();
+        on-error;
+          success = *on;
+        endmon;
+
+        select;
+          when success;
+            // Success.
+          when excpWasCaught;
+            fail( 'The failure exception'
+                + ' should not be caught by the monitor block' );
+          other;
+            fail( 'fail() should have raise an exception' );
+        endsl;
+
+      /end-free
+     P testFailShouldRiseAboveAnEnclosingMonitorBlock...
+     P                 e
+
 
      PtestTwoAndTwoEqualsFour...
      P                 b                   Export
@@ -162,12 +204,10 @@
         aEqual( 'RUTESTCASE' : assertFailEvt.callStkEnt(1).pgmNm );
         aEqual( 'ASSERT'     : assertFailEvt.callStkEnt(1).modNm );
         aEqual( 'assert'     : assertFailEvt.callStkEnt(1).procNm );
-        aEqual( '0000008500' : assertFailEvt.callStkEnt(1).specNb );
 
         aEqual( 'RUTESTCASE' : assertFailEvt.callStkEnt(2).pgmNm );
         aEqual( 'ASSERT'     : assertFailEvt.callStkEnt(2).modNm );
         aEqual( 'aEqual'     : assertFailEvt.callStkEnt(2).procNm );
-        aEqual( '0000006600' : assertFailEvt.callStkEnt(2).specNb );
 
         aEqual( 'ASSERTT'    : assertFailEvt.callStkEnt(3).pgmNm );
         aEqual( 'ASSERTT'    : assertFailEvt.callStkEnt(3).modNm );
@@ -242,7 +282,6 @@
      DtestAssertWithFailure...
      D                 pi
 
-     D excpWasSeen     s               n
      D assertFailEvt   ds                  LikeDs(AssertFailEvt_t)
 
       /free
@@ -251,19 +290,15 @@
 
         monitor;
           assert( *off : 'Failure message!' );
-          excpWasSeen = *off;
+          fail( 'assert( *off : ...) should have raised an error.' );
 
         on-error;
-          excpWasSeen = *on;
+          // Success. Failure exception was seen.
         endmon;
 
         // Controls.
 
         assertFailEvt = getAssertFailEvt();
-
-        if not excpWasSeen;    // Not implemented with assert.
-          fail( 'assert( *off : ...) should have raised an error.' );
-        endif;
 
         aEqual( 'Failure message!' : assertFailEvt.msg );
 
@@ -301,3 +336,22 @@
       /end-free
      P                 e
 
+      //----------------------------------------------------------------------
+      //   Helper Procedures
+      //----------------------------------------------------------------------
+
+     P callFailInAMonitorBlock...
+     P                 b
+     D callFailInAMonitorBlock...
+     D                 pi              n
+      /free
+
+          monitor;
+            fail( 'Failure message' );
+            return *off;
+          on-error;
+            return *on;
+          endmon;
+
+      /end-free
+     P                 e
