@@ -26,9 +26,3 @@
        // - control boundary
      D CONTROL_BOUNDARY...
      D                 c                   Const('*CTLBDY')
-
-       // Call stack count:
-     D ONE_CALL_STK_LVL_ABOVE...
-     D                 c                   Const(1)
-     D TWO_CALL_STK_LVL_ABOVE...
-     D                 c                   Const(2)

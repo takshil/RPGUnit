@@ -33,7 +33,7 @@
 
       /free
 
-        msg = rcvPgmMsg( '*EXCP' : ONE_CALL_STK_LVL_ABOVE_HERE );
+        msg = rcvPgmMsg( '*EXCP' : ONE_CALL_STK_LVL_ABOVE );
 
         excpMsgInfo.msgId  = msg.id;
         excpMsgInfo.msg    = msg.txt;
@@ -55,7 +55,7 @@
 
       /free
 
-        msg = rcvPgmMsg( msgType : ONE_CALL_STK_LVL_ABOVE_HERE );
+        msg = rcvPgmMsg( msgType : ONE_CALL_STK_LVL_ABOVE );
         return msg.rplData;
 
       /end-free
@@ -70,7 +70,7 @@
 
       /free
 
-        msg = rcvPgmMsg( msgType : ONE_CALL_STK_LVL_ABOVE_HERE );
+        msg = rcvPgmMsg( msgType : ONE_CALL_STK_LVL_ABOVE );
         return msg.txt;
 
       /end-free
@@ -110,7 +110,7 @@
                   %size(rawMsgBuf) :
                   ALL_MSG_INFO_WITH_SENDER_INFO :
                   THIS_CALL_STK_ENT :
-                  ONE_CALL_STK_LVL_ABOVE_HERE + safeCallStkCnt :
+                  ONE_CALL_STK_LVL_ABOVE + safeCallStkCnt :
                   msgType :
                   NO_MSG_KEY :
                   NO_WAIT :
@@ -174,11 +174,10 @@
      P sndCompMsg      e
 
 
-     P sndEscapeMsgToCaller...
-     P                 b                   Export
-     D sndEscapeMsgToCaller...
-     D                 pi
+     P sndEscapeMsg    b                   Export
+     D sndEscapeMsg    pi
      D  msg                         256a   Const
+     D  callStkCnt                   10i 0 Const
 
        // The message reference key.
      D msgKey          s              4a
@@ -191,9 +190,22 @@
                   %len(%trimr(msg)) :
                   '*ESCAPE' :
                   CUR_CALL_STK_ENT :
-                  TWO_CALL_STK_LVL_ABOVE :
+                  ONE_CALL_STK_LVL_ABOVE + callStkCnt :
                   msgKey :
                   percolateErrors );
+
+      /end-free
+     P sndEscapeMsg    e
+
+
+     P sndEscapeMsgToCaller...
+     P                 b                   Export
+     D sndEscapeMsgToCaller...
+     D                 pi
+     D  msg                         256a   Const
+      /free
+
+        sndEscapeMsg( msg : TWO_CALL_STK_LVL_ABOVE );
 
       /end-free
      P sndEscapeMsgToCaller...
@@ -273,5 +285,3 @@
 
       /end-free
      P sndStsMsg       e
-
-

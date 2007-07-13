@@ -340,6 +340,7 @@
 
         procWithNoError.procNm  =        'proc_with_no_error';
         procWithNoError.procPtr = %paddr( proc_with_no_error );
+
         callWithLogging( procWithNoError );
 
         assert( procWithNoErrorWasCalled : 'proc_with_no_error not called' );

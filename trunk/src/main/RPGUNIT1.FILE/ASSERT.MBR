@@ -110,12 +110,15 @@
        //----------------------------------------------------------------------
      D fail            pi
      D  msg                         256a   Const
+
+     D msgKey          s              4a
+
       /free
 
         assertFailEvt.msg = msg;
         assertFailEvt.callStkEnt = getCallStk();
 
-        sndEscapeMsgToCaller( msg );
+        sndEscapeMsg( msg : TWO_CALL_STK_LVL_ABOVE );
 
       /end-free
      P fail            e
