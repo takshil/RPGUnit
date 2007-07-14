@@ -206,6 +206,9 @@
              CHGPFM     FILE(&TARGETLIB/RPGUNITT1) MBR(RUNT) +
                           SRCTYPE(RPGLE) TEXT('RPGUnit SelfTest - +
                           Test RUN.')
+             CHGPFM     FILE(&TARGETLIB/RPGUNITT1) MBR(SPLF) +
+                          SRCTYPE(RPGLE) TEXT('RPGUnit SelfTest - +
+                          Spool file test helper.')
 
              CHGPFM     FILE(&TARGETLIB/RPGUNITY1) MBR(APILIST) +
                           SRCTYPE(RPGLE) TEXT('RPGUnit Prototype - +
@@ -285,6 +288,9 @@
              CHGPFM     FILE(&TARGETLIB/RPGUNITY1) MBR(RUNNERBND) +
                           SRCTYPE(BND) TEXT('RPGUnit Prototype - +
                           Binder for RUNNER.')
+             CHGPFM     FILE(&TARGETLIB/RPGUNITY1) MBR(SPLF) +
+                          SRCTYPE(RPGLE) TEXT('RPGUnit SelfTest - +
+                          Spool file test helper.')
              CHGPFM     FILE(&TARGETLIB/RPGUNITY1) MBR(TEMPLATES) +
                           SRCTYPE(RPGLE) TEXT('RPGUnit Prototype - +
                           Data templates.')
