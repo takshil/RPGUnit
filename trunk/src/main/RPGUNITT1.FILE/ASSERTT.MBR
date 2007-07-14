@@ -73,7 +73,7 @@
             fail( 'The failure exception'
                 + ' should not be caught by the monitor block' );
           other;
-            fail( 'fail() should have raise an exception' );
+            fail( 'fail() should have raised an exception' );
         endsl;
 
       /end-free

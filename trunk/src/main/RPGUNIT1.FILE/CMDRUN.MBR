@@ -34,12 +34,11 @@
      D  testCasesCnt                 10i 0 Const
      D  testProcToRun                      Const Like(ProcNm_t)
 
-       // Returns a formatted test run completion message.
-     D fmtCompMsg      pr           256a   Varying
-     D  testCaseCnt                  10i 0 Const
-     D  assertCnt                    10i 0 Const
-     D  failureCnt                   10i 0 Const
-     D  errorCnt                     10i 0 Const
+       // Format a word with its counter.
+       // (e.g., fmtWordWithCnt( 2 : 'apple' ) = '2 apples' )
+     D fmtWordWithCnt  pr           256a   Varying
+     D  cnt                          10i 0 Const
+     D  word                        256a   Const Varying
 
        // Handle a test case error.
      D handleError     pr
@@ -193,7 +192,7 @@
      P                 e
 
 
-     P fmtCompMsg      b
+     P fmtCompMsg      b                   Export
        //----------------------------------------------------------------------
        // Format a test run completion message. See prototype.
        //----------------------------------------------------------------------
@@ -203,34 +202,24 @@
      D  failureCnt                   10i 0 Const
      D  errorCnt                     10i 0 Const
 
-       // Completion message tokens.
-     D success         c                   Const('Success. ')
-     D failure         c                   Const('FAILURE! ')
-     D error           c                   Const('ERROR! ')
-     D testCases       c                   Const(' test cases, ')
-     D assertions      c                   Const(' assertions, ')
-     D failures        c                   Const(' failures, ')
-     D errors          c                   Const(' errors.')
-
      D msg             s            256a   Varying
 
       /free
 
         select;
           when errorCnt <> 0;
-            msg = error;
-
+            msg = 'ERROR!';
           when failureCnt <> 0;
-            msg = failure;
-
+            msg = 'FAILURE!';
           other;
-            msg = success;
+            msg = 'Success.';
         endsl;
 
-        msg += %char(testCaseCnt)  + testCases
-             + %char(assertCnt)    + assertions
-             + %char(failureCnt)   + failures
-             + %char(errorCnt)     + errors;
+        msg += ' ';
+        msg += fmtWordWithCnt( testCaseCnt : 'test case' ) + ', ';
+        msg += fmtWordWithCnt( assertCnt   : 'assertion' ) + ', ';
+        msg += fmtWordWithCnt( failureCnt  : 'failure'   ) + ', ';
+        msg += fmtWordWithCnt( errorCnt    : 'error'     ) + '.';
 
         return msg;
 
@@ -247,6 +236,22 @@
 
       /end-free
      P fmtObjNm        e
+
+
+     P fmtWordWithCnt  b
+     D fmtWordWithCnt  pi           256a   Varying
+     D  cnt                          10i 0 Const
+     D  word                        256a   Const Varying
+      /free
+
+        if cnt < 2;
+          return %char(cnt) + ' ' + word;
+        else;
+          return %char(cnt) + ' ' + word + 's';
+        endif;
+
+      /end-free
+     P fmtWordWithCnt  e
 
 
      P handleError     b

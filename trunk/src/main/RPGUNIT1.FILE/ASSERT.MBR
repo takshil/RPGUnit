@@ -110,9 +110,6 @@
        //----------------------------------------------------------------------
      D fail            pi
      D  msg                         256a   Const
-
-     D msgKey          s              4a
-
       /free
 
         assertFailEvt.msg = msg;

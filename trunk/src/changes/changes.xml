@@ -6,6 +6,9 @@
   <body>
     <release version="0.3" date="SVN" description="Version 0.3 Release Notes">
       <action dev="lacton" type="fix">
+        Fixed RUCALLTST completion message so that the words are suffixed by 's' only if there are several of them.
+      </action>
+      <action dev="lacton" type="fix">
         Fixed fail() so that calling it from inside a monitor block actually raises an exception outside the monitor block. Until then, calling fail() from inside a monitor block would only force a jump to the on-error part of the block.
       </action>
       <action dev="lacton" type="fix">

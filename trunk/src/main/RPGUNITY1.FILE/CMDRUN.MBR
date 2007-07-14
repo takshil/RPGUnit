@@ -14,6 +14,13 @@
      D  order                         8a   Const
      D  detail                        6a   Const
 
+       // Returns a formatted test run completion message.
+     D fmtCompMsg      pr           256a   Varying
+     D  testCaseCnt                  10i 0 Const
+     D  assertCnt                    10i 0 Const
+     D  failureCnt                   10i 0 Const
+     D  errorCnt                     10i 0 Const
+
        // Return a user-friendly-formated qualified object name.
      D fmtObjNm        pr            21a   Varying
      D  obj                                Const LikeDs(Object_t)
