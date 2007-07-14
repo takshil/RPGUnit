@@ -52,6 +52,9 @@
        // Test callWithLogging when the call raises an error.
      D test_callWithLogging_withError...
      D                 pr
+       // Test fmtCompMsg.
+     D test_fmtCompMsg...
+     D                 pr
 
 
       //----------------------------------------------------------------------
@@ -373,6 +376,34 @@
         aEqual( TEST_CASE_ERROR    : logLine(1).type );
         aEqual( 'Artificial error' : logLine(1).msg );
 
+      /end-free
+     P                 e
+
+
+     P test_fmtCompMsg...
+     P                 b                   Export
+     D test_fmtCompMsg...
+     D                 pi
+      /free
+
+        aEqual( 'Success. 0 test case, 0 assertion, 0 failure, 0 error.' :
+                fmtCompMsg( 0 : 0 : 0 : 0 ) );
+
+        aEqual( 'Success. 2 test cases, 0 assertion, 0 failure, 0 error.' :
+                fmtCompMsg( 2 : 0 : 0 : 0 ) );
+
+        aEqual( 'Success. 0 test case, 2 assertions, 0 failure, 0 error.' :
+                fmtCompMsg( 0 : 2 : 0 : 0 ) );
+
+        aEqual( 'FAILURE! 0 test case, 0 assertion, 2 failures, 0 error.' :
+                fmtCompMsg( 0 : 0 : 2 : 0 ) );
+
+        aEqual( 'ERROR! 0 test case, 0 assertion, 0 failure, 2 errors.' :
+                fmtCompMsg( 0 : 0 : 0 : 2 ) );
+
+        // Errors have priority over failures.
+        aEqual( 'ERROR! 0 test case, 0 assertion, 2 failures, 1 error.' :
+                fmtCompMsg( 0 : 0 : 2 : 1 ) );
 
       /end-free
      P                 e
