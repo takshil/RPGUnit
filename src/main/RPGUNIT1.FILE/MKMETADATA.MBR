@@ -75,9 +75,15 @@
                           SRCTYPE(RPGLE) TEXT('RPGUnit - User space +
                           handling.')
 
+             CHGPFM     FILE(&TARGETLIB/RPGUNITC1) MBR(MKCMD) +
+                          SRCTYPE(CLLE) TEXT('RPGUnit - Build the +
+                          commands.')
              CHGPFM     FILE(&TARGETLIB/RPGUNITC1) MBR(RUCALLTST) +
                           SRCTYPE(CMD) TEXT('RPGUnit - Call a test +
                           suite by command line.')
+             CHGPFM     FILE(&TARGETLIB/RPGUNITC1) MBR(RUCMDHLP) +
+                          SRCTYPE(PNLGRP) TEXT('RPGUnit - Command +
+                          online help.')
              CHGPFM     FILE(&TARGETLIB/RPGUNITC1) MBR(RUCRTTST) +
                           SRCTYPE(CMD) TEXT('RPGUnit - Create a +
                           test suite.')

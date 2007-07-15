@@ -5,6 +5,12 @@
   </properties>
   <body>
     <release version="0.3" date="SVN" description="Version 0.3 Release Notes">
+      <action dev="lacton" type="add">
+        Added online help for commands RUCRTTST and RUCALLTST.
+      </action>
+      <action dev="lacton" type="fix">
+        Changed PGM parameter for RUCRTTST command to TSTPGM, to be consistent with RUCALLTST command.
+      </action>
       <action dev="lacton" type="fix">
         Fixed RUCALLTST completion message so that the words are suffixed by 's' only if there are several of them.
       </action>

@@ -1,6 +1,6 @@
              CMD        PROMPT('RPGUnit v0.2 - Create Test')
 
-             PARM       PROMPT('Program') KWD(PGM) TYPE(PGM) MIN(1)
+             PARM       PROMPT('Test program') KWD(TSTPGM) TYPE(PGM) MIN(1)
  PGM:        QUAL       TYPE(*NAME) LEN(10)
              QUAL       PROMPT('Library') TYPE(*NAME) LEN(10) DFT(*CURLIB) SPCVAL(*CURLIB)
 
