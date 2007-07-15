@@ -10,7 +10,7 @@
 
              /* Sanity Check. */
 
-             RUCRTTST   PGM(QTEMP/TESTPGM03) SRCFILE(RPGUNITF1)
+             RUCRTTST   TSTPGM(QTEMP/TESTPGM03) SRCFILE(RPGUNITF1)
              RUCALLTST  TSTPGM(QTEMP/TESTPGM03)
              MONMSG     MSGID(CPF0000) EXEC(CHGVAR VAR(&FAILSEEN) +
                           VALUE('OK'))

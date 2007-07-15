@@ -105,7 +105,7 @@
      DtestEmptyTest    pi
       /free
 
-        run( 'RUCRTTST PGM(QTEMP/TESTPGM01) SRCFILE(RPGUNITF1)' );
+        run( 'RUCRTTST TSTPGM(QTEMP/TESTPGM01) SRCFILE(RPGUNITF1)' );
 
         run( 'RUCALLTST QTEMP/TESTPGM01' : noError : '*COMP' : msgTxt );
 
@@ -120,7 +120,7 @@
      DtestSuccess      pi
       /free
 
-        run( 'RUCRTTST PGM(QTEMP/TESTPGM02) SRCFILE(RPGUNITF1)' );
+        run( 'RUCRTTST TSTPGM(QTEMP/TESTPGM02) SRCFILE(RPGUNITF1)' );
 
         run( 'RUCALLTST QTEMP/TESTPGM02' : noError : '*COMP' : msgTxt );
 
@@ -135,7 +135,7 @@
      DtestFailures     pi
       /free
 
-        run( 'RUCRTTST PGM(QTEMP/TESTPGM03) SRCFILE(RPGUNITF1)' );
+        run( 'RUCRTTST TSTPGM(QTEMP/TESTPGM03) SRCFILE(RPGUNITF1)' );
 
         run( 'RUCALLTST QTEMP/TESTPGM03' : errorExpected : '*ESCAPE' : msgTxt );
 
@@ -170,7 +170,7 @@
      D                 pi
       /free
 
-        run( 'RUCRTTST PGM(QTEMP/TESTPGM04) SRCFILE(RPGUNITF1)' );
+        run( 'RUCRTTST TSTPGM(QTEMP/TESTPGM04) SRCFILE(RPGUNITF1)' );
 
         run( 'RUCALLTST QTEMP/TESTPGM04' : noError : '*COMP' : msgTxt );
 
@@ -187,7 +187,7 @@
      D                 pi
       /free
 
-        run( 'RUCRTTST PGM(QTEMP/TESTPGM05) SRCFILE(RPGUNITF1)' );
+        run( 'RUCRTTST TSTPGM(QTEMP/TESTPGM05) SRCFILE(RPGUNITF1)' );
 
         run( 'RUCALLTST QTEMP/TESTPGM05' : errorExpected : '*ESCAPE' : msgTxt );
 
@@ -209,7 +209,7 @@
      DtestError        pi
       /free
 
-        run( 'RUCRTTST PGM(QTEMP/TESTPGM06) SRCFILE(RPGUNITF1)' );
+        run( 'RUCRTTST TSTPGM(QTEMP/TESTPGM06) SRCFILE(RPGUNITF1)' );
 
         run( 'RUCALLTST QTEMP/TESTPGM06' : errorExpected : '*ESCAPE' : msgTxt );
 
@@ -234,7 +234,7 @@
      DtestManyTests    pi
       /free
 
-        run( 'RUCRTTST PGM(QTEMP/TESTPGM13) SRCFILE(RPGUNITF1)' );
+        run( 'RUCRTTST TSTPGM(QTEMP/TESTPGM13) SRCFILE(RPGUNITF1)' );
 
         run( 'RUCALLTST QTEMP/TESTPGM13' : noError : '*COMP' : msgTxt );
 
@@ -249,7 +249,7 @@
      DtestStackTrace   pi
       /free
 
-        run( 'RUCRTTST PGM(QTEMP/TESTPGM07) SRCFILE(RPGUNITF1)' );
+        run( 'RUCRTTST TSTPGM(QTEMP/TESTPGM07) SRCFILE(RPGUNITF1)' );
 
         run( 'RUCALLTST QTEMP/TESTPGM07' : errorExpected : '*ESCAPE' : msgTxt );
 
@@ -297,7 +297,7 @@
      D                 pi
       /free
 
-        run( 'RUCRTTST PGM(QTEMP/TESTPGM09) SRCFILE(RPGUNITF1)' );
+        run( 'RUCRTTST TSTPGM(QTEMP/TESTPGM09) SRCFILE(RPGUNITF1)' );
 
         run( 'RUCALLTST QTEMP/TESTPGM09' : errorExpected : '*ESCAPE' : msgTxt );
 
@@ -328,7 +328,7 @@
      D                 pi
       /free
 
-        run( 'RUCRTTST PGM(QTEMP/TESTPGM10) SRCFILE(RPGUNITF1)' );
+        run( 'RUCRTTST TSTPGM(QTEMP/TESTPGM10) SRCFILE(RPGUNITF1)' );
 
         run( 'RUCALLTST QTEMP/TESTPGM10' : errorExpected : '*ESCAPE' : msgTxt );
 
@@ -353,7 +353,7 @@
      DtestNoTestCase   pi
       /free
 
-        run( 'RUCRTTST PGM(QTEMP/TESTPGM11) SRCFILE(RPGUNITF1)' );
+        run( 'RUCRTTST TSTPGM(QTEMP/TESTPGM11) SRCFILE(RPGUNITF1)' );
 
         run( 'RUCALLTST QTEMP/TESTPGM11' : errorExpected : '*ESCAPE' : msgTxt );
 
@@ -371,7 +371,7 @@
      D                 pi
       /free
 
-        run( 'RUCRTTST PGM(QTEMP/TESTPGM12) SRCFILE(RPGUNITF1)' );
+        run( 'RUCRTTST TSTPGM(QTEMP/TESTPGM12) SRCFILE(RPGUNITF1)' );
 
         run( 'RUCALLTST QTEMP/TESTPGM12' : errorExpected : '*ESCAPE' : msgTxt );
 
@@ -395,7 +395,7 @@
      DtestBigInteger   pi
       /free
 
-        run( 'RUCRTTST PGM(QTEMP/TESTPGM14) SRCFILE(RPGUNITF1)' );
+        run( 'RUCRTTST TSTPGM(QTEMP/TESTPGM14) SRCFILE(RPGUNITF1)' );
 
         run( 'RUCALLTST QTEMP/TESTPGM14' : errorExpected : '*ESCAPE' : msgTxt );
 
@@ -426,7 +426,7 @@
      D                 pi
       /free
 
-        run( 'RUCRTTST PGM(QTEMP/TESTPGM15) SRCFILE(RPGUNITF1)' );
+        run( 'RUCRTTST TSTPGM(QTEMP/TESTPGM15) SRCFILE(RPGUNITF1)' );
 
         run( 'RUCALLTST TSTPGM(QTEMP/TESTPGM15) DETAIL(*ALL)' :
              noError :
@@ -458,7 +458,7 @@
      D                 pi
       /free
 
-        run( 'RUCRTTST PGM(QTEMP/TESTPGM16) SRCFILE(RPGUNITF1)' );
+        run( 'RUCRTTST TSTPGM(QTEMP/TESTPGM16) SRCFILE(RPGUNITF1)' );
 
         run( 'RUCALLTST TSTPGM(QTEMP/TESTPGM16) ORDER(*REVERSE)' :
              noError :
@@ -483,7 +483,7 @@
      DtestChooseTest   pi
       /free
 
-        run( 'RUCRTTST PGM(QTEMP/TESTPGM05) SRCFILE(RPGUNITF1)' );
+        run( 'RUCRTTST TSTPGM(QTEMP/TESTPGM05) SRCFILE(RPGUNITF1)' );
 
         run( 'RUCALLTST QTEMP/TESTPGM05 TSTPRC(TEST2)' :
              errorExpected : '*ESCAPE' : msgTxt );
@@ -515,7 +515,7 @@
      D                 pi
       /free
 
-        run( 'RUCRTTST PGM(QTEMP/TESTPGM05) SRCFILE(RPGUNITF1)' );
+        run( 'RUCRTTST TSTPGM(QTEMP/TESTPGM05) SRCFILE(RPGUNITF1)' );
 
         run( 'RUCALLTST QTEMP/TESTPGM05 TSTPRC(NON_EXISTING_TEST)' :
              errorExpected : '*ESCAPE' : msgTxt );
@@ -542,7 +542,7 @@
      D                 pi
       /free
 
-        run( 'RUCRTTST PGM(QTEMP/TESTPGM01) SRCFILE(RPGUNITF1)' :
+        run( 'RUCRTTST TSTPGM(QTEMP/TESTPGM01) SRCFILE(RPGUNITF1)' :
              noError :
              '*COMP' :
              msgTxt );
@@ -559,7 +559,7 @@
      D                 pi
       /free
 
-        run( 'RUCRTTST PGM(QTEMP/TESTPGM17) SRCFILE(RPGUNITF1)' );
+        run( 'RUCRTTST TSTPGM(QTEMP/TESTPGM17) SRCFILE(RPGUNITF1)' );
 
         run( 'RUCALLTST QTEMP/TESTPGM17' : errorExpected : '*ESCAPE' : msgTxt );
 
@@ -589,7 +589,7 @@
      D                 pi
       /free
 
-        run( 'RUCRTTST PGM(QTEMP/TESTPGM18) SRCFILE(RPGUNITF1)' );
+        run( 'RUCRTTST TSTPGM(QTEMP/TESTPGM18) SRCFILE(RPGUNITF1)' );
 
         run( 'RUCALLTST QTEMP/TESTPGM18' : errorExpected : '*ESCAPE' : msgTxt );
 
@@ -620,7 +620,7 @@
      D                 pi
       /free
 
-        run( 'RUCRTTST PGM(QTEMP/TESTPGM19) SRCFILE(RPGUNITF1)' );
+        run( 'RUCRTTST TSTPGM(QTEMP/TESTPGM19) SRCFILE(RPGUNITF1)' );
 
         run( 'RUCALLTST QTEMP/TESTPGM19' : errorExpected : '*ESCAPE' : msgTxt );
 

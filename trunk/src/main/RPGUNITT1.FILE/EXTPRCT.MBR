@@ -167,8 +167,8 @@
      DsetUpSuite       pi
       /free
 
-        runcmd( 'RUCRTTST PGM(QTEMP/SRVPGM1) SRCFILE(RPGUNITF1)' );
-        runcmd( 'RUCRTTST PGM(QTEMP/SRVPGM2) SRCFILE(RPGUNITF1)' );
+        runcmd( 'RUCRTTST TSTPGM(QTEMP/SRVPGM1) SRCFILE(RPGUNITF1)' );
+        runcmd( 'RUCRTTST TSTPGM(QTEMP/SRVPGM2) SRCFILE(RPGUNITF1)' );
 
       /end-free
      PsetUpSuite       e

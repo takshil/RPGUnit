@@ -1,13 +1,13 @@
-             CMD        PROMPT('RPGUnit v0.2 - Call Test Suite')
+             CMD        PROMPT('RPGUnit v0.2 - Call Tests')
 
-             PARM       KWD(TSTPGM) TYPE(OBJ) MIN(1) PROMPT('Test Service Program')
+             PARM       KWD(TSTPGM) TYPE(OBJ) MIN(1) PROMPT('Test program')
              PARM       KWD(TSTPRC) TYPE(*CHAR) LEN(32) DFT(*ALL) SPCVAL(*ALL) PROMPT('Test +
-                          Procedure')
+                          procedure')
              PARM       KWD(ORDER) TYPE(*CHAR) LEN(8) RSTD(*YES) DFT(*API) VALUES(*API +
-                          *REVERSE) PROMPT('Run Order')
+                          *REVERSE) PROMPT('Run order')
              PARM       KWD(DETAIL) TYPE(*CHAR) LEN(6) RSTD(*YES) +
                           DFT(*BASIC) VALUES(*BASIC *ALL) +
-                          PROMPT('Report Detail')
+                          PROMPT('Report detail')
 
  OBJ:        QUAL       TYPE(*NAME) LEN(10)
              QUAL       TYPE(*NAME) LEN(10) DFT(*LIBL) SPCVAL(*LIBL) PROMPT('Library')

@@ -1,0 +1,116 @@
+.*
+.*    RPGUnit Command Online Help
+.*
+:pnlgrp.
+.*
+:help name=RUCRTTST.
+RPGUnit Create Test (RUCRTTST) - Help
+:p.
+The RPGUnit Create Test (RUCRTTST) command
+compiles an RPGLE source member containing test procedures into a test program.
+:ehelp.
+.*
+:help name='RUCRTTST/TSTPGM'.
+Test program (TSTPGM) - Help
+:xh3.Test program (TSTPGM)
+:p.
+Specifies the name of the test program (*SRVPGM) to create.
+:ehelp.
+.*
+:help name='RUCRTTST/SRCFILE'.
+Source file (SRCFILE) - Help
+:xh3.Source file (SRCFILE)
+:p.
+Specifies the name of the source file containing a member with the same name as TSTPGM.
+This member must be a valid, nomain RPGLE source member.
+:ehelp.
+.*
+:help name='RUCRTTST/COPTION'.
+Compile options (COPTION) - Help
+:xh3.Compile options (COPTION)
+:p.
+Refer to the OPTION parameter in CRTRPGMOD command help.
+:ehelp.
+.*
+:help name='RUCRTTST/DBGVIEW'.
+Debugging views (DBGVIEW) - Help
+:xh3.Debugging views (DBGVIEW)
+:p.
+Refer to the DBGVIEW parameter in CRTRPGMOD command help.
+:ehelp.
+.*
+:help name='RUCRTTST/BNDSRVPGM'.
+Bind service program (BNDSRVPGM) - Help
+:xh3.Bind service program (BNDSRVPGM)
+:p.
+Refer to the BNDSRVPGM parameter in CRTSRVPGM command help.
+:ehelp.
+.*
+:help name='RUCRTTST/BNDDIR'.
+Binding directory (BNDDIR) - Help
+:xh3.Binding directory (BNDDIR)
+:p.
+Refer to the BNDDIR parameter in CRTSRVPGM command help.
+:ehelp.
+.*
+:help name='RUCRTTST/BOPTION'.
+Binding options (BOPTION) - Help
+:xh3.Binding options (BOPTION)
+:p.
+Refer to the OPTION parameter in CRTSRVPGM command help.
+:ehelp.
+.*
+:help name=RUCALLTST.
+RPGUnit Call Tests (RUCALLTST) - Help
+:p.
+The RPGUnit Call Tests (RUCALLTST) command runs a test suite or a test procedure.
+:ehelp.
+.*
+:help name='RUCALLTST/TSTPGM'.
+Test program (TSTPGM) - Help
+:xh3.Test program (TSTPGM)
+:p.
+A test program is a service program object (*SRVPGM), exporting procedures starting with TEST.
+:ehelp.
+.*
+:help name='RUCALLTST/TSTPRC'.
+Test procedure (TSTPRC) - Help
+:xh3.Test procedure (TSTPRC)
+:p.
+Specifies the name of the test procedures that should be run.
+:parml.
+:pt.:pk def.*ALL:epk.
+:pd.Run all test procedures.
+:pt.test-procedure-name
+:pd.Enter the name of the test procedure to run.
+:eparml.
+:ehelp.
+.*
+:help name='RUCALLTST/ORDER'.
+Run order (ORDER) - Help
+:xh3.Run order (ORDER)
+:p.
+Specifies the order for running the test procedures.
+Useful to check that there is no dependencies between test procedures.
+:parml.
+:pt.:pk def.*API:epk.
+:pd.Run test procedures in the order provided by the system API.
+:pt.*REVERSE
+:pd.Run test procedures in reverse order.
+:eparml.
+:ehelp.
+.*
+:help name='RUCALLTST/DETAIL'.
+Report detail (DETAIL) - Help
+:xh3.Report detail (DETAIL)
+:p.
+Specifies how detailed the test run report should be.
+:parml.
+:pt.:pk def.*BASIC:epk.
+:pd.Full detail for failures and errors, no detail for successes.
+:pt.*ALL
+:pd.Full detail in all cases.
+:eparml.
+:ehelp.
+.*
+:epnlgrp.
