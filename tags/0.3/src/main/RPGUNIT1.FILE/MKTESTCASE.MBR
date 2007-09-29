@@ -1,0 +1,19 @@
+             PGM        PARM(&TARGETLIB)
+             DCL        VAR(&TARGETLIB) TYPE(*CHAR) LEN(10)
+
+             CHGVAR     VAR(&TARGETLIB) VALUE(&TARGETLIB)
+             MONMSG     MSGID(MCH3601) EXEC(SNDPGMMSG MSGID(CPF9898) +
+                          MSGF(QCPFMSG) MSGDTA('Target library +
+                          parameter required.') MSGTYPE(*ESCAPE))
+
+             CRTRPGMOD  MODULE(QTEMP/ASSERT) SRCFILE(RPGUNIT1) DBGVIEW(*LIST)
+             CRTRPGMOD  MODULE(QTEMP/PGMMSG) SRCFILE(RPGUNIT1) DBGVIEW(*LIST)
+             CRTRPGMOD  MODULE(QTEMP/SETUP) SRCFILE(RPGUNIT1) DBGVIEW(*LIST)
+
+             CRTSRVPGM  SRVPGM(&TARGETLIB/RUTESTCASE) +
+                          MODULE(QTEMP/ASSERT QTEMP/SETUP +
+                          QTEMP/PGMMSG) EXPORT(*SRCFILE) +
+                          SRCFILE(RPGUNITY1) SRCMBR(TESTCASEBN) +
+                          TEXT('RPGUnit - TestCase Toolkit.')
+
+             ENDPGM
