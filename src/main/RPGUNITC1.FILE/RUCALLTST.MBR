@@ -1,4 +1,4 @@
-             CMD        PROMPT('RPGUnit v0.2 - Call Tests')
+             CMD        PROMPT('RPGUnit v0.3 - Call Tests')
 
              PARM       KWD(TSTPGM) TYPE(OBJ) MIN(1) PROMPT('Test program')
              PARM       KWD(TSTPRC) TYPE(*CHAR) LEN(32) DFT(*ALL) SPCVAL(*ALL) PROMPT('Test +

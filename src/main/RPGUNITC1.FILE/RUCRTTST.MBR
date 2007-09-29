@@ -1,4 +1,4 @@
-             CMD        PROMPT('RPGUnit v0.2 - Create Test')
+             CMD        PROMPT('RPGUnit v0.3 - Create Test')
 
              PARM       PROMPT('Test program') KWD(TSTPGM) TYPE(PGM) MIN(1)
  PGM:        QUAL       TYPE(*NAME) LEN(10)

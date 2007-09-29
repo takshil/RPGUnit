@@ -4,7 +4,7 @@
     <author email="lacton@users.sourceforge.net">lacton</author>
   </properties>
   <body>
-    <release version="0.3" date="SVN" description="Version 0.3 Release Notes">
+    <release version="0.3" date="2007-09-29" description="Version 0.3 Release Notes">
       <action dev="lacton" type="add">
         Added online help for commands RUCRTTST and RUCALLTST.
       </action>
