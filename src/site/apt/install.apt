@@ -10,14 +10,14 @@ Installation
     
     * Extract it, using an application like WinZip or gzip.
     
-    * Create the physical source files on your iSeries host. From there on, LIB should be replaced by the name of the library where you want to install RPGUnit.
+    * Create the physical source files on your iSeries host. From there on, YOURLIB should be replaced by the name of the library where you want to install RPGUnit.
     
 +-----+
-===> CRTSRCPF FILE(LIB/RPGUNIT1) RCDLEN(112) TEXT('RPGUnit - Framework.')
-===> CRTSRCPF FILE(LIB/RPGUNITC1) RCDLEN(112) TEXT('RPGUnit - Commands.')
-===> CRTSRCPF FILE(LIB/RPGUNITF1) RCDLEN(112) TEXT('RPGUnit - Test Fixtures.')
-===> CRTSRCPF FILE(LIB/RPGUNITT1) RCDLEN(112) TEXT('RPGUnit - Self-Test.')
-===> CRTSRCPF FILE(LIB/RPGUNITY1) RCDLEN(112) TEXT('RPGUnit - Prototypes.')
+===> CRTSRCPF FILE(YOURLIB/RPGUNIT1) RCDLEN(112) TEXT('RPGUnit - Framework.')
+===> CRTSRCPF FILE(YOURLIB/RPGUNITC1) RCDLEN(112) TEXT('RPGUnit - Commands.')
+===> CRTSRCPF FILE(YOURLIB/RPGUNITF1) RCDLEN(112) TEXT('RPGUnit - Test Fixtures.')
+===> CRTSRCPF FILE(YOURLIB/RPGUNITT1) RCDLEN(112) TEXT('RPGUnit - Self-Test.')
+===> CRTSRCPF FILE(YOURLIB/RPGUNITY1) RCDLEN(112) TEXT('RPGUnit - Prototypes.')
 +-----+
 
     * Upload the source code to your iSeries host.
@@ -27,7 +27,7 @@ Installation
 > ftp your.iSeries.host
 ftp> ascii
 ftp> prompt
-ftp> cd /QSYS.LIB/LIB.LIB
+ftp> cd /QSYS.LIB/YOURLIB.LIB
 ftp> mput *.FILE/*.MBR
 ftp> bye
 +-----+
@@ -35,15 +35,15 @@ ftp> bye
     * Restore the source member meta-data.
     
 +-----+
-===> CRTBNDCL PGM(QTEMP/MKMETADATA) SRCFILE(LIB/RPGUNIT1)
-===> CALL PGM(QTEMP/MKMETADATA) PARM(LIB)
+===> CRTBNDCL PGM(QTEMP/MKMETADATA) SRCFILE(YOURLIB/RPGUNIT1)
+===> CALL PGM(QTEMP/MKMETADATA) PARM(YOURLIB)
 +-----+
 
     * Compile the framework.
     
 +-----+
-===> CRTBNDCL PGM(LIB/MKRPGUNIT) SRCFILE(LIB/RPGUNIT1)
-===> SBMJOB CMD(CALL PGM(LIB/MKRPGUNIT) PARM(LIB)) JOB(MKRPGUNIT)
+===> CRTBNDCL PGM(YOURLIB/MKRPGUNIT) SRCFILE(YOURLIB/RPGUNIT1)
+===> SBMJOB CMD(CALL PGM(YOURLIB/MKRPGUNIT) PARM(YOURLIB)) JOB(MKRPGUNIT)
 +-----+
 
     * Start writing unit tests!
@@ -53,13 +53,13 @@ ftp> bye
         * Compile the test harness.
     
 +-----+
-===> CRTBNDCL PGM(LIB/MKRPGUNITT) SRCFILE(LIB/RPGUNITT1)
+===> CRTBNDCL PGM(YOURLIB/MKRPGUNITT) SRCFILE(YOURLIB/RPGUNITT1)
 +-----+
 
         * Run the test harness.
     
 +-----+
-===> SBMJOB CMD(CALL PGM(LIB/MKRPGUNITT) PARM(QTEMP)) JOB(MKRPGUNITT)
+===> SBMJOB CMD(CALL PGM(YOURLIB/MKRPGUNITT) PARM(QTEMP)) JOB(MKRPGUNITT)
 +-----+
 
         * If the MKRPGUNITT job ends normally (without any error), it means the framework is sound and working.
