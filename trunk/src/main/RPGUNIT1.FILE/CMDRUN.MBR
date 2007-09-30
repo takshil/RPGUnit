@@ -208,14 +208,14 @@
 
         select;
           when errorCnt <> 0;
-            msg = 'ERROR!';
+            msg = 'ERROR';
           when failureCnt <> 0;
-            msg = 'FAILURE!';
+            msg = 'FAILURE';
           other;
-            msg = 'Success.';
+            msg = 'Success';
         endsl;
 
-        msg += ' ';
+        msg += '. ';
         msg += fmtWordWithCnt( testCaseCnt : 'test case' ) + ', ';
         msg += fmtWordWithCnt( assertCnt   : 'assertion' ) + ', ';
         msg += fmtWordWithCnt( failureCnt  : 'failure'   ) + ', ';

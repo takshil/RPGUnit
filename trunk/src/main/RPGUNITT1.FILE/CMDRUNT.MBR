@@ -395,14 +395,14 @@
         aEqual( 'Success. 0 test case, 2 assertions, 0 failure, 0 error.' :
                 fmtCompMsg( 0 : 2 : 0 : 0 ) );
 
-        aEqual( 'FAILURE! 0 test case, 0 assertion, 2 failures, 0 error.' :
+        aEqual( 'FAILURE. 0 test case, 0 assertion, 2 failures, 0 error.' :
                 fmtCompMsg( 0 : 0 : 2 : 0 ) );
 
-        aEqual( 'ERROR! 0 test case, 0 assertion, 0 failure, 2 errors.' :
+        aEqual( 'ERROR. 0 test case, 0 assertion, 0 failure, 2 errors.' :
                 fmtCompMsg( 0 : 0 : 0 : 2 ) );
 
         // Errors have priority over failures.
-        aEqual( 'ERROR! 0 test case, 0 assertion, 2 failures, 1 error.' :
+        aEqual( 'ERROR. 0 test case, 0 assertion, 2 failures, 1 error.' :
                 fmtCompMsg( 0 : 0 : 2 : 1 ) );
 
       /end-free

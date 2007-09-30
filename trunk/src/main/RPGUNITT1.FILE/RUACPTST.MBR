@@ -139,7 +139,7 @@
 
         run( 'RUCALLTST QTEMP/TESTPGM03' : errorExpected : '*ESCAPE' : msgTxt );
 
-        aEqual( 'FAILURE! 2 test cases, 2 assertions, 2 failures, 0 error.':
+        aEqual( 'FAILURE. 2 test cases, 2 assertions, 2 failures, 0 error.':
                 msgTxt );
 
         opnSplf( 'RPGUNIT' : 'TESTPGM03' );
@@ -156,7 +156,7 @@
         splfLineStartsWith( '  iEqual' );
         splfLineStartsWith( '  TESTFALSE2 (TESTPGM03:2200)' );
         splfLineStartsWith( '-----------------------' );
-        splfLineStartsWith( 'FAILURE! 2 test cases, 2 assertions,'
+        splfLineStartsWith( 'FAILURE. 2 test cases, 2 assertions,'
                           + ' 2 failures, 0 error.' );
         cloSplf();
 
@@ -191,7 +191,7 @@
 
         run( 'RUCALLTST QTEMP/TESTPGM05' : errorExpected : '*ESCAPE' : msgTxt );
 
-        aEqual( 'FAILURE! 2 test cases, 0 assertion, 1 failure, 0 error.':
+        aEqual( 'FAILURE. 2 test cases, 0 assertion, 1 failure, 0 error.':
                 msgTxt );
 
         aEqual( 'setup'        : rcvMsgData('*INFO') );
@@ -213,7 +213,7 @@
 
         run( 'RUCALLTST QTEMP/TESTPGM06' : errorExpected : '*ESCAPE' : msgTxt );
 
-        aEqual( 'ERROR! 1 test case, 0 assertion, 0 failure, 1 error.':
+        aEqual( 'ERROR. 1 test case, 0 assertion, 0 failure, 1 error.':
                 msgTxt );
 
         opnSplf( 'RPGUNIT' : 'TESTPGM06' );
@@ -222,7 +222,7 @@
         splfLineStartsWith( 'MCH1211 - ' );
         splfLineStartsWith( '  TESTERROR (TESTPGM06:1400)' );
         splfLineStartsWith( '-----------------------' );
-        splfLineStartsWith( 'ERROR! 1 test case, 0 assertion,'
+        splfLineStartsWith( 'ERROR. 1 test case, 0 assertion,'
                           + ' 0 failure, 1 error.' );
         cloSplf();
 
@@ -253,7 +253,7 @@
 
         run( 'RUCALLTST QTEMP/TESTPGM07' : errorExpected : '*ESCAPE' : msgTxt );
 
-        aEqual( 'FAILURE! 1 test case, 1 assertion, 1 failure, 0 error.':
+        aEqual( 'FAILURE. 1 test case, 1 assertion, 1 failure, 0 error.':
                 msgTxt );
 
         opnSplf( 'RPGUNIT' : 'TESTPGM07' );
@@ -265,7 +265,7 @@
         splfLineStartsWith( '  FAILINGPROC (TESTPGM07:1300)' );
         splfLineStartsWith( '  TESTSTACK (TESTPGM07:2200)' );
         splfLineStartsWith( '-----------------------' );
-        splfLineStartsWith( 'FAILURE! 1 test case, 1 assertion,'
+        splfLineStartsWith( 'FAILURE. 1 test case, 1 assertion,'
                           + ' 1 failure, 0 error.' );
         cloSplf();
 
@@ -301,7 +301,7 @@
 
         run( 'RUCALLTST QTEMP/TESTPGM09' : errorExpected : '*ESCAPE' : msgTxt );
 
-        aEqual( 'ERROR! 1 test case, 0 assertion, 0 failure, 1 error.' :
+        aEqual( 'ERROR. 1 test case, 0 assertion, 0 failure, 1 error.' :
                 msgTxt );
 
         aEqual( 'setup'        : rcvMsgData('*INFO') );    // Error during setup.
@@ -314,7 +314,7 @@
         splfLineStartsWith( 'MCH1211 - ' );
         splfLineStartsWith( '  SETUP (TESTPGM09:2100)' );
         splfLineStartsWith( '-----------------------' );
-        splfLineStartsWith( 'ERROR! 1 test case, 0 assertion,'
+        splfLineStartsWith( 'ERROR. 1 test case, 0 assertion,'
                           + ' 0 failure, 1 error.' );
         cloSplf();
 
@@ -332,7 +332,7 @@
 
         run( 'RUCALLTST QTEMP/TESTPGM10' : errorExpected : '*ESCAPE' : msgTxt );
 
-        aEqual( 'ERROR! 1 test case, 0 assertion, 0 failure, 1 error.' :
+        aEqual( 'ERROR. 1 test case, 0 assertion, 0 failure, 1 error.' :
                 msgTxt );
 
         opnSplf( 'RPGUNIT' : 'TESTPGM10' );
@@ -341,7 +341,7 @@
         splfLineStartsWith( 'MCH1211 - ' );
         splfLineStartsWith( '  TEARDOWN (TESTPGM10:1900)' );
         splfLineStartsWith( '-----------------------' );
-        splfLineStartsWith( 'ERROR! 1 test case, 0 assertion,'
+        splfLineStartsWith( 'ERROR. 1 test case, 0 assertion,'
                           + ' 0 failure, 1 error.' );
         cloSplf();
 
@@ -375,7 +375,7 @@
 
         run( 'RUCALLTST QTEMP/TESTPGM12' : errorExpected : '*ESCAPE' : msgTxt );
 
-        aEqual( 'FAILURE! 2 test cases, 0 assertion, 1 failure, 0 error.':
+        aEqual( 'FAILURE. 2 test cases, 0 assertion, 1 failure, 0 error.':
                 msgTxt );
 
         aEqual( 'setupSuite'   : rcvMsgData('*INFO') );
@@ -399,7 +399,7 @@
 
         run( 'RUCALLTST QTEMP/TESTPGM14' : errorExpected : '*ESCAPE' : msgTxt );
 
-        aEqual( 'FAILURE! 2 test cases, 2 assertions, 1 failure, 0 error.' :
+        aEqual( 'FAILURE. 2 test cases, 2 assertions, 1 failure, 0 error.' :
                 msgTxt );
 
         opnSplf( 'RPGUNIT' : 'TESTPGM14' );
@@ -412,7 +412,7 @@
         splfLineStartsWith( '  iEqual' );
         splfLineStartsWith( '  TEST_DIFFERENT (TESTPGM14:2800)' );
         splfLineStartsWith( '-----------------------' );
-        splfLineStartsWith( 'FAILURE! 2 test cases, 2 assertions,'
+        splfLineStartsWith( 'FAILURE. 2 test cases, 2 assertions,'
                           + ' 1 failure, 0 error.' );
         cloSplf();
 
@@ -488,7 +488,7 @@
         run( 'RUCALLTST QTEMP/TESTPGM05 TSTPRC(TEST2)' :
              errorExpected : '*ESCAPE' : msgTxt );
 
-        aEqual( 'FAILURE! 1 test case, 0 assertion, 1 failure, 0 error.':
+        aEqual( 'FAILURE. 1 test case, 0 assertion, 1 failure, 0 error.':
                 msgTxt );
 
         aEqual( 'setup'        : rcvMsgData('*INFO') );
@@ -501,7 +501,7 @@
         splfLineStartsWith( 'test2' );
         splfLineStartsWith( '  TEST2 (TESTPGM05' );
         splfLineStartsWith( '-----------------------' );
-        splfLineStartsWith( 'FAILURE! 1 test case, 0 assertion,'
+        splfLineStartsWith( 'FAILURE. 1 test case, 0 assertion,'
                           + ' 1 failure, 0 error.' );
         cloSplf();
 
@@ -520,7 +520,7 @@
         run( 'RUCALLTST QTEMP/TESTPGM05 TSTPRC(NON_EXISTING_TEST)' :
              errorExpected : '*ESCAPE' : msgTxt );
 
-        aEqual( 'ERROR! 0 test case, 0 assertion, 0 failure, 1 error.':
+        aEqual( 'ERROR. 0 test case, 0 assertion, 0 failure, 1 error.':
                 msgTxt );
 
         opnSplf( 'RPGUNIT' : 'TESTPGM05' );
@@ -528,7 +528,7 @@
         splfLineStartsWith( 'NON_EXISTING_TEST - ERROR' );
         splfLineStartsWith( 'Test procedure not found.' );
         splfLineStartsWith( '-----------------------' );
-        splfLineStartsWith( 'ERROR! 0 test case, 0 assertion,'
+        splfLineStartsWith( 'ERROR. 0 test case, 0 assertion,'
                           + ' 0 failure, 1 error.' );
         cloSplf();
 
@@ -563,7 +563,7 @@
 
         run( 'RUCALLTST QTEMP/TESTPGM17' : errorExpected : '*ESCAPE' : msgTxt );
 
-        aEqual( 'ERROR! 0 test case, 0 assertion, 0 failure, 1 error.':
+        aEqual( 'ERROR. 0 test case, 0 assertion, 0 failure, 1 error.':
                 msgTxt );
 
         aEqual( 'setupSuite'    : rcvMsgData('*INFO') );    // Error.
@@ -575,7 +575,7 @@
         splfLineStartsWith( 'MCH1211 - ' );
         splfLineStartsWith( '  SETUPSUITE (TESTPGM17:2100)' );
         splfLineStartsWith( '-----------------------' );
-        splfLineStartsWith( 'ERROR! 0 test case, 0 assertion,'
+        splfLineStartsWith( 'ERROR. 0 test case, 0 assertion,'
                           + ' 0 failure, 1 error.' );
         cloSplf();
 
@@ -593,7 +593,7 @@
 
         run( 'RUCALLTST QTEMP/TESTPGM18' : errorExpected : '*ESCAPE' : msgTxt );
 
-        aEqual( 'ERROR! 1 test case, 0 assertion, 0 failure, 1 error.':
+        aEqual( 'ERROR. 1 test case, 0 assertion, 0 failure, 1 error.':
                 msgTxt );
 
         aEqual( 'setupSuite'    : rcvMsgData('*INFO') );
@@ -606,7 +606,7 @@
         splfLineStartsWith( 'MCH1211 - ' );
         splfLineStartsWith( '  TEARDOWNSUITE (TESTPGM18:3900)' );
         splfLineStartsWith( '-----------------------' );
-        splfLineStartsWith( 'ERROR! 1 test case, 0 assertion,'
+        splfLineStartsWith( 'ERROR. 1 test case, 0 assertion,'
                           + ' 0 failure, 1 error.' );
         cloSplf();
 
@@ -624,7 +624,7 @@
 
         run( 'RUCALLTST QTEMP/TESTPGM19' : errorExpected : '*ESCAPE' : msgTxt );
 
-        aEqual( 'ERROR! 0 test case, 0 assertion, 0 failure, 2 errors.':
+        aEqual( 'ERROR. 0 test case, 0 assertion, 0 failure, 2 errors.':
                 msgTxt );
 
         aEqual( 'setupSuite'    : rcvMsgData('*INFO') );    // Error.
@@ -640,7 +640,7 @@
         splfLineStartsWith( 'MCH1211 - ' );
         splfLineStartsWith( '  TEARDOWNSUITE (TESTPGM19:4200)' );
         splfLineStartsWith( '-----------------------' );
-        splfLineStartsWith( 'ERROR! 0 test case, 0 assertion,'
+        splfLineStartsWith( 'ERROR. 0 test case, 0 assertion,'
                           + ' 0 failure, 2 errors.' );
         cloSplf();
 
