@@ -4,6 +4,11 @@
     <author email="lacton@users.sourceforge.net">lacton</author>
   </properties>
   <body>
+    <release version="0.3.1" date="2007-09-30" description="Version 0.3.1 Release Notes">
+      <action dev="lacton" type="fix">
+        Replaced all exclamation marks (!) by a simple dot (.), to avoid transcoding problem between different locales and different platforms.
+      </action>
+    </release>
     <release version="0.3" date="2007-09-29" description="Version 0.3 Release Notes">
       <action dev="lacton" type="add">
         Added online help for commands RUCRTTST and RUCALLTST.
