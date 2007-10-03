@@ -6,6 +6,9 @@
                           MSGF(QCPFMSG) MSGDTA('Target library +
                           parameter required.') MSGTYPE(*ESCAPE))
 
+             CRTSQLRPGI OBJ(QTEMP/JOBLOG) SRCFILE(RPGUNIT1) +
+                          COMMIT(*NONE) OBJTYPE(*MODULE) +
+                          DBGVIEW(*SOURCE)
              CRTRPGMOD  MODULE(QTEMP/PGMMSG) SRCFILE(RPGUNIT1) +
                           DBGVIEW(*LIST)
              CRTRPGMOD  MODULE(QTEMP/SPLF) SRCFILE(RPGUNITT1) +
@@ -15,8 +18,8 @@
              CRTRPGMOD  MODULE(QTEMP/RUACPTST) SRCFILE(RPGUNITT1) +
                           DBGVIEW(*LIST)
              CRTSRVPGM  SRVPGM(&TARGETLIB/RUACPTST) +
-                          MODULE(QTEMP/RUACPTST QTEMP/PGMMSG +
-                          QTEMP/SPLF QTEMP/USRSPC) EXPORT(*ALL) +
-                          BNDSRVPGM(RUTESTCASE)
+                          MODULE(QTEMP/RUACPTST QTEMP/JOBLOG +
+                          QTEMP/PGMMSG QTEMP/SPLF QTEMP/USRSPC) +
+                          EXPORT(*ALL) BNDSRVPGM(RUTESTCASE)
 
              ENDPGM

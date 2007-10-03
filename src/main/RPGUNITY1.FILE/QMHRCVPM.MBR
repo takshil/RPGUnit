@@ -124,6 +124,8 @@
        // Do not wait for receiving the message.
      D NO_WAIT         c                   Const(0)
 
-       // Remove the message after receiving it.
+       // Message action:
+       // - keep the message in the message queue and mark it as an old message
+     D MARK_AS_OLD     c                   Const('*OLD')
+       // - remove the message after receiving it
      D REMOVE_MSG      c                   Const('*REMOVE')
-
