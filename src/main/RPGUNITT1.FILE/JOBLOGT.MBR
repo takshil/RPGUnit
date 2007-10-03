@@ -1,0 +1,79 @@
+      //
+      // Unit tests for JOBLOG.
+      //
+
+     H NoMain Option(*SrcStmt)
+
+
+      //----------------------------------------------------------------------
+      //   Exported Procedures
+      //----------------------------------------------------------------------
+
+     D setUp           pr
+     D testNoMessage   pr
+     D testMessage     pr
+
+
+      //----------------------------------------------------------------------
+      //   Imported Procedures
+      //----------------------------------------------------------------------
+
+      /copy RPGUNIT1,TESTCASE
+      /copy RPGUNITY1,JOBLOG
+
+      //----------------------------------------------------------------------
+      //   Global Variables
+      //----------------------------------------------------------------------
+
+     D testStartTime   s               z
+
+
+      //----------------------------------------------------------------------
+      //   Test Procedures
+      //----------------------------------------------------------------------
+
+     P setUp           b                   Export
+     D setUp           pi
+      /free
+
+        testStartTime = getFullTimeStamp();
+
+      /end-free
+     P setUp           e
+
+
+     P testNoMessage   b                   Export
+     D testNoMessage   pi
+      /free
+
+        monitor;
+          assertJobLogContains( 'MCH1211' : testStartTime );
+          fail( 'assertJobLogContains(...) should have raised a failure.' );
+        on-error;
+          // TODO check it's a failure and not an error.
+        endmon;
+
+      /end-free
+     P testNoMessage   e
+
+
+     P testMessage     b                   Export
+     D testMessage     pi
+
+     D zero            s             10i 0 Inz(0)
+     D x               s             10i 0 Inz(1)
+
+      /free
+
+        // TODO Encapsulate this into a private subprocedure.
+        // Send a divide by zero error message to the joblog.
+
+        monitor;
+          x = 1 / zero;
+        on-error;
+        endmon;
+
+        assertJobLogContains( 'MCH1211' : testStartTime );
+
+      /end-free
+     P testMessage     e
