@@ -1,0 +1,11 @@
+      //
+      // Prototype for JOBLOG.
+      //
+
+     D assertJobLogContains...
+     D                 pr
+     D  msgId                         7a   Const
+     D  timeLimit                      z   Const
+
+     D getFullTimeStamp...
+     D                 pr              z

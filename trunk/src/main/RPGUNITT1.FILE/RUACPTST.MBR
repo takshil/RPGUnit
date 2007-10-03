@@ -216,6 +216,8 @@
         aEqual( 'ERROR. 1 test case, 0 assertion, 0 failure, 1 error.':
                 msgTxt );
 
+        fail( 'Add check for Error message here' );
+
         opnSplf( 'RPGUNIT' : 'TESTPGM06' );
         splfLineStartsWith( '*** Tests from TESTPGM06 ***' );
         splfLineStartsWith( 'TESTERROR - ERROR' );

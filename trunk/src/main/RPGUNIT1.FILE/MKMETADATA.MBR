@@ -35,6 +35,9 @@
                           test cases.')
              CHGPFM     FILE(&TARGETLIB/RPGUNIT1) MBR(GLOSSARY) +
                           SRCTYPE(TXT) TEXT('RPGUnit - Glossary.')
+             CHGPFM     FILE(&TARGETLIB/RPGUNIT1) MBR(JOBLOG) +
+                          SRCTYPE(SQLRPGLE) TEXT('RPGUnit - Job log +
+                          handling.')
              CHGPFM     FILE(&TARGETLIB/RPGUNIT1) MBR(LICENSE) +
                           SRCTYPE(TXT) TEXT('RPGUnit - Software license.')
              CHGPFM     FILE(&TARGETLIB/RPGUNIT1) MBR(MKCMDRUN) +
@@ -170,6 +173,9 @@
              CHGPFM     FILE(&TARGETLIB/RPGUNITT1) MBR(EXTTSTT) +
                           SRCTYPE(RPGLE) TEXT('RPGUnit SelfTest - +
                           Test EXTTST.')
+             CHGPFM     FILE(&TARGETLIB/RPGUNITT1) MBR(JOBLOGT) +
+                          SRCTYPE(RPGLE) TEXT('RPGUnit SelfTest - +
+                          Test JOBLOG.')
              CHGPFM     FILE(&TARGETLIB/RPGUNITT1) MBR(MKACPTST) +
                           SRCTYPE(CLLE) TEXT('RPGUnit SelfTest - +
                           Build the acceptance tests.')
@@ -188,6 +194,9 @@
              CHGPFM     FILE(&TARGETLIB/RPGUNITT1) MBR(MKEXTTSTT) +
                           SRCTYPE(CLLE) TEXT('RPGUnit SelfTest - +
                           Build EXTTSTT.')
+             CHGPFM     FILE(&TARGETLIB/RPGUNITT1) MBR(MKJOBLOGT) +
+                          SRCTYPE(CLLE) TEXT('RPGUnit SelfTest - +
+                          Build JOBLOGT.')
              CHGPFM     FILE(&TARGETLIB/RPGUNITT1) MBR(MKPGMMSGT) +
                           SRCTYPE(CLLE) TEXT('RPGUnit SelfTest - +
                           Build PGMMSGT.')
@@ -242,6 +251,11 @@
              CHGPFM     FILE(&TARGETLIB/RPGUNITY1) MBR(EXTTST) +
                           SRCTYPE(RPGLE) TEXT('RPGUnit Prototype - +
                           Extract tests.')
+             CHGPFM     FILE(&TARGETLIB/RPGUNITY1) MBR(JOBLOG) +
+                          SRCTYPE(RPGLE) TEXT('RPGUnit Prototype - +
+                          Job log handling.')
+             CHGPFM     FILE(&TARGETLIB/RPGUNITY1) MBR(OPNLIST) +
+                          SRCTYPE(RPGLE) TEXT('Open list structure.')
              CHGPFM     FILE(&TARGETLIB/RPGUNITY1) MBR(PGMMSG) +
                           SRCTYPE(RPGLE) TEXT('RPGUnit Prototype - +
                           Program message handling.')
@@ -250,6 +264,16 @@
                           program information API.')
              CHGPFM     FILE(&TARGETLIB/RPGUNITY1) MBR(QCMDEXC) +
                           SRCTYPE(RPGLE) TEXT('Execute command.')
+             CHGPFM     FILE(&TARGETLIB/RPGUNITY1) MBR(QGYCLST) +
+                          SRCTYPE(RPGLE) TEXT('Close list.')
+             CHGPFM     FILE(&TARGETLIB/RPGUNITY1) MBR(QGYGTLE) +
+                          SRCTYPE(RPGLE) TEXT('Get list entries.')
+             CHGPFM     FILE(&TARGETLIB/RPGUNITY1) MBR(QGYOLJBL) +
+                          SRCTYPE(RPGLE) TEXT('Open list of job log +
+                          messages.')
+             CHGPFM     FILE(&TARGETLIB/RPGUNITY1) MBR(QGYOLSPL) +
+                          SRCTYPE(RPGLE) TEXT('Open list of spooled +
+                          files.')
              CHGPFM     FILE(&TARGETLIB/RPGUNITY1) MBR(QLEACTBNDP) +
                           SRCTYPE(RPGLE) TEXT('Activate bound +
                           program.')
@@ -295,7 +319,7 @@
                           SRCTYPE(BND) TEXT('RPGUnit Prototype - +
                           Binder for RUNNER.')
              CHGPFM     FILE(&TARGETLIB/RPGUNITY1) MBR(SPLF) +
-                          SRCTYPE(RPGLE) TEXT('RPGUnit SelfTest - +
+                          SRCTYPE(RPGLE) TEXT('RPGUnit Prototype - +
                           Spool file test helper.')
              CHGPFM     FILE(&TARGETLIB/RPGUNITY1) MBR(TEMPLATES) +
                           SRCTYPE(RPGLE) TEXT('RPGUnit Prototype - +
