@@ -114,7 +114,7 @@
                   msgType :
                   NO_MSG_KEY :
                   NO_WAIT :
-                  REMOVE_MSG :
+                  MARK_AS_OLD :
                   percolateErrors );
 
         rawMsgHdr_p = %addr( rawMsgBuf );

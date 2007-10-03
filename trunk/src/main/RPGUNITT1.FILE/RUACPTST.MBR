@@ -54,6 +54,7 @@
 
       /copy RPGUNITY1,PGMMSG
       /copy RPGUNITY1,QCMDEXC
+      /copy RPGUNITY1,JOBLOG
       /copy RPGUNITY1,SPLF
       /copy RPGUNITY1,TEMPLATES
       /copy RPGUNIT1,TESTCASE
@@ -207,8 +208,12 @@
 
      PtestError        b                   Export
      DtestError        pi
+
+     D testStartTime   s               z
+
       /free
 
+        testStartTime = getFullTimeStamp();
         run( 'RUCRTTST TSTPGM(QTEMP/TESTPGM06) SRCFILE(RPGUNITF1)' );
 
         run( 'RUCALLTST QTEMP/TESTPGM06' : errorExpected : '*ESCAPE' : msgTxt );
@@ -216,7 +221,7 @@
         aEqual( 'ERROR. 1 test case, 0 assertion, 0 failure, 1 error.':
                 msgTxt );
 
-        fail( 'Add check for Error message here' );
+        assertJobLogContains( 'MCH1211' : testStartTime );
 
         opnSplf( 'RPGUNIT' : 'TESTPGM06' );
         splfLineStartsWith( '*** Tests from TESTPGM06 ***' );
