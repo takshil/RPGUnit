@@ -7,14 +7,12 @@
       //
 
      DQGYOLJBL         pr                  ExtPgm('QGYOLJBL')
-     D jobLogListEnt              32766a   Options(*VarSize)
-     D jobLogListEntLen...
-     D                               10i 0 Const
+     D jobLogList                 32766a   Options(*VarSize)
+     D jobLogListLen                 10i 0 Const
      D listInfo                            LikeDs(dsOpnList)
      D nbOfRcdToRtn                  10i 0 Const
-     D msgSelection               32766a   Const Options(*VarSize)
-     D msgSelectionLen...
-     D                               10i 0 Const
+     D msgSelect                  32766a   Const Options(*VarSize)
+     D msgSelectLen                  10i 0 Const
      D error                      32766a   Options(*VarSize: *Omit) NoOpt
 
      DdsOLJL0100EntHdr...
@@ -41,6 +39,11 @@
      D dataSts                        1a
      D                               14a
      D dataLen                       10i 0
+
+       // Number of records to return:
+       // - All records are built synchronously in the list by the main job.
+     D FULL_SYNCHRONOUS_BUILD...
+     D                 c                   Const(-1)
 
        // Field Identifiers:
        // - replacement data or impromptu message text

@@ -15,13 +15,19 @@
       /copy RPGUNIT1,TESTCASE
       /copy RPGUNITY1,ERRORCODE
       /copy RPGUNITY1,OPNLIST
+      /copy RPGUNITY1,PGMMSG
+      /copy RPGUNITY1,QGYCLST
       /copy RPGUNITY1,QGYOLJBL
       /copy RPGUNITY1,TEMPLATES
 
 
       //----------------------------------------------------------------------
-      //   Private Procedures
+      //   Private Procedure Prototypes
       //----------------------------------------------------------------------
+
+     D getSentTimeStamp...
+     D                 pr              z
+     D  msg                                Const LikeDs(dsOLJL0100EntHdr)
 
 
       //----------------------------------------------------------------------
@@ -54,50 +60,55 @@
      D msgBasicInfo    ds                  LikeDs(dsOLJL0100EntHdr)
      D                                     Based(p_msgBasicInfo)
      D p_msgBasicInfo  s               *
-     D jobLogListEnt   s          32766a
-     D sentDateAsIso   s              8a
+     D jobLogList      s          32766a
      D sentTimeStamp   s               z
      D msgIdx          s             10i 0
+     D msgFound        s               n   Inz(*off)
 
       /free
 
-        fldSelect.fldIdOff = %addr(fldSelect.fldId1)     - %addr(fldSelect);
+        fldSelect.fldIdOff = %addr(fldSelect.fldId1) - %addr(fldSelect);
         fldSelect.callMsgqNmOff =
-                             %addr(fldSelect.callMsgqNm) - %addr(fldSelect);
+                         %addr(fldSelect.callMsgqNm) - %addr(fldSelect);
 
-        QGYOLJBL( jobLogListEnt :
-                  %size(jobLogListEnt) :
+        QGYOLJBL( jobLogList :
+                  %size( jobLogList ) :
                   listInfo :
-                  10 : // records to return (TODO)
+                  FULL_SYNCHRONOUS_BUILD :
                   fldSelect :
                   %size( fldSelect ) :
                   percolateErrors );
 
-        p_msgBasicInfo = %addr( jobLogListEnt );
+        p_msgBasicInfo = %addr( jobLogList );
         msgIdx = 1;
 
-        dow msgIdx < listInfo.retRcdCnt;
+        dow 1=1;
+          if msgIdx > listInfo.retRcdCnt;
+            sndEscapeMsgToCaller( 'Insufficient implementation. ' +
+                  'Should use QGYGTLE to retrieve records after ' +
+                               %char( listInfo.retRcdCnt ) + '. ' +
+                                          'Please open an issue.' );
+          endif;
 
-          // Check time limit. TODO: encapsulate.
+          sentTimeStamp = getSentTimeStamp( msgBasicInfo );
 
-          sentDateAsIso = %char( %date( msgBasicInfo.sentDate : *cymd0) :
-                                 *iso0 );
-          sentTimeStamp = %timestamp( sentDateAsIso +
-                                      msgBasicInfo.sentTime +
-                                      msgBasicInfo.microseconds :
-                                      *iso0 );
+          if sentTimeStamp < timeLimit;
+            leave;
+          endif;
 
-          if (msgBasicInfo.msgId = msgId)
-                  and (sentTimeStamp >= timeLimit);
-            return;
+          if msgBasicInfo.msgId = msgId;
+            msgFound = *on;
+            leave;
           endif;
 
           // Go to next message in the job log.
-          p_msgBasicInfo = %addr( jobLogListEnt ) + msgBasicInfo.nextEntOff;
+          p_msgBasicInfo = %addr( jobLogList ) + msgBasicInfo.nextEntOff;
           msgIdx += 1;
         enddo;
 
-        fail( 'Message ' + msgId + ' not found in the job log.' );
+        QGYCLST( listInfo.rqsHdl : percolateErrors );
+
+        assert( msgFound : 'Message ' + msgId + ' not found in the job log.' );
 
       /end-free
      P                 e
@@ -115,6 +126,30 @@
       /free
 
         return now;
+
+      /end-free
+     P                 e
+
+
+      //----------------------------------------------------------------------
+      //   Private Helper Procedures
+      //----------------------------------------------------------------------
+
+     P getSentTimeStamp...
+     P                 b
+     D getSentTimeStamp...
+     D                 pi              z
+     D  msg                                Const LikeDs(dsOLJL0100EntHdr)
+
+     D sentDateAsIso   s              8a
+
+      /free
+
+        sentDateAsIso = %char( %date( msg.sentDate : *cymd0) : *iso0 );
+        return %timestamp( sentDateAsIso +
+                           msg.sentTime +
+                           msg.microseconds :
+                           *iso0 );
 
       /end-free
      P                 e
