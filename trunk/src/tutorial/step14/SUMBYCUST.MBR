@@ -1,0 +1,48 @@
+      //---------------------------------------------------------
+      //  Files
+      //---------------------------------------------------------
+
+     FORDERS2   IF   E           K DISK
+     FCUSTSUMS  O    E             DISK
+
+
+      //---------------------------------------------------------
+      //  Global Variables
+      //---------------------------------------------------------
+
+       // Current order.
+     D orderDS         ds                  LikeRec(ORDER)
+       // Current customer sum.
+     D custSumDS       ds                  LikeRec(CUSTSUM:*output)
+       // Customer break indicator.
+     D custBreak       s               n
+
+
+      //---------------------------------------------------------
+      //  Main Procedure
+      //---------------------------------------------------------
+
+      /free
+
+        read ORDER orderDS;
+        clear custSumDS;
+        custSumDS.CUSTID = orderDS.CUSTID;
+
+        dow not %eof;
+
+          custBreak = (custSumDS.CUSTID <> orderDS.CUSTID);
+          if custBreak;
+            write CUSTSUM custSumDS;
+            clear custSumDS;
+            custSumDS.CUSTID = orderDS.CUSTID;
+          endif;
+
+          custSumDS.SUM += orderDS.ORDERAMT;
+          read ORDER orderDS;
+        enddo;
+
+        write CUSTSUM custSumDS;
+
+        *inlr = *on;
+
+      /end-free

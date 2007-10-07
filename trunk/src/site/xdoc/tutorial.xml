@@ -182,7 +182,7 @@ D                 pi
                                                              
    open CUSTSUMS;                                            
      read CUSTSUM;                                           
-     assert(not %eof : 'File CUSTSUMS should not be empty' );
+     assert( not %eof : 'File CUSTSUMS should not be empty' );
      aEqual( 'A001' : CUSTID );                              
      iEqual( 1000 : SUM );                                   
    close CUSTSUMS;                                           
@@ -385,10 +385,10 @@ Dtest_one_customer_one_order...
 D                 pr                        <span class="codehighlight">
 Dtest_one_customer_two_orders...            
 D                 pr                        </span>
-                                            
-(...)                                       
-                                            <span class="codehighlight">
-Ptest_one_customer_two_orders...            
+</source>
+          ...
+<source>
+<span class="codehighlight">Ptest_one_customer_two_orders...            
 P                 b                   Export
 Dtest_one_customer_two_orders...            
 D                 pi                        
@@ -428,6 +428,7 @@ D                 pi
 P                 e                                          </span>
 </source>
 	</li>
+	
 	<li>
 	  We compile and run the enhanced test program.
 <source>
@@ -436,6 +437,7 @@ P                 e                                          </span>
 <span class="errormessage">FAILURE. 2 test cases, 6 assertions, 1 failure, 0 error.</span>
 </source>
 	</li>
+	
 	<li>
 	  The latest <code>RPGUNIT</code> spool file contains the following information.
 <source>
@@ -475,7 +477,7 @@ Expected 3000, but was 1000.                            </span>
 	</li>
 	
 	<li>
-	  Although the program under test is clean (i.e., no duplication), the same cannot be said of the test program. There is some awful duplication between the two tests. We will now use the special procedure <code>setUp</code> to put the shared code. The RPGUnit framework will call this procedure once before running each test procedure.
+	  Although the program under test is clean (i.e., no duplication), the same cannot be said of the test program. There is some duplication between the two tests. We will now use the special procedure <code>setUp</code> to put the shared code. The RPGUnit framework will call this procedure once before running each test procedure. Let's factor the duplicated code of <code>SUMBYCUSTT</code>.
 <source>
  // Test case prototypes.            <span class="codehighlight">
 DsetUp            pr                 </span>
@@ -523,7 +525,7 @@ D                 pi
                                                              
    open CUSTSUMS;                                            
      read CUSTSUM;                                           
-     assert(not %eof : 'File CUSTSUMS should not be empty' );
+     assert( not %eof : 'File CUSTSUMS should not be empty' );
      aEqual( 'A001' : CUSTID );                              
      iEqual( 1000 : SUM );                                   
    close CUSTSUMS;                                           
@@ -564,8 +566,9 @@ D                 pi
 P                 e             
 </source>
 	</li>
+	
 	<li>
-	  After refactoring test code, we run the test again, to make sure we did not break anything. The test program is still successful.
+	  After refactoring the test code, we run the test again, to make sure we did not break anything. The test program is still successful.
 	</li>
       </ol>
     </section>
@@ -612,13 +615,13 @@ D                 pi
    open CUSTSUMS;                           
      // First customer.                     
      read CUSTSUM;                          
-     assert(not %eof : 'File CUSTSUMS should not be empty' );    
+     assert( not %eof : 'File CUSTSUMS should not be empty' );    
      aEqual( 'A001' : CUSTID );                                  
      iEqual( 1000 : SUM );                                       
                                                                  
      // Second customer.                                         
      read CUSTSUM;                                               
-     assert(not %eof : 'File CUSTSUMS should have two records' );
+     assert( not %eof : 'File CUSTSUMS should have two records' );
      aEqual( 'B002' : CUSTID );                                  
      iEqual( 2000 : SUM );                                       
    close CUSTSUMS;                                               
@@ -631,11 +634,11 @@ P                 e                                              </span>
 <span class="errormessage">TEST_TWO_CUSTOMERS_ONE_ORDER_EACH - FAILURE
 Expected 'A001', but was 'B002'.           </span>
 </source>
-          The problem is that the program under test does not handle the customer ID at all.
+          The problem is that the program under test does not handle the customer identifier at all.
         </li>
         
         <li>
-          Let's improve the program under test so that it handles customer breaks.
+          Let's improve the program under test (i.e., <code>SUMBYCUST</code>) so that it handles customer breaks.
 <source><span class="codehighlight">
  //---------------------------------------------------------  
  //  Global Variables                                         
@@ -691,7 +694,7 @@ D custBreak       s               n                           </span>
       
       <ol>
         <li>
-          There is still a weakness in the program. Customers may not always be grouped together in the order file. We should check how the program handles that.
+          There is still a weakness in the program. Customers may not always be grouped together in the order file. We should check how the program handles that. Let's add a test in <code>SUMBYCUSTTT</code>.
 <source><span class="codehighlight">
 Ptest_two_customers_with_orders_not_grouped...
 P                 b                   Export  
@@ -721,7 +724,7 @@ D                 pi
                                                              
    open CUSTSUMS;                                            
      read CUSTSUM;                                           
-     assert(not %eof : 'File CUSTSUMS should not be empty' );
+     assert( not %eof : 'File CUSTSUMS should not be empty' );
      aEqual( 'A001' : CUSTID );                              
      iEqual( 1000+3000 : SUM );                              
                                                              
@@ -739,7 +742,7 @@ Expected 4000, but was 1000.                        </span>
         </li>
         
         <li>
-          There are several ways to deal with the customer ordering. Here, we'll use a logical file. Let's call it ORDERS2.
+          There are several ways to deal with the customer ordering. Here, we'll use a logical file. Let's call it <code>ORDERS2</code>.
 <source>
                 R ORDER                     PFILE(ORDERS)
                                                          
@@ -749,7 +752,7 @@ Expected 4000, but was 1000.                        </span>
         </li>
         
         <li>
-          We change SUMBYCUST so that it uses ORDERS2 instead of ORDERS.
+          We change <code>SUMBYCUST</code> so that it uses <code>ORDERS2</code> instead of <code>ORDERS</code>.
 <source>
  //---------------------------------------------------------
  //  Files                                                  
@@ -839,7 +842,7 @@ D                 pi
                                                              
    open CUSTSUMS;                                            
      read CUSTSUM;                                           
-     assert(not %eof : 'File CUSTSUMS should not be empty' );
+     assert( not %eof : 'File CUSTSUMS should not be empty' );
      aEqual( 'A001' : CUSTID );                              
      iEqual( 1000 : SUM );                  
    close CUSTSUMS;                          
@@ -871,7 +874,7 @@ D                 pi
                                                              
    open CUSTSUMS;                                            
      read CUSTSUM;                                           
-     assert(not %eof : 'File CUSTSUMS should not be empty' );
+     assert( not %eof : 'File CUSTSUMS should not be empty' );
      aEqual( 'A001' : CUSTID );                              
      iEqual( 1000+2000 : SUM );                              
    close CUSTSUMS;                                           
@@ -904,13 +907,13 @@ D                 pi
    open CUSTSUMS;                                                
      // First customer.                                          
      read CUSTSUM;                                               
-     assert(not %eof : 'File CUSTSUMS should not be empty' );    
+     assert( not %eof : 'File CUSTSUMS should not be empty' );    
      aEqual( 'A001' : CUSTID );                                  
      iEqual( 1000 : SUM );                                       
                                                                  
      // Second customer.                                         
      read CUSTSUM;                                               
-     assert(not %eof : 'File CUSTSUMS should have two records' );
+     assert( not %eof : 'File CUSTSUMS should have two records' );
      aEqual( 'B002' : CUSTID );                                  
      iEqual( 2000 : SUM );                                       
    close CUSTSUMS;                            
@@ -947,7 +950,7 @@ D                 pi
                                                              
    open CUSTSUMS;                                            
      read CUSTSUM;                                           
-     assert(not %eof : 'File CUSTSUMS should not be empty' );
+     assert( not %eof : 'File CUSTSUMS should not be empty' );
      aEqual( 'A001' : CUSTID );                              
      iEqual( 1000+3000 : SUM );                              
                                                              

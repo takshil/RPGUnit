@@ -24,6 +24,10 @@
      D                 pr
      Dtest_one_customer_two_orders...
      D                 pr
+     Dtest_two_customers_one_order_each...
+     D                 pr
+     Dtest_two_customers_with_orders_not_grouped...
+     D                 pr
 
 
       //---------------------------------------------------------
@@ -100,6 +104,84 @@
            aEqual( 'A001' : CUSTID );
            iEqual( 1000+2000 : SUM );
          close CUSTSUMS;
+
+      /end-free
+     P                 e
+
+
+     Ptest_two_customers_one_order_each...
+     P                 b                   Export
+     Dtest_two_customers_one_order_each...
+     D                 pi
+      /free
+
+        // Setup.
+
+        open ORDERS;
+          ORDERID = 2;
+          CUSTID = 'B002';
+          ORDERAMT = 2000;
+          write ORDER;
+        close ORDERS;
+
+        // Run.
+
+        SumByCust();
+
+        // Check.
+
+        open CUSTSUMS;
+          // First customer.
+          read CUSTSUM;
+          assert( not %eof : 'File CUSTSUMS should not be empty' );
+          aEqual( 'A001' : CUSTID );
+          iEqual( 1000 : SUM );
+
+          // Second customer.
+          read CUSTSUM;
+          assert( not %eof : 'File CUSTSUMS should have two records' );
+          aEqual( 'B002' : CUSTID );
+          iEqual( 2000 : SUM );
+        close CUSTSUMS;
+
+      /end-free
+     P                 e
+
+
+     Ptest_two_customers_with_orders_not_grouped...
+     P                 b                   Export
+     Dtest_two_customers_with_orders_not_grouped...
+     D                 pi
+      /free
+
+        // Setup.
+
+        open ORDERS;
+          ORDERID = 2;
+          CUSTID = 'B002';
+          ORDERAMT = 2000;
+          write ORDER;
+
+          ORDERID = 3;
+          CUSTID = 'A001';  // Back to the first customer.
+          ORDERAMT = 3000;
+          write ORDER;
+        close ORDERS;
+
+        // Run.
+
+        SumByCust();
+
+        // Check.
+
+        open CUSTSUMS;
+          read CUSTSUM;
+          assert( not %eof : 'File CUSTSUMS should not be empty' );
+          aEqual( 'A001' : CUSTID );
+          iEqual( 1000+3000 : SUM );
+
+          // No test on second customer.
+        close CUSTSUMS;
 
       /end-free
      P                 e
