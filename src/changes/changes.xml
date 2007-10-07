@@ -4,7 +4,7 @@
     <author email="lacton@users.sourceforge.net">lacton</author>
   </properties>
   <body>
-    <release version="0.3.2" date="SVN" description="Version 0.3.2 Release Notes">
+    <release version="0.3.2" date="2007-10-08" description="Version 0.3.2 Release Notes">
       <action dev="lacton" type="fix">
         The framework no longer removes error messages from the job log.
       </action>
