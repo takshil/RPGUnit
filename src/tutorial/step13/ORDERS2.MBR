@@ -1,0 +1,4 @@
+                R ORDER                     PFILE(ORDERS)
+
+                K CUSTID
+                K ORDERID

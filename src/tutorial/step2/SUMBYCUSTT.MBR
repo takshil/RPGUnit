@@ -53,7 +53,7 @@
 
         open CUSTSUMS;
           read CUSTSUM;
-          assert(not %eof : 'File CUSTSUMS should not be empty' );
+          assert( not %eof : 'File CUSTSUMS should not be empty' );
           aEqual( 'A001' : CUSTID );
           iEqual( 1000 : SUM );
         close CUSTSUMS;
