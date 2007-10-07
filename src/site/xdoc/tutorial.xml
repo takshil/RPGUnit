@@ -14,6 +14,7 @@
         <li><a href="#Context">Context</a></li>
         <li><a href="#Checking that we are able to write unit tests">Checking that we are able to write unit tests</a></li>
         <li><a href="#The first test">The first test</a></li>
+	<li><a href="#Summing orders from the same customer">Summing orders from the same customer</a></li>
         <li><a href="#Not summing orders from different customers">Not summing orders from different customers</a></li>
         <li><a href="#Handling customers in any order">Handling customers in any order</a></li>
         <li><a href="#Source code">Source code</a></li>
