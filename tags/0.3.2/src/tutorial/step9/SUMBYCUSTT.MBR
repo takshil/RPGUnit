@@ -1,0 +1,105 @@
+     H NoMain
+
+
+      //---------------------------------------------------------
+      //  Files
+      //---------------------------------------------------------
+
+     FCUSTSUMS  IF   E             DISK    UsrOpn
+     FORDERS    O    E             DISK    UsrOpn
+
+
+      //---------------------------------------------------------
+      //  Prototypes
+      //---------------------------------------------------------
+
+      /copy RPGUNIT1,TESTCASE
+
+      // Program under test.
+     D SumByCust       pr                  ExtPgm('SUMBYCUST')
+
+      // Test case prototypes.
+     DsetUp            pr
+     Dtest_one_customer_one_order...
+     D                 pr
+     Dtest_one_customer_two_orders...
+     D                 pr
+
+
+      //---------------------------------------------------------
+      //  Test Case Definitions
+      //---------------------------------------------------------
+
+     PsetUp            b                   Export
+     DsetUp            pi
+      /free
+
+        clrpfm('ORDERS');
+        clrpfm('CUSTSUMS');
+
+        open ORDERS;
+          ORDERID = 1;
+          CUSTID = 'A001';
+          ORDERAMT = 1000;
+          write ORDER;
+        close ORDERS;
+
+      /end-free
+     P                 e
+
+
+     Ptest_one_customer_one_order...
+     P                 b                   Export
+     Dtest_one_customer_one_order...
+     D                 pi
+      /free
+
+        // Setup.
+
+        // Run.
+
+        SumByCust();
+
+        // Check.
+
+        open CUSTSUMS;
+          read CUSTSUM;
+          assert( not %eof : 'File CUSTSUMS should not be empty' );
+          aEqual( 'A001' : CUSTID );
+          iEqual( 1000 : SUM );
+        close CUSTSUMS;
+
+      /end-free
+     P                 e
+
+
+     Ptest_one_customer_two_orders...
+     P                 b                   Export
+     Dtest_one_customer_two_orders...
+     D                 pi
+      /free
+
+        // Setup.
+
+        open ORDERS;
+          ORDERID = 2;
+          CUSTID = 'A001';
+          ORDERAMT = 2000;
+          write ORDER;
+        close ORDERS;
+
+        // Run.
+
+        SumByCust();
+
+        // Check.
+
+         open CUSTSUMS;
+           read CUSTSUM;
+           assert( not %eof : 'File CUSTSUMS should not be empty' );
+           aEqual( 'A001' : CUSTID );
+           iEqual( 1000+2000 : SUM );
+         close CUSTSUMS;
+
+      /end-free
+     P                 e

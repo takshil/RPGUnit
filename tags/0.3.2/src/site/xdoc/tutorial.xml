@@ -1,0 +1,1018 @@
+<document>
+
+  <properties>
+    <title>Tutorial</title>
+    <author email="lacton@users.sourceforge.net">lacton</author>
+  </properties>
+  
+  <body>
+  
+    <section name="Tutorial">
+    
+      <ol>
+        <li><a href="#Overview">Overview</a></li>
+        <li><a href="#Context">Context</a></li>
+        <li><a href="#Checking that we are able to write unit tests">Checking that we are able to write unit tests</a></li>
+        <li><a href="#The first test">The first test</a></li>
+	<li><a href="#Summing orders from the same customer">Summing orders from the same customer</a></li>
+        <li><a href="#Not summing orders from different customers">Not summing orders from different customers</a></li>
+        <li><a href="#Handling customers in any order">Handling customers in any order</a></li>
+        <li><a href="#Source code">Source code</a></li>
+      </ol>
+      
+    </section>
+    
+    
+    <section name="Overview">
+    
+      <p>
+        This tutorial will guide you step-by-step through the creation of a small test suite and the implementation of a simple number-summing program. After reading this tutorial, you will know how to write and run RPGUnit tests. You will also learn the basics of <a href="http://en.wikipedia.org/wiki/Test_driven_development">TDD</a>.
+      </p>
+      
+    </section>
+    
+    
+    <section name="Context">
+      
+      <p>
+        Let's assume we want to write a simple program (<code>SUMBYCUST</code>) that sums order amounts by customers. There will be an order file (<code>ORDERS</code>) and a customer report file (<code>CUSTSUMS</code>).
+	
+	Start by creating a source file.
+<source>
+===> CRTSRCPF FILE(RUTUTORIAL) RCDLEN(112) TEXT('RPGUnit - Tutorial.')
+</source>
+
+	Create a <code>PF</code> source member called <code>ORDERS</code> in <code>RUTUTORIAL</code>, with the following description.
+<source>
+	R ORDER              
+	  ORDERID        7P 0
+	  CUSTID         4A  
+	  ORDERAMT      15P 2
+			     
+	K ORDERID            
+</source>
+        
+	Create another <code>PF</code> source member called <code>CUSTSUMS</code>, with the following description.
+<source>
+	R CUSTSUM            
+	  CUSTID         4A  
+	  SUM           17P 2
+			     
+	K CUSTID             
+</source>
+	
+	Create these two files.
+<source>
+===> CRTPF FILE(ORDERS)   SRCFILE(RUTUTORIAL)
+===> CRTPF FILE(CUSTSUMS) SRCFILE(RUTUTORIAL)
+</source>
+      </p>
+      
+    </section>
+
+    <section name="Checking that we are able to write unit tests">
+      
+      <p>
+        Before we write any code that is going to last, we want to be sure the testing infrastructure is working correctly. For this, we will write a dummy test. First create an <code>RPGLE</code> source member <code>SUMBYCUSTT</code> in the <code>RUTUTORIAL</code> source file.
+      </p>
+
+<source>
+H NoMain                                                    
+                                                            
+                                                            
+ //---------------------------------------------------------
+ //  Prototypes                                             
+ //---------------------------------------------------------
+                                                            
+ /copy RPGUNIT1,TESTCASE                                    
+                                                            
+ // Test case prototypes.                                   
+Dtest_failure     pr                                        
+                                                            
+                                                            
+ //---------------------------------------------------------
+ //  Test Case Definitions                                  
+ //---------------------------------------------------------
+                                                            
+Ptest_failure     b                   Export                
+Dtest_failure     pi                                        
+ /free                                                      
+                                                            
+   iEqual( 5 : 2+2 );                                       
+                                                            
+ /end-free         
+P                 e
+</source>
+
+      <p>
+        We compile the dummy test.
+<source>
+===> RUCRTTST TSTPGM(SUMBYCUSTT) SRCFILE(RUTUTORIAL)
+</source>
+        We run it.
+<source>
+===> RUCALLTST SUMBYCUSTT
+<span class="errormessage">FAILURE. 1 test case, 1 assertion, 1 failure, 0 error.</span>
+</source>
+        The dummy test fails as expected. We can remove it and write our first test.
+      </p>
+      
+      <p>
+        If you do not get this failure message, something is wrong with your RPGUnit framework installation. Check that the RPGUnit objects are in your library list (e.g., <code>WRKOBJ RU*</code>) and try to run the framework's self-test feature <code>RPGUNITT1/MKRPGUNITT</code>.
+      </p>
+    </section>
+    
+    
+    <section name="The first test">
+      
+      <ol>
+        <li>
+          The most basic test case would be one customer with one order. So we write our first test. Change <code>SUMBYCUSTT</code> to the following.
+<source>
+H NoMain                                                    
+                                                            
+                                                            
+ //---------------------------------------------------------
+ //  Files                                                  
+ //---------------------------------------------------------
+                                                            
+FCUSTSUMS  IF   E             DISK    UsrOpn                
+FORDERS    O    E             DISK    UsrOpn                
+                                                            
+                                                            
+ //---------------------------------------------------------
+ //  Prototypes                                             
+ //---------------------------------------------------------
+                                                            
+ /copy RPGUNIT1,TESTCASE                                    
+                                                            
+ // Program under test.                                     
+D SumByCust       pr                  ExtPgm('SUMBYCUST')   
+                                                            
+ // Test case prototypes.                                   
+Dtest_one_customer_one_order...                             
+D                 pr
+                                                            
+ //---------------------------------------------------------
+ //  Test Case Definitions                                  
+ //---------------------------------------------------------
+                                                            
+Ptest_one_customer_one_order...                             
+P                 b                   Export                
+Dtest_one_customer_one_order...                             
+D                 pi                                        
+ /free                                                      
+                                                            
+   // Setup.                                                
+                                                            
+   clrpfm('ORDERS');                                        
+   clrpfm('CUSTSUMS');                                      
+                                                            
+   open ORDERS;                                             
+     ORDERID = 1;                                           
+     CUSTID = 'A001';                                       
+     ORDERAMT = 1000;                                       
+     write ORDER;                                           
+   close ORDERS;                                            
+                                                            
+   // Run.                                                  
+                                                            
+   SumByCust();                                              
+                                                             
+   // Check.                                                 
+                                                             
+   open CUSTSUMS;                                            
+     read CUSTSUM;                                           
+     assert( not %eof : 'File CUSTSUMS should not be empty' );
+     aEqual( 'A001' : CUSTID );                              
+     iEqual( 1000 : SUM );                                   
+   close CUSTSUMS;                                           
+                                                             
+ /end-free                                                   
+P                 e                                          
+</source>
+        </li>
+        
+        <li>
+          We compile this test suite.
+<source>
+===> RUCRTTST TSTPGM(SUMBYCUSTT) SRCFILE(RUTUTORIAL)
+</source>
+        </li>
+        
+        <li>
+          We run this test suite.
+<source>
+===> RUCALLTST SUMBYCUSTT
+<span class="errormessage">ERROR. 1 test case, 0 assertion, 0 failure, 1 error.</span>
+</source>
+        </li>
+        
+        <li>Looking at the job log we can see what is the problem.
+<source>
+<span class="errormessage">Cannot resolve to object SUMBYCUST.</span>
+</source>
+        </li>
+        
+        <li>The problem can also be found by looking at the <code>RPGUNIT</code> spool file (User Data <code>SUMBYCUSTT</code>).
+<source>
+*** Tests from SUMBYCUSTT ***                                                   
+<span class="errormessage">TEST_ONE_CUSTOMER_ONE_ORDER - ERROR                                             
+MCH3401 - Cannot resolve to object SUMBYCUST. Type and Subtype X'0201' Authority
+ X'0000'.</span>                                                                       
+-----------------------                                                         
+<span class="errormessage">ERROR. 1 test case, 0 assertion, 0 failure, 1 error.</span>
+</source>
+        </li>
+        
+        <li>
+          The problem is that we have not created the <code>SUMBYCUST</code> program yet. Let's create an <code>RPGLE</code> source member called <code>SUMBYCUST</code> with the following content.
+<source>
+ //---------------------------------------------------------
+ //  Main Procedure                                         
+ //---------------------------------------------------------
+
+ /free         
+               
+   *inlr = *on;
+               
+ /end-free     
+</source>
+          You may feel underwhelmed by this implementation. Yet it is the simplest thing that will remove the error and allows to proceed on.
+        </li>
+        
+        <li>
+          Compile this program stub.
+<source>
+===> CRTBNDRPG PGM(SUMBYCUST) SRCFILE(RUTUTORIAL)
+</source>
+        </li>
+        
+        <li>
+          We run the test suite again.
+<source>
+===> RUCALLTST SUMBYCUSTT
+<span class="errormessage">FAILURE. 1 test case, 1 assertion, 1 failure, 0 error.</span>
+</source>
+          Better! No technical error and one assertion failure.
+        </li>
+        
+        <li>
+          Looking at the latest <code>RPGUNIT</code> spool file, we can find some details about the failure.
+<source>
+*** Tests from SUMBYCUSTT ***                             
+<span class="errormessage">TEST_ONE_CUSTOMER_ONE_ORDER - FAILURE                     <span class="codehighlight">
+File CUSTSUMS should not be empty                         </span>
+  assert (RUTESTCASE:8500)                                
+  TEST_ONE_CUSTOMER_ONE_ORDER (SUMBYCUSTT:5600)           </span>
+-----------------------                                   
+<span class="errormessage">FAILURE. 1 test case, 1 assertion, 1 failure, 0 error.</span>
+</source>
+          Our test case is complaining that the output file of <code>SUMBYCUST</code>, the <code>CUSTSUMS</code> file, is empty.
+        </li>
+        
+        <li>
+          Let's improve our <code>SUMBYCUST</code> program a little bit. The new code is highlighted.
+<source>
+<span class="codehighlight"> //---------------------------------------------------------
+ //  Files                                                  
+ //---------------------------------------------------------
+                                                            
+FCUSTSUMS  O    E             DISK                          </span>
+                                                            
+                                                            
+ //---------------------------------------------------------
+ //  Main Procedure                                         
+ //---------------------------------------------------------
+                                                            
+ /free                                                      
+                                                            <span class="codehighlight">
+   write CUSTSUM;                                           </span>
+                                                            
+   *inlr = *on;                                             
+                                                            
+ /end-free                                                  
+</source>
+          This is a fake implementation. Although it is obvious this cannot be the final implementation, it should be enough to fix the failure.
+        </li>
+        
+        <li>
+          Compiling this new version of <code>SUMBYCUST</code> and running the tests suite once more, we get the following message.
+<source>
+===> CRTBNDRPG PGM(SUMBYCUST) SRCFILE(RUTUTORIAL)
+===> RUCALLTST SUMBYCUSTT
+<span class="errormessage">FAILURE. 1 test case, 2 assertions, 1 failure, 0 error.</span>
+</source>
+          Has nothing changed? Maybe not. Let's check the failure report (<code>DSPSPLF FILE(RPGUNIT) SPLNBR(*LAST)</code>).
+<source>
+*** Tests from SUMBYCUSTT ***                             
+<span class="errormessage">TEST_ONE_CUSTOMER_ONE_ORDER - FAILURE                     <span class="codehighlight">
+Expected 'A001', but was ''.                              </span>
+  assert (RUTESTCASE:8500)                                
+  aEqual (RUTESTCASE:6600)                                <span class="codehighlight">
+  TEST_ONE_CUSTOMER_ONE_ORDER (SUMBYCUSTT:5700)           </span></span>
+-----------------------                                   
+<span class="errormessage">FAILURE. 1 test case, 2 assertions, 1 failure, 0 error.</span>
+</source>
+          The failure is different. Now, the test case finds the record it expects, but the content is wrong. Looking up line 57.00 of source member <code>SUMBYCUSTT</code>, we can see that the field <code>CUSTID</code> is wrong. It is blank, though it should contain the customer ID "A001".
+        </li>
+        
+        <li>
+          Let's fix the program under test so that both the customer ID and the order amount sum are correct. Again, it will be only a fake implementation.
+<source>
+ //---------------------------------------------------------
+ //  Main Procedure                                         
+ //---------------------------------------------------------
+                                                            
+ /free                                                      
+                                                            <span class="codehighlight">
+   CUSTID = 'A001';                                         
+   SUM = 1000;                                              </span>
+   write CUSTSUM;                                           
+                                                            
+   *inlr = *on;                                             
+                                                            
+ /end-free                                                  
+</source>
+        </li>
+        
+        <li>
+          After compiling the program and running the test, we get the following message.
+<source>
+<span class="successmessage">Success. 1 test case, 3 assertions, 0 failure, 0 error.</span>
+</source>
+          Victory! Our first test case runs successfully, albeit using a fake implementation.
+        </li>
+        
+        <li>
+          There is some code duplication between the program under test and the test program. Let's refactor the magic values ("A001" and 1000) that we find in both programs, by really reading the ORDERS file this time.
+<source>
+ //---------------------------------------------------------
+ //  Files                                                  
+ //---------------------------------------------------------
+                                                            <span class="codehighlight">
+FORDERS    IF   E             DISK                          </span>
+FCUSTSUMS  O    E             DISK                          
+                                                            
+                                                            
+ //---------------------------------------------------------
+ //  Main Procedure                                         
+ //---------------------------------------------------------
+                                                            
+ /free                                                      
+                                                            <span class="codehighlight">
+   read ORDER;                                              
+   SUM = ORDERAMT;                                          </span>
+   write CUSTSUM;                                           
+                                                            
+   *inlr = *on;                                             
+                                                            
+ /end-free                                                  
+</source>
+          We compile the refactored program and run the test. Since it is still successful, we can be sure our refactoring did not break anything that used to work. The astute reader will have noticed there is still some code duplication in the test program, but we will leave it there, because seeing the same hardcoded values in the setup part and in the check part can be nice when reading a test case.
+        </li>
+      </ol>
+    </section>
+    
+    
+    <section name="Summing orders from the same customer">
+      
+      <ol>
+        <li>
+	  Let's add a test case with two orders from the same customer. This will force us to write the summing logic.
+<source>
+ // Test case prototypes.                   
+Dtest_one_customer_one_order...             
+D                 pr                        <span class="codehighlight">
+Dtest_one_customer_two_orders...            
+D                 pr                        </span>
+</source>
+          ...
+<source>
+<span class="codehighlight">Ptest_one_customer_two_orders...            
+P                 b                   Export
+Dtest_one_customer_two_orders...            
+D                 pi                        
+ /free                                      
+                                            
+   // Setup.                                
+                                            
+   clrpfm('ORDERS');                        
+   clrpfm('CUSTSUMS');                      
+                                            
+   open ORDERS;                             
+     ORDERID = 1;                           
+     CUSTID = 'A001';                       
+     ORDERAMT = 1000;                       
+     write ORDER;                           
+     
+     ORDERID = 2;                           
+     CUSTID = 'A001';                       
+     ORDERAMT = 2000;                       
+     write ORDER;                           
+   close ORDERS;                            
+                                            
+   // Run.                                  
+                                            
+   SumByCust();                                              
+                                                             
+   // Check.                                                 
+                                                             
+   open CUSTSUMS;                                            
+     read CUSTSUM;                                           
+     assert( not %eof : 'File CUSTSUMS should not be empty' );
+     aEqual( 'A001' : CUSTID );                              
+     iEqual( 1000+2000 : SUM );                              
+   close CUSTSUMS;                                           
+                                                             
+ /end-free                                                   
+P                 e                                          </span>
+</source>
+	</li>
+	
+	<li>
+	  We compile and run the enhanced test program.
+<source>
+===> RUCRTTST TSTPGM(SUMBYCUSTT) SRCFILE(RUTUTORIAL)
+===> RUCALLTST SUMBYCUSTT
+<span class="errormessage">FAILURE. 2 test cases, 6 assertions, 1 failure, 0 error.</span>
+</source>
+	</li>
+	
+	<li>
+	  The latest <code>RPGUNIT</code> spool file contains the following information.
+<source>
+*** Tests from SUMBYCUSTT ***                           
+<span class="errormessage">TEST_ONE_CUSTOMER_TWO_ORDERS - FAILURE                  <span class="codehighlight">
+Expected 3000, but was 1000.                            </span>
+  assert (RUTESTCASE:8500)                              
+  iEqual (RUTESTCASE:25600)                             
+  TEST_ONE_CUSTOMER_TWO_ORDERS (SUMBYCUSTT:10000)       </span>
+-----------------------                                 
+<span class="errormessage">FAILURE. 2 test cases, 6 assertions, 1 failure, 0 error.</span>
+</source>
+          It looks like RPGUnit has found out that our summing programming is not summing anything at all.
+	</li>
+	
+	<li>
+	  We add a simple looping logic in the <code>SUMBYCUST</code> program.
+<source>
+   read ORDER;                    <span class="codehighlight">
+                                  
+   dow not %eof;                  
+     SUM += ORDERAMT;             
+     read ORDER;                  
+   enddo;                         
+                                  </span>
+   write CUSTSUM;                 
+</source>
+	</li>
+	
+	<li>
+	  Compiling the improved program and running the tests, we get a success.
+<source>
+===> CRTBNDRPG PGM(SUMBYCUST) SRCFILE(RUTUTORIAL)
+===> RUCALLTST SUMBYCUSTT
+<span class="successmessage">Success. 2 test cases, 6 assertions, 0 failure, 0 error.</span>
+</source>
+	</li>
+	
+	<li>
+	  Although the program under test is clean (i.e., no duplication), the same cannot be said of the test program. There is some duplication between the two tests. We will now use the special procedure <code>setUp</code> to put the shared code. The RPGUnit framework will call this procedure once before running each test procedure. Let's factor the duplicated code of <code>SUMBYCUSTT</code>.
+<source>
+ // Test case prototypes.            <span class="codehighlight">
+DsetUp            pr                 </span>
+Dtest_one_customer_one_order...      
+D                 pr                 
+Dtest_one_customer_two_orders...     
+D                 pr
+
+
+ //---------------------------------------------------------
+ //  Test Case Definitions                                  
+ //---------------------------------------------------------
+                                                            <span class="codehighlight">
+PsetUp            b                   Export                
+DsetUp            pi                                        
+ /free                                                      
+                                                            
+   clrpfm('ORDERS');                                        
+   clrpfm('CUSTSUMS');                                      
+                                                            
+   open ORDERS;                                             
+     ORDERID = 1;                                           
+     CUSTID = 'A001';                                       
+     ORDERAMT = 1000;                                       
+     write ORDER;                                           
+   close ORDERS;                                            
+                                                            
+ /end-free                                                  
+P                 e                                         
+                                                            
+                                                            </span>
+Ptest_one_customer_one_order...                             
+P                 b                   Export                
+Dtest_one_customer_one_order...                              
+D                 pi                                         
+ /free                                                       
+                                                             <span class="codehighlight">
+   // Setup.                                                 
+                                                             
+   // Run.                                                   </span>
+                                                             
+   SumByCust();                                              
+                                                             
+   // Check.                                                 
+                                                             
+   open CUSTSUMS;                                            
+     read CUSTSUM;                                           
+     assert( not %eof : 'File CUSTSUMS should not be empty' );
+     aEqual( 'A001' : CUSTID );                              
+     iEqual( 1000 : SUM );                                   
+   close CUSTSUMS;                                           
+                                                             
+ /end-free                                                   
+P                 e                                          
+                                                             
+                                                             
+Ptest_one_customer_two_orders...                             
+P                 b                   Export                   
+Dtest_one_customer_two_orders...                               
+D                 pi                                           
+ /free                                                         
+                                                               <span class="codehighlight">
+   // Setup.                                                   
+                                                               
+   open ORDERS;                                                
+     ORDERID = 2;                                              
+     CUSTID = 'A001';                                          
+     ORDERAMT = 2000;                                          
+     write ORDER;                                              
+   close ORDERS;                                               
+                                                               </span>
+   // Run.                                                     
+                                                               
+   SumByCust();                                                
+                                                               
+   // Check.                                                   
+                                                               
+    open CUSTSUMS;                                             
+      read CUSTSUM;                                            
+      assert( not %eof : 'File CUSTSUMS should not be empty' );
+      aEqual( 'A001' : CUSTID );                               
+      iEqual( 1000+2000 : SUM );
+    close CUSTSUMS;             
+                                
+ /end-free                      
+P                 e             
+</source>
+	</li>
+	
+	<li>
+	  After refactoring the test code, we run the test again, to make sure we did not break anything. The test program is still successful.
+	</li>
+      </ol>
+    </section>
+    
+    
+    <section name="Not summing orders from different customers">
+      
+      <ol>
+        <li>
+          Let's add a new test case. This time, there will be two customers, with one order each.
+<source>
+ // Test case prototypes.            
+DsetUp            pr                 
+Dtest_one_customer_one_order...      
+D                 pr                 
+Dtest_one_customer_two_orders...     
+D                 pr                 <span class="codehighlight">
+Dtest_two_customers_one_order_each...
+D                 pr                 </span>
+</source>
+          ...
+<source>
+<span class="codehighlight">Ptest_two_customers_one_order_each...       
+P                 b                   Export
+Dtest_two_customers_one_order_each...       
+D                 pi                        
+ /free                                      
+                                            
+   // Setup.                                
+                                            
+   open ORDERS;                             
+     ORDERID = 2;                           
+     CUSTID = 'B002';                       
+     ORDERAMT = 2000;                       
+     write ORDER;                           
+   close ORDERS;                            
+                                            
+   // Run.                                  
+                                            
+   SumByCust();                             
+                                            
+   // Check.                                
+                                            
+   open CUSTSUMS;                           
+     // First customer.                     
+     read CUSTSUM;                          
+     assert( not %eof : 'File CUSTSUMS should not be empty' );    
+     aEqual( 'A001' : CUSTID );                                  
+     iEqual( 1000 : SUM );                                       
+                                                                 
+     // Second customer.                                         
+     read CUSTSUM;                                               
+     assert( not %eof : 'File CUSTSUMS should have two records' );
+     aEqual( 'B002' : CUSTID );                                  
+     iEqual( 2000 : SUM );                                       
+   close CUSTSUMS;                                               
+                                                                 
+ /end-free                                                       
+P                 e                                              </span>
+</source>
+          This new test fails.
+<source>
+<span class="errormessage">TEST_TWO_CUSTOMERS_ONE_ORDER_EACH - FAILURE
+Expected 'A001', but was 'B002'.           </span>
+</source>
+          The problem is that the program under test does not handle the customer identifier at all.
+        </li>
+        
+        <li>
+          Let's improve the program under test (i.e., <code>SUMBYCUST</code>) so that it handles customer breaks.
+<source><span class="codehighlight">
+ //---------------------------------------------------------  
+ //  Global Variables                                         
+ //---------------------------------------------------------  
+                                                              
+  // Current order.                                           
+D orderDS         ds                  LikeRec(ORDER)          
+  // Current customer sum.                                    
+D custSumDS       ds                  LikeRec(CUSTSUM:*output)
+  // Customer break indicator.                                
+D custBreak       s               n                           </span>
+                                                              
+                                                              
+ //---------------------------------------------------------  
+ //  Main Procedure                                           
+ //---------------------------------------------------------  
+                                                              
+ /free                                                        
+                                                              <span class="codehighlight">
+   read ORDER orderDS;                                        
+   clear custSumDS;                                           
+   custSumDS.CUSTID = orderDS.CUSTID;                         
+                                                              </span>
+   dow not %eof;                                              
+                                                              <span class="codehighlight">
+     custBreak = (custSumDS.CUSTID &lt;> orderDS.CUSTID);        
+     if custBreak;                                    
+       write CUSTSUM custSumDS;                       
+       clear custSumDS;                               
+       custSumDS.CUSTID = orderDS.CUSTID;             
+     endif;                                           
+                                                      
+     custSumDS.SUM += orderDS.ORDERAMT;               
+     read ORDER orderDS;                              </span>
+   enddo;                                             
+                                                      <span class="codehighlight">
+   write CUSTSUM custSumDS;                           </span>
+                                                      
+   *inlr = *on;                                       
+                                                      
+ /end-free                                            
+</source>
+        </li>
+        
+        <li>
+          Compiling the program under test and running the test program, we get a success.
+        </li>
+      </ol>
+    </section>
+    
+    
+    <section name="Handling customers in any order">
+      
+      <ol>
+        <li>
+          There is still a weakness in the program. Customers may not always be grouped together in the order file. We should check how the program handles that. Let's add a test in <code>SUMBYCUSTTT</code>.
+<source><span class="codehighlight">
+Ptest_two_customers_with_orders_not_grouped...
+P                 b                   Export  
+Dtest_two_customers_with_orders_not_grouped...
+D                 pi                          
+ /free                                        
+                                              
+   // Setup.                                  
+                                              
+   open ORDERS;                               
+     ORDERID = 2;                             
+     CUSTID = 'B002';                         
+     ORDERAMT = 2000;                         
+     write ORDER;                             
+                                              
+     ORDERID = 3;                             
+     CUSTID = 'A001';  // Back to the first customer.
+     ORDERAMT = 3000;                         
+     write ORDER;                             
+   close ORDERS;                              
+                                              
+   // Run.                                    
+                                              
+   SumByCust();                               
+                                              
+   // Check.                                                 
+                                                             
+   open CUSTSUMS;                                            
+     read CUSTSUM;                                           
+     assert( not %eof : 'File CUSTSUMS should not be empty' );
+     aEqual( 'A001' : CUSTID );                              
+     iEqual( 1000+3000 : SUM );                              
+                                                             
+     // No test on second customer.                          
+   close CUSTSUMS;                                           
+                                                             
+ /end-free                                                       
+P                 e                                              </span>
+</source>
+          As could be expected, this test fails.
+<source>
+<span class="errormessage">TEST_TWO_CUSTOMERS_WITH_ORDERS_NOT_GROUPED - FAILURE
+Expected 4000, but was 1000.                        </span>
+</source>
+        </li>
+        
+        <li>
+          There are several ways to deal with the customer ordering. Here, we'll use a logical file. Let's call it <code>ORDERS2</code>.
+<source>
+                R ORDER                     PFILE(ORDERS)
+                                                         
+                K CUSTID                                 
+                K ORDERID                                
+</source>
+        </li>
+        
+        <li>
+          We change <code>SUMBYCUST</code> so that it uses <code>ORDERS2</code> instead of <code>ORDERS</code>.
+<source>
+ //---------------------------------------------------------
+ //  Files                                                  
+ //---------------------------------------------------------
+                                                            <span class="codehighlight">
+FORDERS2   IF   E           K DISK                          </span>
+FCUSTSUMS  O    E             DISK                          
+</source>
+        The tests are successful.
+        </li>
+      </ol>
+    </section>
+    
+    
+    <section name="Source code">
+      
+      <p>
+        For your convenience, here is the full source for the test program and the program under test.
+<source>
+H NoMain                                                    
+                                                            
+                                                            
+ //---------------------------------------------------------
+ //  Files                                                  
+ //---------------------------------------------------------
+                                                            
+FCUSTSUMS  IF   E             DISK    UsrOpn                
+FORDERS    O    E             DISK    UsrOpn                
+                                                            
+                                                            
+ //---------------------------------------------------------
+ //  Prototypes                                             
+ //---------------------------------------------------------
+                                                            
+ /copy RPGUNIT1,TESTCASE                                    
+                                                            
+ // Program under test.                                     
+D SumByCust       pr                  ExtPgm('SUMBYCUST')   
+                                                            
+ // Test case prototypes.                                   
+DsetUp            pr                                        
+Dtest_one_customer_one_order...                             
+D                 pr                                        
+Dtest_one_customer_two_orders...                            
+D                 pr                                        
+Dtest_two_customers_one_order_each...                       
+D                 pr                                        
+Dtest_two_customers_with_orders_not_grouped...              
+D                 pr                                        
+                                                            
+                                                            
+ //---------------------------------------------------------
+ //  Test Case Definitions                                  
+ //---------------------------------------------------------
+                                                            
+PsetUp            b                   Export                
+DsetUp            pi                                        
+ /free                                                      
+                                                            
+   clrpfm('ORDERS');                                        
+   clrpfm('CUSTSUMS');                                      
+                                                            
+   open ORDERS;                                             
+     ORDERID = 1;                                           
+     CUSTID = 'A001';                                       
+     ORDERAMT = 1000;                                       
+     write ORDER;                                           
+   close ORDERS;                                             
+                                                             
+ /end-free                                                   
+P                 e                                          
+                                                             
+                                                             
+Ptest_one_customer_one_order...                              
+P                 b                   Export                 
+Dtest_one_customer_one_order...                              
+D                 pi                                         
+ /free                                                       
+                                                             
+   // Setup.                                                 
+                                                             
+   // Run.                                                   
+                                                             
+   SumByCust();                                              
+                                                             
+   // Check.                                                 
+                                                             
+   open CUSTSUMS;                                            
+     read CUSTSUM;                                           
+     assert( not %eof : 'File CUSTSUMS should not be empty' );
+     aEqual( 'A001' : CUSTID );                              
+     iEqual( 1000 : SUM );                  
+   close CUSTSUMS;                          
+                                            
+ /end-free                                  
+P                 e                         
+                                            
+                                            
+Ptest_one_customer_two_orders...            
+P                 b                   Export
+Dtest_one_customer_two_orders...            
+D                 pi                        
+ /free                                      
+                                            
+   // Setup.                                
+                                            
+   open ORDERS;                             
+     ORDERID = 2;                           
+     CUSTID = 'A001';                       
+     ORDERAMT = 2000;                       
+     write ORDER;                           
+   close ORDERS;                            
+                                            
+   // Run.                                  
+                                            
+   SumByCust();                                              
+                                                             
+   // Check.                                                 
+                                                             
+   open CUSTSUMS;                                            
+     read CUSTSUM;                                           
+     assert( not %eof : 'File CUSTSUMS should not be empty' );
+     aEqual( 'A001' : CUSTID );                              
+     iEqual( 1000+2000 : SUM );                              
+   close CUSTSUMS;                                           
+                                                             
+ /end-free                                                   
+P                 e                                          
+                                                             
+                                                             
+Ptest_two_customers_one_order_each...                        
+P                 b                   Export                 
+Dtest_two_customers_one_order_each...                        
+D                 pi                                         
+ /free                                                       
+                                                             
+   // Setup.                                                 
+                                                             
+   open ORDERS;                                              
+     ORDERID = 2;                                                
+     CUSTID = 'B002';                                            
+     ORDERAMT = 2000;                                            
+     write ORDER;                                                
+   close ORDERS;                                                 
+                                                                 
+   // Run.                                                       
+                                                                 
+   SumByCust();                                                  
+                                                                 
+   // Check.                                                     
+                                                                 
+   open CUSTSUMS;                                                
+     // First customer.                                          
+     read CUSTSUM;                                               
+     assert( not %eof : 'File CUSTSUMS should not be empty' );    
+     aEqual( 'A001' : CUSTID );                                  
+     iEqual( 1000 : SUM );                                       
+                                                                 
+     // Second customer.                                         
+     read CUSTSUM;                                               
+     assert( not %eof : 'File CUSTSUMS should have two records' );
+     aEqual( 'B002' : CUSTID );                                  
+     iEqual( 2000 : SUM );                                       
+   close CUSTSUMS;                            
+                                              
+ /end-free                                    
+P                 e                           
+                                              
+                                              
+Ptest_two_customers_with_orders_not_grouped...
+P                 b                   Export  
+Dtest_two_customers_with_orders_not_grouped...
+D                 pi                          
+ /free                                        
+                                              
+   // Setup.                                  
+                                              
+   open ORDERS;                               
+     ORDERID = 2;                             
+     CUSTID = 'B002';                         
+     ORDERAMT = 2000;                         
+     write ORDER;                             
+                                              
+     ORDERID = 3;                             
+     CUSTID = 'A001';                         
+     ORDERAMT = 3000;                         
+     write ORDER;                             
+   close ORDERS;                                             
+                                                             
+   // Run.                                                   
+                                                             
+   SumByCust();                                              
+                                                             
+   // Check.                                                 
+                                                             
+   open CUSTSUMS;                                            
+     read CUSTSUM;                                           
+     assert( not %eof : 'File CUSTSUMS should not be empty' );
+     aEqual( 'A001' : CUSTID );                              
+     iEqual( 1000+3000 : SUM );                              
+                                                             
+     // No test on second customer.                          
+   close CUSTSUMS;                                           
+                                                             
+ /end-free                                                   
+P                 e                                          </source>
+<source>
+ //---------------------------------------------------------  
+ //  Files                                                    
+ //---------------------------------------------------------  
+                                                              
+FORDERS2   IF   E           K DISK                            
+FCUSTSUMS  O    E             DISK                            
+                                                              
+                                                              
+ //---------------------------------------------------------  
+ //  Global Variables                                         
+ //---------------------------------------------------------  
+                                                              
+  // Current order.                                           
+D orderDS         ds                  LikeRec(ORDER)          
+  // Current customer sum.                                    
+D custSumDS       ds                  LikeRec(CUSTSUM:*output)
+  // Customer break indicator.                                
+D custBreak       s               n                           
+                                                              
+                                                              
+ //---------------------------------------------------------  
+ //  Main Procedure                                           
+ //---------------------------------------------------------  
+                                                              
+ /free                                                
+                                                      
+   read ORDER orderDS;                                
+   clear custSumDS;                                   
+   custSumDS.CUSTID = orderDS.CUSTID;                 
+                                                      
+   dow not %eof;                                      
+                                                      
+     custBreak = (custSumDS.CUSTID &lt;> orderDS.CUSTID);
+     if custBreak;                                    
+       write CUSTSUM custSumDS;                       
+       clear custSumDS;                               
+       custSumDS.CUSTID = orderDS.CUSTID;             
+     endif;                                           
+                                                      
+     custSumDS.SUM += orderDS.ORDERAMT;               
+     read ORDER orderDS;                              
+   enddo;                                             
+                                                      
+   write CUSTSUM custSumDS;                           
+                                                      
+   *inlr = *on;                                       
+                                                      
+ /end-free                                            
+</source>
+      </p>
+      
+    </section>
+    
+  </body>
+</document>

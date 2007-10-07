@@ -1,0 +1,25 @@
+     H NoMain
+
+
+      //---------------------------------------------------------
+      //  Prototypes
+      //---------------------------------------------------------
+
+      /copy RPGUNIT1,TESTCASE
+
+      // Test case prototypes.
+     Dtest_failure     pr
+
+
+      //---------------------------------------------------------
+      //  Test Case Definitions
+      //---------------------------------------------------------
+
+     Ptest_failure     b                   Export
+     Dtest_failure     pi
+      /free
+
+        iEqual( 5 : 2+2 );
+
+      /end-free
+     P                 e

@@ -1,0 +1,99 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    
+    <!-- The Basics -->
+    <groupId>org.rpgunit</groupId>
+    <artifactId>rpgunit</artifactId>
+    <version>0.3.2</version>
+    <packaging>pom</packaging>
+    
+    
+    <!-- Build Settings -->
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <descriptors>
+                        <descriptor>src/assembly/src.xml</descriptor>
+                    </descriptors>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>assembly</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>license</report>
+                            <report>scm</report>
+                            <report>issue-tracking</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+	    <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-changes-plugin</artifactId>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>changes-report</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+        </plugins>
+    </reporting>
+    
+    
+    <!-- Project information -->
+    <name>RPGUnit</name>
+    <description>
+        RPGUnit is a regression testing framework similar to JUnit (http://www.junit.org/).
+	Developers use it to implement unit tests in RPG ILE,
+	a language found mainly on the iSeries (a.k.a. AS/400) platform.
+    </description>
+    <url>http://www.rpgunit.org/</url>
+    <inceptionYear>2005</inceptionYear>
+    <licenses>
+        <license>
+            <name>Common Public License Version 1.0</name>
+            <url>src/main/RPGUNIT1.FILE/LICENSE.MBR</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    
+    
+    <!-- Environment Settings -->
+    <issueManagement>
+        <system>Sourceforge Tracker</system>
+        <url>http://sourceforge.net/tracker/?group_id=176506</url>
+    </issueManagement>
+    <scm>
+        <connection>scm:svn:https://rpgunit.svn.sourceforge.net/svnroot/rpgunit/tags/0.3.2</connection>
+        <developerConnection>scm:svn:https://rpgunit.svn.sourceforge.net/svnroot/rpgunit/tags/0.3.2</developerConnection>
+        <url>http://rpgunit.svn.sourceforge.net/svnroot/rpgunit/tags/0.3.2</url>
+    </scm>
+    <distributionManagement>
+        <site> 
+            <id>sourceforge.net</id> 
+            <url>scp://shell.sourceforge.net/home/groups/r/rp/rpgunit/htdocs</url> 
+        </site> 
+        <downloadUrl>http://prdownloads.sourceforge.net/rpgunit</downloadUrl>
+    </distributionManagement>
+
+
+</project>

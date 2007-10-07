@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="RPGUnit.org"> <!-- This name is included in the <title> tag. -->
+    <bannerLeft>
+        <src>./images/logos/RPGUnit_logo.gif</src>
+    </bannerLeft>
+    
+    <poweredBy>
+        <logo img="http://sflogo.sourceforge.net/sflogo.php?group_id=176506&amp;type=1"
+	      name="SourceForge.net"
+	      href="http://sourceforge.net/"/>
+        <logo img="./images/logos/maven-feather-border.png"
+	      name="Built by Maven"
+	      href="http://maven.apache.org/"/>
+    </poweredBy>
+    
+    <skin>
+        <groupId>org.apache.maven.skins</groupId>
+        <artifactId>maven-stylus-skin</artifactId>
+    </skin>
+    
+    <publishDate format="yyyy-MM-dd"/>
+    
+    <body>
+
+        <head>
+            <meta name="keywords" content="rpgunit, junit, xunit, testing, test, unit, tools, framework, test first, test driven, tdd, rpg, ile, as400, iseries, extreme programming, xp" />
+            <meta name="description" content="Homepage of the RPGUnit project" />
+            <meta name="robots" content="all" />
+            <link href="favicon.ico" rel="SHORTCUT ICON" />
+        </head>
+    
+        <links>
+            <item name="SF.net project page" href="http://sourceforge.net/projects/rpgunit/" />
+        </links>
+
+        <menu name="RPGUnit">
+            <item name="Summary" href="index.html"/>
+            <item name="Downloads" href="http://sourceforge.net/project/showfiles.php?group_id=176506"/>
+	    <item name="Install" href="install.html"/>
+            <item name="Tutorial" href="tutorial.html"/> 
+            <!-- TODO <item name="Cookbook" href="cookbook.html"/> -->
+            <!-- TODO <item name="Guidelines" href="guidelines.html"/> -->
+            <item name="Forum" href="http://sourceforge.net/forum/?group_id=176506"/>
+        </menu>
+        
+        <menu name="Project info">
+	    <item name="Release Notes" href="changes-report.html"/>
+            <item name="License" href="license.html"/>
+            <!-- TODO <item name="Prerequisites" href="prerequisites.html"/> -->
+            <item name="Team Members" href="http://sourceforge.net/project/memberlist.php?group_id=176506"/>
+            <item name="Source Repository" href="source-repository.html"/>
+            <item name="Issue Tracking" href="issue-tracking.html"/>
+            <!-- TODO <item name="Developer Resources" href="/developer/index.html" collapse="true">
+                <item name="System Architecture" href="/developer/architecture.html"/>
+             </item> -->
+        </menu>
+	
+    </body>
+</project>
