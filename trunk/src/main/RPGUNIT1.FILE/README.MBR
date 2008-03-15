@@ -11,12 +11,29 @@ service program, the framework can run all test cases and produce a test run
 report, indicating any failure or error found.
 
 RPGUnit is RPG-centric in three ways.
-1. The unit test are written in RPG. Thus, RPG programmers can write their
-own automated unit tests. Yet, any ILE language can also be used.
-2. The framework is meant to test programs written in RPG. Yet, any iSeries
+1. The unit tests are usually written in RPG. Thus, RPG programmers can write
+their own automated unit tests in a language they know well. Still, any ILE
+language can also be used.
+2. The test framework can test programs written in RPG. Still, any iSeries
 program can be tested, regardless of the implementation language.
-3. The framework itself is written in RPG. This is an application of the 'eat
-your own dog food' slogan.
+3. The test framework itself is written in RPG. This is an application of the
+'eat your own dog food' slogan.
+
+More information can be found on the RPGUnit website: http://www.rpgunit.org
+
+The framework was built and tested with V5R3. It is meant to work on V5R1 and
+later. If you find a portability issue, please open a bug request on the
+website.
+
+The files included in the distribution are:
+- RPGUNIT1		The framework itself
+- RPGUNITC1		Commands to call the framework
+- RPGUNITF1		Fixtures for testing the framework
+- RPGUNITT1		Tests for the framework itself
+- RPGUNITY1		Prototypes
+
+To build the framework, refer to http://www.rpgunit.org/install.html
 
 Author: Lacton (lacton (at) users.sourceforge.net)
-Date Written: 2006-09-08
+First written on 2006-09-08
+Last updated on 2008-03-15
