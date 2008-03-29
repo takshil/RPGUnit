@@ -12,12 +12,13 @@
       <ol>
         <li><a href="#Overview">Overview</a></li>
         <li><a href="#Context">Context</a></li>
-        <li><a href="#Checking that we are able to write unit tests">Checking that we are able to write unit tests</a></li>
-        <li><a href="#The first test">The first test</a></li>
-	<li><a href="#Summing orders from the same customer">Summing orders from the same customer</a></li>
-        <li><a href="#Not summing orders from different customers">Not summing orders from different customers</a></li>
-        <li><a href="#Handling customers in any order">Handling customers in any order</a></li>
-        <li><a href="#Source code">Source code</a></li>
+        <li><a href="#Checking_that_we_are_able_to_write_unit_tests">Checking that we are able to write unit tests</a></li>
+        <li><a href="#The_first_test">The first test</a></li>
+	<li><a href="#Summing_orders_from_the_same_customer">Summing orders from the same customer</a></li>
+        <li><a href="#Not_summing_orders_from_different_customers">Not summing orders from different customers</a></li>
+        <li><a href="#Handling_customers_in_any_order">Handling customers in any order</a></li>
+        <li><a href="#Source_code">Source code</a></li>
+        <li><a href="#Source_code_in_fixed_position">Source code in fixed position</a></li>
       </ol>
       
     </section>
@@ -1011,7 +1012,224 @@ D custBreak       s               n
  /end-free                                            
 </source>
       </p>
-      
+
+    </section>
+    
+    
+    <section name="Source code in fixed position">
+
+      <p>
+        If you are not comfortable with free format, here is the equivalent in fixed-position style.
+<source>
+H NoMain
+
+
+ //---------------------------------------------------------
+ //  Files
+ //---------------------------------------------------------
+
+ FCUSTSUMS  IF   E             DISK    UsrOpn
+ FORDERS    O    E             DISK    UsrOpn
+
+
+ //---------------------------------------------------------
+ //  Prototypes
+ //---------------------------------------------------------
+
+ /copy RPGUNIT1,TESTCASE
+
+ // Program under test.
+D SumByCust       pr                  ExtPgm('SUMBYCUST')
+
+ // Test case prototypes.
+DsetUp            pr
+Dtest_one_customer_one_order...
+D                 pr
+Dtest_one_customer_two_orders...
+D                 pr
+Dtest_two_customers_one_order_each...
+D                 pr
+Dtest_two_customers_with_orders_not_grouped...
+D                 pr
+
+
+ //---------------------------------------------------------
+ //  Test Case Definitions
+ //---------------------------------------------------------
+
+PsetUp            b                   Export
+DsetUp            pi
+C                   callp     clrpfm('ORDERS')
+C                   callp     clrpfm('CUSTSUMS')
+
+C                   open      ORDERS
+C                   eval      ORDERID = 1
+C                   eval      CUSTID = 'A001'
+C                   eval      ORDERAMT = 1000
+C                   write     ORDER
+C                   close     ORDERS
+P                 e
+
+
+Ptest_one_customer_one_order...
+P                 b                   Export
+Dtest_one_customer_one_order...
+D                 pi
+
+ // Setup.
+
+ // Run.
+C                   callp     SumByCust()
+
+ // Check.
+C                   open      CUSTSUMS
+C                   read      CUSTSUM
+C                   callp     assert( not %eof
+C                                   : 'File CUSTSUMS should not be empty' )
+C                   callp     aEqual( 'A001' : CUSTID )
+C                   callp     iEqual( 1000 : SUM )
+C                   close     CUSTSUMS
+P                 e
+
+
+Ptest_one_customer_two_orders...
+P                 b                   Export
+Dtest_one_customer_two_orders...
+D                 pi
+
+ // Setup.
+C                   open      ORDERS
+C                   eval      ORDERID = 2
+C                   eval      CUSTID = 'A001'
+C                   eval      ORDERAMT = 2000
+C                   write     ORDER
+C                   close     ORDERS
+
+ // Run.
+C                   callp     SumByCust()
+
+ // Check.
+C                   open      CUSTSUMS
+C                   read      CUSTSUM
+C                   callp     assert( not %eof
+C                                   : 'File CUSTSUMS should not be empty' )
+C                   callp     aEqual( 'A001' : CUSTID )
+C                   callp     iEqual( 1000+2000 : SUM )
+C                   close     CUSTSUMS
+
+P                 e
+
+
+Ptest_two_customers_one_order_each...
+P                 b                   Export
+Dtest_two_customers_one_order_each...
+D                 pi
+
+ // Setup.
+C                   open      ORDERS
+C                   eval      ORDERID = 2
+C                   eval      CUSTID = 'B002'
+C                   eval      ORDERAMT = 2000
+C                   write     ORDER
+C                   close     ORDERS
+
+ // Run.
+C                   callp     SumByCust()
+
+ // Check.
+C                   open      CUSTSUMS
+ // First customer.
+C                   read      CUSTSUM
+C                   callp     assert( not %eof
+C                                   : 'File CUSTSUMS should not be empty' )
+C                   callp     aEqual( 'A001' : CUSTID )
+C                   callp     iEqual( 1000 : SUM )
+
+ // Second customer.
+C                   read      CUSTSUM
+C                   callp     assert( not %eof
+C                               : 'File CUSTSUMS should have two records' )
+C                   callp     aEqual( 'B002' : CUSTID )
+C                   callp     iEqual( 2000 : SUM )
+C                   close     CUSTSUMS
+P                 e
+
+
+Ptest_two_customers_with_orders_not_grouped...
+P                 b                   Export
+Dtest_two_customers_with_orders_not_grouped...
+D                 pi
+
+ // Setup.
+C                   open      ORDERS
+C                   eval      ORDERID = 2
+C                   eval      CUSTID = 'B002'
+C                   eval      ORDERAMT = 2000
+C                   write     ORDER
+
+C                   eval      ORDERID = 3
+C                   eval      CUSTID = 'A001'                              Back to 1st customer
+C                   eval      ORDERAMT = 3000
+C                   write     ORDER
+C                   close     ORDERS
+
+ // Run.
+C                   callp     SumByCust()
+
+ // Check.
+C                   open      CUSTSUMS
+C                   read      CUSTSUM
+C                   callp     assert( not %eof
+C                                   : 'File CUSTSUMS should not be empty' )
+C                   callp     aEqual( 'A001' : CUSTID )
+C                   callp     iEqual( 1000+3000 : SUM )
+
+ // No test on second customer.
+C                   close     CUSTSUMS
+P                 e                                    </source>
+<source>
+ //---------------------------------------------------------
+ //  Files
+ //---------------------------------------------------------
+
+FORDERS2   IF   E           K DISK
+FCUSTSUMS  O    E             DISK
+
+
+ //---------------------------------------------------------
+ //  Global Variables
+ //---------------------------------------------------------
+
+  // Current order.
+D orderDS         ds                  LikeRec(ORDER)
+  // Current customer sum.
+D custSumDS       ds                  LikeRec(CUSTSUM:*output)
+
+
+ //---------------------------------------------------------
+ //  Main Procedure
+ //---------------------------------------------------------
+
+C                   READ      ORDER         orderDS
+C                   CLEAR                   custSumDS
+C                   EVAL      custSumDS.CUSTID = orderDS.CUSTID
+
+C                   DOW       not %eof
+
+C                   IF        custSumDS.CUSTID &lt;> orderDS.CUSTID           Customer break
+C                   WRITE     CUSTSUM       custSumDS
+C                   CLEAR                   custSumDS
+C                   EVAL      custSumDS.CUSTID = orderDS.CUSTID
+C                   ENDIF
+
+C                   EVAL      custSumDS.SUM += orderDS.ORDERAMT
+C                   READ      ORDER         orderDS
+C                   ENDDO
+
+C                   WRITE     CUSTSUM       custSumDS
+
+C                   SETON                                        LR</source>
+      </p>
     </section>
     
   </body>
