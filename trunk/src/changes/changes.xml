@@ -1,6 +1,6 @@
 <document>
   <properties>
-    <title>RPGUnit Issues</title>
+    <title>RPGUnit Release Notes</title>
     <author email="lacton@users.sourceforge.net">lacton</author>
   </properties>
   <body>
@@ -42,7 +42,7 @@
       </action>
       <action dev="lacton" type="fix">
         Fixed RPGUnit's acceptance tests so that they pass when submitted from a server job (e.g., using RMTCMD).
-      </action>	      
+      </action>
     </release>
     <release version="0.2" date="2006-09-05" description="Version 0.2 Release Notes">
       <action dev="lacton" type="add">
