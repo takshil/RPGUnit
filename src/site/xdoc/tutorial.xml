@@ -239,7 +239,7 @@ MCH3401 - Cannot resolve to object SUMBYCUST. Type and Subtype X'0201' Authority
                
  /end-free     
 </source>
-          You may feel underwhelmed by this implementation. Yet it is the simplest thing that will remove the error and allows to proceed on.
+          You may feel underwhelmed by this implementation. Yet it is the simplest thing that will remove the error and allow to proceed on.
         </li>
         
         <li>
