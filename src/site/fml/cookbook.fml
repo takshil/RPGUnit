@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<faqs title="RPGUnit Cookbook" toplink="false">
+
+  <part id="general">
+    <title>General</title>
+
+    <faq id="tear-down-close-all">
+      <question>
+        An assertion fails before the test closes an open file.  The file left open makes other test cases fails for no good reason.
+      </question>
+      <answer>
+        <p>
+	  Add a <code>close *all</code> statement in a <code>tearDown</code> procedure.
+	</p>
+
+<source>
+Ptest_something   b                   Export                                                
+Dtest_something   pi                                                                        
+ /free                                                                                      
+                                                                                            
+   PgmUnderTst( 'something' );                                                              
+                                                                                            
+   open AFILE;                                                                              
+     read ARECORD;                                                                          
+     aEqual( 'something' : aField );                                                        
+   close AFILE;    // This statement will not be reached if the aEqual assertion fails.     
+                                                                                            
+ /end-free                                                                                  
+P                 e                                                                       
+
+PtearDown         b                   Export                                                
+DtearDown         pi                                                                        
+ /free                                                                                      
+                                                                                            
+   close *all;    // All files opened by the testing program will be closed, no matter what.
+                                                                                            
+ /end-free                                                                                  
+P                 e                                                                         </source>
+      </answer>
+    </faq>
+    
+    <faq id="sql-test">
+      <question>
+        Can I use SQL statements in a test?
+      </question>
+      <answer>
+        <p>
+	  Yes!  Anything you can do with RPG, you can do with RPGUnit.  Here is an example of a test with SQL statements.
+	</p>
+<source>
+     H NoMain
+
+      /copy RPGUNIT1,TESTCASE
+
+     D PgmUnderTest    pr                  ExtPgm('YOURPGM')
+
+     DsetUp            pr
+     Dtest_something   pr
+
+     PsetUp            b                   Export
+     DsetUp            pi
+     C/exec sql
+     C+  delete from AFILE
+     C/end-exec
+     P                 e
+
+     Ptest_something   b                   Export
+     Dtest_something   pi
+     D aRecord       e ds                  Qualified ExtName(AFILE)
+     C/exec sql
+     C+  insert into SOMEFILE values(1, 'A001', 1000)
+     C/end-exec
+     C                   callp     PgmUnderTest
+     C/exec sql
+     C+  select * into :aRecord from AFILE
+     C/end-exec
+      /free
+        aEqual( '00' : %Subst( SqlState : 1 : 2 ) );
+        iEqual( 1000 : aRecord.aField );
+      /end-free
+     P                 e
+</source>
+        <p>
+	  You cannot use the <code>RUCRTTST</code> command to compile this test program.  You have to compile the SQLRPGLE member containing the test code as a module, and then turn it into a service program.
+	</p>
+<source>===> CRTSQLRPGI OBJ(SQLTST) SRCFILE(SRCFILE) COMMIT(*NONE) OBJTYPE(*MODULE)
+===> CRTSRVPGM SRVPGM(SQLTST) EXPORT(*ALL) BNDSRVPGM(RUTESTCASE)
+===> RUCALLTST SQLTST</source>                                             
+      </answer>
+    </faq>
+  </part>
+</faqs>
