@@ -27,3 +27,7 @@ p                 e
 ```
 
 _Read more at http://rpgunit.sourceforge.net/tutorial.html_  
+
+
+## Changelog
+A [Changelog](CHANGELOG.md) has been available since version 0.2
